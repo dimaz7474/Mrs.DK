@@ -193,6 +193,16 @@
             color: white;
         }
 
+        .btn-order {
+            background-color: var(--lighter-green);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-order:hover {
+            background-color: var(--light-green);
+        }
+
         /* Products Section */
         .section-title {
             text-align: center;
@@ -273,8 +283,167 @@
             margin-bottom: 15px;
         }
 
-        .order-btn {
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .qty-btn:hover {
+            background-color: var(--primary-green);
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        /* Customer Form */
+        .customer-form {
+            background-color: var(--cream);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .form-control {
             width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Quicksand', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--light-green);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background-color: var(--cream);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .order-summary h3 {
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            border-bottom: 2px solid var(--lighter-green);
+            padding-bottom: 10px;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--light-green);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--lighter-green);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--dark-brown);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .modal-title {
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
         }
 
@@ -496,6 +665,11 @@
             .status-step {
                 flex: 0 0 calc(50% - 30px);
             }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
 
         @media (max-width: 768px) {
@@ -542,6 +716,10 @@
             .products-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .modal-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -567,6 +745,7 @@
                 <ul id="navMenu">
                     <li><a href="#home">Beranda</a></li>
                     <li><a href="#products">Produk</a></li>
+                    <li><a href="#order-form">Pesan Sekarang</a></li>
                     <li><a href="#tracking">Tracking Pesanan</a></li>
                     <li><a href="#contact">Kontak</a></li>
                 </ul>
@@ -581,8 +760,8 @@
                 <div class="hero-text">
                     <h2>Kopi Susu Autentik dengan Cita Rasa Khas Mrs. DK</h2>
                     <p>Rasakan kenikmatan kopi susu premium dengan racikan spesial dari Mrs. DK. Dibuat dengan biji kopi pilihan dan susu segar berkualitas tinggi untuk pengalaman minum kopi yang tak terlupakan.</p>
-                    <a href="https://wa.me/6285298055758?text=Halo%20Mrs.%20DK,%20saya%20ingin%20memesan%20kopi%20susu" target="_blank" class="btn btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+                    <a href="#order-form" class="btn btn-whatsapp">
+                        <i class="fas fa-shopping-cart"></i> Pesan Sekarang
                     </a>
                 </div>
                 <div class="hero-image">
@@ -608,9 +787,14 @@
                         <h3>Kopi Susu Creamy</h3>
                         <p>Perpaduan sempurna kopi robusta dengan susu segar dan gula aren asli.</p>
                         <div class="price">Rp 15.000</div>
-                        <a href="https://wa.me/6285298055758?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Classic" target="_blank" class="btn btn-whatsapp order-btn">
-                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                        </a>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" data-product="1">-</button>
+                            <input type="number" class="quantity-input" id="qty-1" value="0" min="0" readonly>
+                            <button class="qty-btn plus" data-product="1">+</button>
+                        </div>
+                        <button class="btn btn-order add-to-order" data-product="1" data-name="Kopi Susu Creamy" data-price="15000">
+                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
+                        </button>
                     </div>
                 </div>
                 
@@ -623,9 +807,14 @@
                         <h3>Kopi Susu Gula Aren</h3>
                         <p>Kopi susu dengan gula aren asli yang memberikan rasa karamel alami.</p>
                         <div class="price">Rp 15.000</div>
-                        <a href="https://wa.me/6285298055758?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Gula%20Aren" target="_blank" class="btn btn-whatsapp order-btn">
-                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                        </a>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" data-product="2">-</button>
+                            <input type="number" class="quantity-input" id="qty-2" value="0" min="0" readonly>
+                            <button class="qty-btn plus" data-product="2">+</button>
+                        </div>
+                        <button class="btn btn-order add-to-order" data-product="2" data-name="Kopi Susu Gula Aren" data-price="15000">
+                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
+                        </button>
                     </div>
                 </div>
                 
@@ -638,9 +827,14 @@
                         <h3>Kopi Susu Creamy 1 Litee</h3>
                         <p>Kopi susu dengan tambahan rasa hazelnut yang creamy dan harum.</p>
                         <div class="price">Rp 55.000</div>
-                        <a href="https://wa.me/6285298055758?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Hazelnut" target="_blank" class="btn btn-whatsapp order-btn">
-                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                        </a>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" data-product="3">-</button>
+                            <input type="number" class="quantity-input" id="qty-3" value="0" min="0" readonly>
+                            <button class="qty-btn plus" data-product="3">+</button>
+                        </div>
+                        <button class="btn btn-order add-to-order" data-product="3" data-name="Kopi Susu Creamy 1 Litee" data-price="55000">
+                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
+                        </button>
                     </div>
                 </div>
                 
@@ -650,14 +844,64 @@
                         <i class="fas fa-mug-hot"></i>
                     </div>
                     <div class="product-info">
-                        <h3>Kopi Susu coconut</h3>
+                        <h3>Kopi Susu Coconut</h3>
                         <p>Kopi susu dengan ekstrak kelapa alami yang memberikan aroma memikat.</p>
                         <div class="price">Rp 15.000</div>
-                        <a href="https://wa.me/6285298055758?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Vanilla" target="_blank" class="btn btn-whatsapp order-btn">
-                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
-                        </a>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" data-product="4">-</button>
+                            <input type="number" class="quantity-input" id="qty-4" value="0" min="0" readonly>
+                            <button class="qty-btn plus" data-product="4">+</button>
+                        </div>
+                        <button class="btn btn-order add-to-order" data-product="4" data-name="Kopi Susu Coconut" data-price="15000">
+                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
+                        </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Form Section -->
+    <section class="products" id="order-form">
+        <div class="container">
+            <h2 class="section-title">Formulir Pemesanan</h2>
+            
+            <div class="customer-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customer-name"><i class="fas fa-user"></i> Nama Lengkap</label>
+                        <input type="text" id="customer-name" class="form-control" placeholder="Masukkan nama lengkap Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone"><i class="fas fa-phone"></i> Nomor WhatsApp</label>
+                        <input type="tel" id="customer-phone" class="form-control" placeholder="Contoh: 081234567890" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-address"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
+                    <textarea id="customer-address" class="form-control" rows="4" placeholder="Masukkan alamat lengkap untuk pengiriman" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-note"><i class="fas fa-sticky-note"></i> Catatan Pesanan (Opsional)</label>
+                    <textarea id="customer-note" class="form-control" rows="3" placeholder="Contoh: Kurangi gula, tambah es, dll."></textarea>
+                </div>
+            </div>
+            
+            <div class="order-summary">
+                <h3><i class="fas fa-receipt"></i> Ringkasan Pesanan</h3>
+                <div class="order-items" id="order-items">
+                    <p style="text-align: center; color: var(--brown);">Belum ada pesanan</p>
+                </div>
+                <div class="order-total">
+                    <span>Total Pembayaran:</span>
+                    <span id="total-price">Rp 0</span>
+                </div>
+                
+                <button class="btn btn-whatsapp" id="confirm-order" style="margin-top: 30px; width: 100%;">
+                    <i class="fab fa-whatsapp"></i> Konfirmasi & Kirim Pesanan via WhatsApp
+                </button>
             </div>
         </div>
     </section>
@@ -734,6 +978,28 @@
         </div>
     </section>
 
+    <!-- Order Success Modal -->
+    <div class="modal" id="orderSuccessModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title">Pesanan Berhasil!</h2>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <i class="fas fa-check-circle" style="font-size: 80px; color: var(--light-green); margin-bottom: 20px;"></i>
+                <p style="color: var(--brown); font-size: 18px; margin-bottom: 20px;">Pesanan Anda telah berhasil dikirim ke WhatsApp kami. Tim kami akan segera memproses pesanan Anda.</p>
+                <div style="background-color: #f5f5f5; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <p style="font-weight: 600; color: var(--dark-brown);">No. Pesanan: <span id="modalOrderNumber">#ORD-001</span></p>
+                    <p style="color: var(--brown);">Total: <span id="modalOrderTotal">Rp 0</span></p>
+                </div>
+            </div>
+            <button class="btn btn-whatsapp" id="whatsappButton" style="width: 100%;">
+                <i class="fab fa-whatsapp"></i> Buka WhatsApp
+            </button>
+            <button class="btn" id="closeModal" style="width: 100%; margin-top: 15px;">
+                <i class="fas fa-times"></i> Tutup
+            </button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
@@ -745,7 +1011,7 @@
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/6285298055758" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 
@@ -754,7 +1020,7 @@
                     <div class="contact-info">
                         <p><i class="fas fa-map-marker-alt"></i> Jl. Raya Kopi No. 123, Jakarta</p>
                         <p><i class="fas fa-phone"></i> 021-1234-5678</p>
-                        <p><i class="fab fa-whatsapp"></i> 0812-3456-7890</p>
+                        <p><i class="fab fa-whatsapp"></i> 0852-9805-5758</p>
                         <p><i class="fas fa-envelope"></i> hello@kopisusumrsdk.com</p>
                     </div>
                 </div>
@@ -776,6 +1042,18 @@
     </footer>
 
     <script>
+        // Data produk
+        const products = {
+            1: { name: "Kopi Susu Creamy", price: 15000, qty: 0 },
+            2: { name: "Kopi Susu Gula Aren", price: 15000, qty: 0 },
+            3: { name: "Kopi Susu Creamy 1 Litee", price: 55000, qty: 0 },
+            4: { name: "Kopi Susu Coconut", price: 15000, qty: 0 }
+        };
+
+        // Data pesanan
+        let orderItems = [];
+        let totalPrice = 0;
+
         // Mobile menu toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             const navMenu = document.getElementById('navMenu');
@@ -790,7 +1068,176 @@
             navMenu.style.gap = '20px';
             navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
         });
-        
+
+        // Quantity controls
+        document.querySelectorAll('.qty-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product');
+                const input = document.getElementById(`qty-${productId}`);
+                let value = parseInt(input.value);
+                
+                if (this.classList.contains('plus')) {
+                    value++;
+                } else if (this.classList.contains('minus') && value > 0) {
+                    value--;
+                }
+                
+                input.value = value;
+                products[productId].qty = value;
+                
+                // Update add to order button
+                const addButton = document.querySelector(`.add-to-order[data-product="${productId}"]`);
+                if (value > 0) {
+                    addButton.innerHTML = `<i class="fas fa-check-circle"></i> Ditambahkan (${value})`;
+                    addButton.style.backgroundColor = 'var(--light-green)';
+                } else {
+                    addButton.innerHTML = `<i class="fas fa-plus-circle"></i> Tambah ke Pesanan`;
+                    addButton.style.backgroundColor = 'var(--lighter-green)';
+                }
+            });
+        });
+
+        // Add to order functionality
+        document.querySelectorAll('.add-to-order').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseInt(this.getAttribute('data-price'));
+                const quantity = products[productId].qty;
+                
+                if (quantity > 0) {
+                    // Cek apakah produk sudah ada di pesanan
+                    const existingItemIndex = orderItems.findIndex(item => item.id == productId);
+                    
+                    if (existingItemIndex > -1) {
+                        if (quantity > 0) {
+                            orderItems[existingItemIndex].quantity = quantity;
+                        } else {
+                            orderItems.splice(existingItemIndex, 1);
+                        }
+                    } else {
+                        orderItems.push({
+                            id: productId,
+                            name: productName,
+                            price: productPrice,
+                            quantity: quantity
+                        });
+                    }
+                    
+                    updateOrderSummary();
+                }
+            });
+        });
+
+        // Update order summary
+        function updateOrderSummary() {
+            const orderItemsElement = document.getElementById('order-items');
+            totalPrice = 0;
+            
+            if (orderItems.length === 0) {
+                orderItemsElement.innerHTML = '<p style="text-align: center; color: var(--brown);">Belum ada pesanan</p>';
+            } else {
+                let itemsHTML = '';
+                orderItems.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    totalPrice += itemTotal;
+                    
+                    itemsHTML += `
+                        <div class="order-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <small>${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}</small>
+                            </div>
+                            <div>Rp ${itemTotal.toLocaleString('id-ID')}</div>
+                        </div>
+                    `;
+                });
+                
+                orderItemsElement.innerHTML = itemsHTML;
+            }
+            
+            document.getElementById('total-price').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+        }
+
+        // Confirm order functionality
+        document.getElementById('confirm-order').addEventListener('click', function() {
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerPhone = document.getElementById('customer-phone').value.trim();
+            const customerAddress = document.getElementById('customer-address').value.trim();
+            const customerNote = document.getElementById('customer-note').value.trim();
+            
+            // Validasi input
+            if (!customerName || !customerPhone || !customerAddress) {
+                alert('Harap isi semua data yang diperlukan (Nama, WhatsApp, dan Alamat)');
+                return;
+            }
+            
+            if (orderItems.length === 0) {
+                alert('Harap tambahkan minimal satu produk ke pesanan');
+                return;
+            }
+            
+            if (!customerPhone.match(/^[0-9]{10,13}$/)) {
+                alert('Nomor WhatsApp tidak valid. Harap masukkan 10-13 digit angka');
+                return;
+            }
+            
+            // Generate order number
+            const orderNumber = 'ORD-' + Date.now().toString().substr(-6);
+            
+            // Format pesan untuk WhatsApp
+            let whatsappMessage = `Halo Kopi Susu Mrs. DK, saya ingin memesan:\n\n`;
+            
+            orderItems.forEach(item => {
+                whatsappMessage += `- ${item.name}: ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')} = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
+            });
+            
+            whatsappMessage += `\n*Total: Rp ${totalPrice.toLocaleString('id-ID')}*\n\n`;
+            whatsappMessage += `Data Pemesan:\n`;
+            whatsappMessage += `Nama: ${customerName}\n`;
+            whatsappMessage += `WhatsApp: ${customerPhone}\n`;
+            whatsappMessage += `Alamat: ${customerAddress}\n`;
+            
+            if (customerNote) {
+                whatsappMessage += `Catatan: ${customerNote}\n`;
+            }
+            
+            whatsappMessage += `\nNo. Pesanan: ${orderNumber}`;
+            
+            // Encode message for WhatsApp URL
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            const whatsappURL = `https://wa.me/6285298055758?text=${encodedMessage}`;
+            
+            // Simpan data untuk modal
+            document.getElementById('modalOrderNumber').textContent = orderNumber;
+            document.getElementById('modalOrderTotal').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            
+            // Update WhatsApp button
+            const whatsappButton = document.getElementById('whatsappButton');
+            whatsappButton.href = whatsappURL;
+            whatsappButton.target = '_blank';
+            
+            // Show success modal
+            document.getElementById('orderSuccessModal').style.display = 'flex';
+        });
+
+        // Modal functionality
+        document.getElementById('modalClose').addEventListener('click', function() {
+            document.getElementById('orderSuccessModal').style.display = 'none';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('orderSuccessModal').style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('orderSuccessModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
         // Close order button functionality
         document.getElementById('closeOrderBtn').addEventListener('click', function() {
             const trackingSteps = document.querySelectorAll('.status-step');
@@ -810,7 +1257,7 @@
             // Show alert
             alert('Terima kasih! Pesanan telah dikonfirmasi sebagai diterima. Selamat menikmati Kopi Susu Mrs. DK!');
         });
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -834,7 +1281,7 @@
                 }
             });
         });
-        
+
         // Simulate order tracking updates
         function simulateTrackingUpdate() {
             const trackingSteps = document.querySelectorAll('.status-step');
