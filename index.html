@@ -928,6 +928,52 @@
         .autocomplete-suggestion:last-child {
             border-bottom: none;
         }
+
+        		/* Styling untuk gambar produk */
+.product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Hapus background color dan styling lama dari .product-image */
+.product-image {
+    height: 200px;
+    /* Hapus background-color: var(--lighter-green); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Tambahkan ini untuk crop gambar yang overflow */
+    position: relative;
+}
+
+/* Fallback jika gambar gagal load */
+.product-image i {
+    position: absolute;
+    font-size: 60px;
+    color: white;
+    opacity: 0.8;
+    z-index: 1;
+}
+
+/* Overlay untuk efek hover */
+.product-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.3) 100%);
+    z-index: 1;
+    transition: opacity 0.3s;
+}
+
+.product-card:hover .product-image::after {
+    opacity: 0.7;
+}
     </style>
 </head>
 <body>
@@ -1000,9 +1046,12 @@
             <div class="products-grid">
                 <!-- Product 1 -->
                 <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
+						<div class="product-image">
+							<!-- Ganti ikon dengan gambar -->
+							<img src="botol200ml.jpeg" 
+								 alt="Kopi Susu Creamy" 
+								 class="product-img">
+						</div>
                     <div class="product-info">
                         <h3>Kopi Susu Creamy</h3>
                         <p>Perpaduan sempurna kopi robusta dengan susu segar dan gula aren asli.</p>
@@ -1017,10 +1066,14 @@
                 </div>
                 
                 <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
+                
+					<div class="product-card">
+						<div class="product-image">
+							<!-- Ganti ikon dengan gambar -->
+							<img src="cup.jpeg" 
+								 alt="Kopi Susu Gula Aren" 
+								 class="product-img">
+						</div>
                     <div class="product-info">
                         <h3>Kopi Susu Gula Aren</h3>
                         <p>Kopi susu dengan gula aren asli yang memberikan rasa karamel alami.</p>
@@ -1035,10 +1088,13 @@
                 </div>
                 
                 <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
+               <div class="product-card">
+						<div class="product-image">
+							<!-- Ganti ikon dengan gambar -->
+							<img src="1liter.jpeg" 
+								 alt="Kopi Susu Creamy 1 Liter" 
+								 class="product-img">
+						</div>
                     <div class="product-info">
                         <h3>Kopi Susu Creamy 1 Liter</h3>
                         <p>Kopi susu dengan tambahan rasa hazelnut yang creamy dan harum.</p>
@@ -1053,10 +1109,14 @@
                 </div>
                 
                 <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
+               
+					<div class="product-card">
+						<div class="product-image">
+							<!-- Ganti ikon dengan gambar -->
+							<img src="cup.jpeg" 
+								 alt="Kopi Susu Coconut" 
+								 class="product-img">
+						</div>
                     <div class="product-info">
                         <h3>Kopi Susu Coconut</h3>
                         <p>Kopi susu dengan ekstrak kelapa alami yang memberikan aroma memikat.</p>
