@@ -2044,7 +2044,8 @@
         // ================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Content Loaded - Initializing...');
-            
+            // Setup store status monitoring
+		setupStoreStatusListener();
             // Mobile menu toggle
             document.getElementById('mobileMenuBtn').addEventListener('click', function() {
                 const navMenu = document.getElementById('navMenu');
@@ -2113,6 +2114,177 @@
                 console.error('Error initializing Google Maps:', error);
             }
         }
+
+
+// ================================
+// STORE STATUS CHECK
+// ================================
+function checkStoreStatus() {
+    const status = localStorage.getItem('storeStatus') || 'open';
+    const closedMessage = localStorage.getItem('storeClosedMessage') || 
+        'Maaf, toko sedang tutup sementara. Silakan pesan pada jam operasional kami.';
+    
+    if (status === 'closed') {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'storeClosedOverlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        `;
+        
+        overlay.innerHTML = `
+            <div style="
+                background-color: white;
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 500px;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                animation: popIn 0.5s ease;
+            ">
+                <div style="
+                    width: 100px;
+                    height: 100px;
+                    background-color: #f44336;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 25px;
+                ">
+                    <i class="fas fa-store-slash" style="font-size: 50px; color: white;"></i>
+                </div>
+                
+                <h2 style="color: #f44336; margin-bottom: 15px; font-family: 'Poppins', sans-serif;">
+                    TOKO SEDANG TUTUP
+                </h2>
+                
+                <div style="
+                    background-color: #fff3e0;
+                    padding: 20px;
+                    border-radius: 10px;
+                    margin: 20px 0;
+                    text-align: left;
+                    border-left: 4px solid #ff9800;
+                ">
+                    <p style="color: #5d4037; margin: 0;">
+                        <i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i>
+                        ${closedMessage}
+                    </p>
+                </div>
+                
+                <div style="color: #666; margin: 25px 0; text-align: left;">
+                    <p style="margin-bottom: 10px;">
+                        <i class="fas fa-clock"></i> <strong>Jam Operasional:</strong>
+                    </p>
+                    <ul style="padding-left: 20px; margin: 0;">
+                        <li>Senin - Jumat: 07:00 - 21:00</li>
+                        <li>Sabtu - Minggu: 08:00 - 22:00</li>
+                    </ul>
+                </div>
+                
+                <button onclick="location.reload()" style="
+                    background-color: var(--light-green);
+                    color: white;
+                    border: none;
+                    padding: 15px 30px;
+                    border-radius: 12px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    margin-top: 10px;
+                ">
+                    <i class="fas fa-sync-alt"></i> Refresh Status
+                </button>
+                
+                <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i> Status toko diupdate oleh admin
+                </p>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Disable order buttons
+        document.querySelectorAll('.qty-btn, .quantity-input, #sendToWhatsApp').forEach(el => {
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.5';
+        });
+        
+        return false;
+    }
+    
+    return true;
+}
+
+function updateProductAvailability(isAvailable) {
+    const buttons = document.querySelectorAll('.qty-btn, .quantity-input');
+    const orderButton = document.getElementById('sendToWhatsApp');
+    
+    if (!isAvailable) {
+        buttons.forEach(btn => {
+            btn.style.pointerEvents = 'none';
+            btn.style.opacity = '0.5';
+        });
+        
+        if (orderButton) {
+            orderButton.style.pointerEvents = 'none';
+            orderButton.style.opacity = '0.5';
+            orderButton.disabled = true;
+        }
+    } else {
+        buttons.forEach(btn => {
+            btn.style.pointerEvents = 'auto';
+            btn.style.opacity = '1';
+        });
+        
+        if (orderButton) {
+            orderButton.style.pointerEvents = 'auto';
+            orderButton.style.opacity = '1';
+            orderButton.disabled = false;
+        }
+    }
+}
+
+// ================================
+// LISTEN FOR STORE STATUS CHANGES
+// ================================
+function setupStoreStatusListener() {
+    // Check initial status
+    setTimeout(() => {
+        if (!checkStoreStatus()) {
+            updateProductAvailability(false);
+        }
+    }, 1000);
+    
+    // Listen for status changes
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'storeStatus' || e.key === 'storeStatusChanged') {
+            console.log('Store status changed, reloading...');
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        }
+    });
+    
+    // Periodically check status (every 30 seconds)
+    setInterval(() => {
+        const status = localStorage.getItem('storeStatus') || 'open';
+        updateProductAvailability(status === 'open');
+    }, 30000);
+}
+
 
         function setupCustomAutocomplete() {
             const locationInput = document.getElementById('location-search');
@@ -2812,8 +2984,20 @@
             }
         }
 
+// Update fungsi sendOrderToWhatsApp untuk cek status toko
         function sendOrderToWhatsApp() {
-            const customerName = document.getElementById('customer-name').value.trim();
+            
+			 // Cek status toko terlebih dahulu
+    const status = localStorage.getItem('storeStatus') || 'open';
+    if (status === 'closed') {
+        showAlert('Toko Sedang Tutup', 
+            'Maaf, toko sedang tutup sementara. Silakan pesan pada jam operasional kami.', 
+            'warning');
+        return;
+    }
+			
+			
+			const customerName = document.getElementById('customer-name').value.trim();
             const customerPhone = document.getElementById('customer-phone').value.trim();
             const customerAddress = document.getElementById('customer-address').value.trim();
             const manualAddress = document.getElementById('manual-address').value.trim();
