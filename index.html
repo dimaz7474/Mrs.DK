@@ -1,0 +1,18 @@
+     function bayarQRIS() {
+         // Integrasi dengan Midtrans API
+         fetch('/api/pembayaran/qris', {
+             method: 'POST',
+             body: JSON.stringify({ amount: 25000, item: 'Kopi Susu' })
+         })
+         .then(response => response.json())
+         .then(data => {
+             // Tampilkan QR code
+             document.getElementById('qris-qr').src = data.qr_url;
+         });
+     }
+
+     function bayarTransfer() {
+         // Redirect ke halaman transfer bank
+         window.location.href = '/transfer-bank';
+     }
+     
