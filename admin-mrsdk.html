@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kopi Susu Mrs. DK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #1a5d1a;
+            --light-green: #2e7d32;
+            --lighter-green: #4caf50;
+            --cream: #f9f3e9;
+            --brown: #5d4037;
+            --dark-brown: #3e2723;
+            --yellow: #ffd54f;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Admin */
+        .admin-header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .admin-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+        }
+
+        .admin-logo p {
+            color: var(--cream);
+            font-size: 14px;
+        }
+
+        .admin-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .admin-nav a.active {
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+        }
+
+        .admin-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .admin-sidebar h2 {
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            border-bottom: 2px solid var(--lighter-green);
+            padding-bottom: 10px;
+        }
+
+        .admin-stats {
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: var(--brown);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light-green);
+        }
+
+        /* Main Content */
+        .admin-main {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--dark-brown);
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--lighter-green);
+        }
+
+        /* Order List */
+        .order-list {
+            margin-top: 20px;
+        }
+
+        .order-search {
+            margin-bottom: 20px;
+        }
+
+        .order-search input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .order-search input:focus {
+            outline: none;
+            border-color: var(--light-green);
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .orders-table th {
+            background-color: var(--lighter-green);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .orders-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .orders-table tr:hover {
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-diterima {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-disiapkan {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-pengantaran {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-sampai {
+            background-color: #f1f8e9;
+            color: #689f38;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+        }
+
+        .btn-edit:hover {
+            background-color: #ffca28;
+        }
+
+        .btn-delete {
+            background-color: #ff5252;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff1744;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--brown);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Tracking Update Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: var(--dark-brown);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .tracking-options {
+            margin: 20px 0;
+        }
+
+        .tracking-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tracking-option:hover {
+            border-color: var(--light-green);
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .tracking-option.active {
+            border-color: var(--light-green);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .tracking-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .tracking-option.active .tracking-icon {
+            background-color: var(--light-green);
+        }
+
+        .driver-info-form {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .driver-info-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--light-green);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-save {
+            background-color: var(--light-green);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            background-color: var(--primary-green);
+        }
+
+        .btn-cancel {
+            background-color: #ddd;
+            color: #666;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-cancel:hover {
+            background-color: #ccc;
+        }
+
+        /* Alert Message */
+        .alert-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        }
+
+        .login-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: var(--dark-brown);
+            margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--light-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-green);
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff1744;
+        }
+
+        /* Test Orders Button */
+        .test-btn {
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .test-btn:hover {
+            background-color: #ffca28;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="adminUsername">Username</label>
+                    <input type="text" id="adminUsername" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard (Initially Hidden) -->
+    <div id="dashboardPage" style="display: none;">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="container admin-header-content">
+                <div class="admin-logo">
+                    <h1>Admin Dashboard</h1>
+                    <p>Kopi Susu Mrs. DK - Manajemen Pesanan</p>
+                </div>
+                <nav class="admin-nav">
+                    <ul>
+                        <li><a href="#" class="active" id="navOrders">Pesanan</a></li>
+                        <li><a href="#" id="navProducts">Produk</a></li>
+                        <li><a href="#" id="navReports">Laporan</a></li>
+                    </ul>
+                </nav>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="container dashboard-content">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+                <div class="admin-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Pesanan</span>
+                        <span class="stat-value" id="totalOrders">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Hari Ini</span>
+                        <span class="stat-value" id="todayOrders">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Sedang Diproses</span>
+                        <span class="stat-value" id="processingOrders">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Pengantaran</span>
+                        <span class="stat-value" id="deliveryOrders">0</span>
+                    </div>
+                </div>
+                
+                <button class="test-btn" id="createTestOrder">
+                    <i class="fas fa-plus"></i> Buat Pesanan Test
+                </button>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Daftar Pesanan</h2>
+                
+                <div class="order-search">
+                    <input type="text" id="searchOrder" placeholder="Cari berdasarkan ID Pesanan atau Nama Pelanggan...">
+                </div>
+
+                <div class="order-list">
+                    <div id="ordersContainer">
+                        <!-- Orders will be populated here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Update Tracking Modal -->
+    <div class="modal-overlay" id="updateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Status Pesanan</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div id="modalOrderInfo">
+                <!-- Order info will be populated here -->
+            </div>
+            
+            <div class="tracking-options" id="trackingOptions">
+                <!-- Options will be populated dynamically -->
+            </div>
+
+            <div class="driver-info-form" id="driverInfoForm">
+                <h4><i class="fas fa-user"></i> Informasi Driver</h4>
+                <div class="form-group">
+                    <label for="driverName">Nama Driver</label>
+                    <input type="text" id="driverName" placeholder="Contoh: Budi Santoso">
+                </div>
+                <div class="form-group">
+                    <label for="driverPhone">No. Telepon Driver</label>
+                    <input type="text" id="driverPhone" placeholder="Contoh: 081234567890">
+                </div>
+                <div class="form-group">
+                    <label for="currentLocation">Posisi Saat Ini</label>
+                    <input type="text" id="currentLocation" placeholder="Contoh: Jl. Merdeka No. 45">
+                </div>
+                <div class="form-group">
+                    <label for="estimatedTime">Perkiraan Waktu Tiba</label>
+                    <input type="text" id="estimatedTime" placeholder="Contoh: 5 menit dari tujuan">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelUpdate">Batal</button>
+                <button class="btn-save" id="saveUpdate">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Message -->
+    <div class="alert-message" id="alertMessage">
+        <div class="alert-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div>
+            <strong id="alertTitle">Berhasil!</strong>
+            <p id="alertText">Perubahan telah disimpan</p>
+        </div>
+    </div>
+
+    <script>
+	
+	// Auto-refresh orders every 5 seconds
+let refreshInterval;
+// Fungsi untuk auto-refresh orders (di admin side)
+function startAutoRefresh() {
+    if (refreshInterval) clearInterval(refreshInterval);
+    
+    refreshInterval = setInterval(() => {
+        const oldLength = orders.length;
+        syncOrdersFromCustomer();
+        
+        if (orders.length !== oldLength) {
+            console.log('New order detected! Refreshing table...');
+            displayOrders();
+            updateStats();
+            showAlert('Pesanan Baru', 'Ada pesanan baru dari customer!', 'info');
+        }
+    }, 3000); // Check every 3 seconds
+}
+
+// Stop auto-refresh
+function stopAutoRefresh() {
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+    }
+}
+
+// Start auto-refresh when dashboard loads
+function showDashboard() {
+    console.log('Showing dashboard');
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').style.display = 'block';
+    
+    // Load and display orders
+    syncOrdersFromCustomer();
+    displayOrders();
+    updateStats();
+    
+    // Start auto-refresh
+    startAutoRefresh();
+}
+
+// Stop auto-refresh when logging out
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    stopAutoRefresh();
+    localStorage.removeItem('adminLoggedIn');
+    showLogin();
+    showAlert('Logout Berhasil', 'Anda telah keluar dari sistem');
+});
+	
+        // Data pesanan (simulasi database)
+        let orders = [];
+
+        // Admin credentials
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'kopisusu123';
+
+        // Current order being edited
+        let currentOrderId = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, checking login...');
+            
+            // Load orders from localStorage first
+            loadOrdersFromStorage();
+            
+            // Check login
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            console.log('Is logged in?', isLoggedIn);
+            
+            if (isLoggedIn === 'true') {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        // Show login page
+        function showLogin() {
+            console.log('Showing login page');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboardPage').style.display = 'none';
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            console.log('Showing dashboard');
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboardPage').style.display = 'block';
+            
+            // Load and display orders
+            loadOrdersFromStorage();
+            displayOrders();
+            updateStats();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            console.log('Setting up event listeners');
+            
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('adminUsername').value;
+                const password = document.getElementById('adminPassword').value;
+                
+                console.log('Login attempt:', username);
+                
+                if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    showDashboard();
+                    showAlert('Login Berhasil', 'Selamat datang di dashboard admin!');
+                } else {
+                    showAlert('Login Gagal', 'Username atau password salah!', 'error');
+                }
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('adminLoggedIn');
+                showLogin();
+                showAlert('Logout Berhasil', 'Anda telah keluar dari sistem');
+            });
+
+            // Close modal buttons
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelUpdate').addEventListener('click', closeModal);
+
+            // Save update button
+            document.getElementById('saveUpdate').addEventListener('click', saveTrackingUpdate);
+
+            // Search orders
+            document.getElementById('searchOrder').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterOrders(searchTerm);
+            });
+
+            // Create test order button
+            document.getElementById('createTestOrder').addEventListener('click', createTestOrder);
+
+            // Nav links
+            document.querySelectorAll('.admin-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Remove active class from all links
+                    document.querySelectorAll('.admin-nav a').forEach(a => {
+                        a.classList.remove('active');
+                    });
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                });
+            });
+        }
+
+       // Fungsi untuk sinkronisasi data dari index.html
+function syncOrdersFromCustomer() {
+    console.log('Checking for customer orders...');
+    
+    // Cek apakah ada data pesanan dari index.html
+    const lastOrderId = localStorage.getItem('lastOrderId');
+    if (lastOrderId) {
+        console.log('Found last order ID from customer:', lastOrderId);
+    }
+    
+    // Load existing orders
+    const savedOrders = localStorage.getItem('mrsdkOrders');
+    
+    if (savedOrders) {
+        try {
+            orders = JSON.parse(savedOrders);
+            console.log('Loaded orders from storage:', orders.length);
+            
+            // Sort by date (newest first)
+            orders.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return dateB - dateA;
+            });
+        } catch (e) {
+            console.error('Error parsing orders:', e);
+            orders = [];
+        }
+    } else {
+        console.log('No orders found in storage');
+        orders = [];
+    }
+    
+    // If no orders, create initial test data
+    if (orders.length === 0) {
+        console.log('Creating initial test orders');
+        createInitialOrders();
+    }
+}
+
+// Ganti fungsi loadOrdersFromStorage dengan:
+function loadOrdersFromStorage() {
+    syncOrdersFromCustomer();
+}
+
+        // Create initial test orders
+        function createInitialOrders() {
+            orders = [
+                {
+                    id: 'KD12345',
+                    customer: 'Ahmad Santoso',
+                    date: new Date().toISOString().split('T')[0],
+                    time: '10:30',
+                    total: 65000,
+                    status: 'diterima',
+                    items: [
+                        { name: 'Kopi Susu Creamy', qty: 2, price: 15000 },
+                        { name: 'Kopi Susu Gula Aren', qty: 1, price: 15000 },
+                        { name: 'Kopi Susu Coconut', qty: 2, price: 15000 }
+                    ],
+                    customerPhone: '081234567890',
+                    address: 'Jl. Merdeka No. 10, Jakarta',
+                    driver: {
+                        name: '',
+                        phone: '',
+                        location: '',
+                        eta: ''
+                    },
+                    tracking: [
+                        { 
+                            status: 'diterima', 
+                            time: '10:30', 
+                            date: new Date().toISOString().split('T')[0],
+                            note: 'Pesanan diterima dari WhatsApp'
+                        }
+                    ]
+                },
+                {
+                    id: 'KD12346',
+                    customer: 'Siti Rahayu',
+                    date: new Date().toISOString().split('T')[0],
+                    time: '09:15',
+                    total: 15000,
+                    status: 'disiapkan',
+                    items: [
+                        { name: 'Kopi Susu Gula Aren', qty: 1, price: 15000 }
+                    ],
+                    customerPhone: '081298765432',
+                    address: 'Jl. Sudirman No. 45, Jakarta',
+                    driver: {
+                        name: 'Budi Santoso',
+                        phone: '081234567890',
+                        location: 'Jl. Merdeka No. 45',
+                        eta: '5 menit dari tujuan'
+                    },
+                    tracking: [
+                        { 
+                            status: 'diterima', 
+                            time: '09:15', 
+                            date: new Date().toISOString().split('T')[0]
+                        },
+                        { 
+                            status: 'disiapkan', 
+                            time: '09:30', 
+                            date: new Date().toISOString().split('T')[0]
+                        }
+                    ]
+                },
+                {
+                    id: 'KD12347',
+                    customer: 'Rudi Hartono',
+                    date: new Date().toISOString().split('T')[0],
+                    time: '14:45',
+                    total: 55000,
+                    status: 'pengantaran',
+                    items: [
+                        { name: 'Kopi Susu Creamy 1 Liter', qty: 1, price: 55000 }
+                    ],
+                    customerPhone: '081377788899',
+                    address: 'Jl. Thamrin No. 8, Jakarta',
+                    driver: {
+                        name: 'Andi Wijaya',
+                        phone: '081298765432',
+                        location: 'Jl. Sudirman No. 12',
+                        eta: '10 menit dari tujuan'
+                    },
+                    tracking: [
+                        { 
+                            status: 'diterima', 
+                            time: '14:45', 
+                            date: new Date().toISOString().split('T')[0]
+                        },
+                        { 
+                            status: 'disiapkan', 
+                            time: '15:00', 
+                            date: new Date().toISOString().split('T')[0]
+                        },
+                        { 
+                            status: 'pengantaran', 
+                            time: '15:30', 
+                            date: new Date().toISOString().split('T')[0],
+                            note: 'Driver dalam perjalanan'
+                        }
+                    ]
+                }
+            ];
+            
+            saveOrdersToStorage();
+        }
+
+        // Create a test order
+        function createTestOrder() {
+            const orderId = 'KD' + Math.floor(10000 + Math.random() * 90000);
+            const customers = ['Budi Setiawan', 'Sari Indah', 'Joko Widodo', 'Maya Sari', 'Rizki Pratama'];
+            const customer = customers[Math.floor(Math.random() * customers.length)];
+            
+            const newOrder = {
+                id: orderId,
+                customer: customer,
+                date: new Date().toISOString().split('T')[0],
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                total: Math.floor(Math.random() * 100000) + 15000,
+                status: 'diterima',
+                items: [
+                    { name: 'Kopi Susu Creamy', qty: 1, price: 15000 },
+                    { name: 'Kopi Susu Gula Aren', qty: 1, price: 15000 }
+                ],
+                customerPhone: '08' + Math.floor(1000000000 + Math.random() * 9000000000),
+                address: 'Jl. Test No. ' + Math.floor(Math.random() * 100) + ', Jakarta',
+                driver: {
+                    name: '',
+                    phone: '',
+                    location: '',
+                    eta: ''
+                },
+                tracking: [
+                    { 
+                        status: 'diterima', 
+                        time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }), 
+                        date: new Date().toISOString().split('T')[0],
+                        note: 'Pesanan test dibuat'
+                    }
+                ]
+            };
+            
+            orders.unshift(newOrder);
+            saveOrdersToStorage();
+            displayOrders();
+            updateStats();
+            showAlert('Berhasil', `Pesanan test ${orderId} telah dibuat`);
+        }
+
+        // Save orders to localStorage
+        function saveOrdersToStorage() {
+            console.log('Saving orders to storage:', orders);
+            localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+        }
+
+        // Display orders in table
+        function displayOrders() {
+            console.log('Displaying orders:', orders);
+            const container = document.getElementById('ordersContainer');
+            
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>Belum ada pesanan</p>
+                        <p style="color: #888; font-size: 14px;">
+                            Pesanan dari WhatsApp akan muncul di sini
+                        </p>
+                        <button class="test-btn" onclick="createTestOrder()">
+                            <i class="fas fa-plus"></i> Buat Pesanan Test
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Tanggal</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+            `;
+            
+            orders.forEach(order => {
+                console.log('Processing order:', order);
+                const statusInfo = getStatusInfo(order.status);
+                
+                tableHTML += `
+                    <tr>
+                        <td class="order-id">${order.id}</td>
+                        <td>
+                            <strong>${order.customer}</strong><br>
+                            <small style="color: #666;">${order.customerPhone}</small>
+                        </td>
+                        <td>${order.date}<br><small>${order.time}</small></td>
+                        <td><strong>Rp ${order.total.toLocaleString('id-ID')}</strong></td>
+                        <td><span class="order-status ${statusInfo.class}">${statusInfo.text}</span></td>
+                        <td>
+                            <div class="order-actions">
+                                <button class="btn-action btn-edit" onclick="editOrder('${order.id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn-action btn-delete" onclick="deleteOrder('${order.id}')">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+
+        // Get status information
+        function getStatusInfo(status) {
+            const statusMap = {
+                'diterima': { class: 'status-diterima', text: 'Diterima' },
+                'disiapkan': { class: 'status-disiapkan', text: 'Disiapkan' },
+                'pengantaran': { class: 'status-pengantaran', text: 'Pengantaran' },
+                'sampai': { class: 'status-sampai', text: 'Sampai' }
+            };
+            return statusMap[status] || { class: 'status-diterima', text: 'Diterima' };
+        }
+
+        // Filter orders based on search term
+        function filterOrders(searchTerm) {
+            const rows = document.querySelectorAll('#ordersTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Update dashboard statistics
+        function updateStats() {
+            const total = orders.length;
+            const today = new Date().toISOString().split('T')[0];
+            const todayOrders = orders.filter(order => order.date === today).length;
+            const processing = orders.filter(order => order.status === 'disiapkan').length;
+            const delivery = orders.filter(order => order.status === 'pengantaran').length;
+            
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('todayOrders').textContent = todayOrders;
+            document.getElementById('processingOrders').textContent = processing;
+            document.getElementById('deliveryOrders').textContent = delivery;
+        }
+
+        // Edit order (open modal)
+        function editOrder(orderId) {
+            console.log('Editing order:', orderId);
+            currentOrderId = orderId;
+            const order = orders.find(o => o.id === orderId);
+            
+            if (!order) {
+                showAlert('Error', 'Pesanan tidak ditemukan', 'error');
+                return;
+            }
+            
+            console.log('Order found:', order);
+            
+            // Populate modal with order info
+            let itemsHTML = '';
+            order.items.forEach(item => {
+                itemsHTML += `${item.name} (${item.qty}x) - Rp ${(item.price * item.qty).toLocaleString('id-ID')}<br>`;
+            });
+            
+            document.getElementById('modalOrderInfo').innerHTML = `
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <p><strong>ID Pesanan:</strong> ${order.id}</p>
+                    <p><strong>Pelanggan:</strong> ${order.customer}</p>
+                    <p><strong>Telepon:</strong> ${order.customerPhone}</p>
+                    <p><strong>Alamat:</strong> ${order.address}</p>
+                    <p><strong>Total:</strong> Rp ${order.total.toLocaleString('id-ID')}</p>
+                    <p><strong>Items:</strong><br>${itemsHTML}</p>
+                </div>
+            `;
+            
+            // Create tracking options
+            const trackingOptions = document.getElementById('trackingOptions');
+            trackingOptions.innerHTML = '';
+            
+            const statusOptions = [
+                { id: 'diterima', icon: 'fa-clipboard-check', label: 'Pesanan Diterima' },
+                { id: 'disiapkan', icon: 'fa-coffee', label: 'Sedang Disiapkan' },
+                { id: 'pengantaran', icon: 'fa-motorcycle', label: 'Dalam Pengantaran' },
+                { id: 'sampai', icon: 'fa-home', label: 'Telah Sampai' }
+            ];
+            
+            statusOptions.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = `tracking-option ${order.status === option.id ? 'active' : ''}`;
+                optionDiv.dataset.status = option.id;
+                
+                const stepData = order.tracking.find(t => t.status === option.id);
+                
+                optionDiv.innerHTML = `
+                    <div class="tracking-icon">
+                        <i class="fas ${option.icon}"></i>
+                    </div>
+                    <div>
+                        <h4>${option.label}</h4>
+                        ${stepData 
+                            ? `<p>${stepData.time} WIB (${stepData.date})</p>` 
+                            : '<p>Klik untuk update</p>'}
+                    </div>
+                `;
+                
+                optionDiv.addEventListener('click', function() {
+                    document.querySelectorAll('.tracking-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show driver info form if status is pengantaran or sampai
+                    const driverForm = document.getElementById('driverInfoForm');
+                    if (option.id === 'pengantaran' || option.id === 'sampai') {
+                        driverForm.classList.add('active');
+                        
+                        // Pre-fill existing driver info
+                        if (order.driver) {
+                            document.getElementById('driverName').value = order.driver.name || '';
+                            document.getElementById('driverPhone').value = order.driver.phone || '';
+                            document.getElementById('currentLocation').value = order.driver.location || '';
+                            document.getElementById('estimatedTime').value = order.driver.eta || '';
+                        }
+                    } else {
+                        driverForm.classList.remove('active');
+                    }
+                });
+                
+                trackingOptions.appendChild(optionDiv);
+            });
+            
+            // Set initial driver form visibility
+            const driverForm = document.getElementById('driverInfoForm');
+            if (order.status === 'pengantaran' || order.status === 'sampai') {
+                driverForm.classList.add('active');
+                if (order.driver) {
+                    document.getElementById('driverName').value = order.driver.name || '';
+                    document.getElementById('driverPhone').value = order.driver.phone || '';
+                    document.getElementById('currentLocation').value = order.driver.location || '';
+                    document.getElementById('estimatedTime').value = order.driver.eta || '';
+                }
+            } else {
+                driverForm.classList.remove('active');
+            }
+            
+            // Show modal
+            document.getElementById('updateModal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('updateModal').style.display = 'none';
+            currentOrderId = null;
+        }
+
+        // Save tracking update
+function saveTrackingUpdate() {
+    if (!currentOrderId) {
+        showAlert('Error', 'Tidak ada pesanan yang dipilih', 'error');
+        return;
+    }
+    
+    const orderIndex = orders.findIndex(o => o.id === currentOrderId);
+    if (orderIndex === -1) {
+        showAlert('Error', 'Pesanan tidak ditemukan', 'error');
+        return;
+    }
+    
+    const selectedOption = document.querySelector('.tracking-option.active');
+    if (!selectedOption) {
+        showAlert('Peringatan', 'Pilih status terlebih dahulu!', 'warning');
+        return;
+    }
+    
+    const newStatus = selectedOption.dataset.status;
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const dateString = now.toISOString().split('T')[0];
+    
+    console.log(`Updating order ${currentOrderId} to status: ${newStatus}`);
+    
+    // Simpan old status untuk comparison
+    const oldStatus = orders[orderIndex].status;
+    
+    // Update order status
+    orders[orderIndex].status = newStatus;
+    
+    // Add to tracking history if not already there
+    if (!orders[orderIndex].tracking.find(t => t.status === newStatus)) {
+        orders[orderIndex].tracking.push({
+            status: newStatus,
+            time: timeString,
+            date: dateString,
+            note: `Status diperbarui ke ${newStatus}`
+        });
+    }
+    
+    // Update driver info if applicable
+    if (newStatus === 'pengantaran' || newStatus === 'sampai') {
+        orders[orderIndex].driver = {
+            name: document.getElementById('driverName').value,
+            phone: document.getElementById('driverPhone').value,
+            location: document.getElementById('currentLocation').value,
+            eta: document.getElementById('estimatedTime').value
+        };
+    }
+    
+    // Save to localStorage
+    saveOrdersToStorage();
+	
+	
+// Fungsi untuk trigger storage event
+function triggerStorageEvent() {
+    try {
+        // Simpan data ke localStorage
+        localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+        
+        // Buat custom event untuk notify tab lain
+        const event = new CustomEvent('mrsdkOrderUpdated', {
+            detail: { orders: orders }
+        });
+        window.dispatchEvent(event);
+        
+        // Juga trigger storage event (untuk tab lain di browser yang sama)
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: 'mrsdkOrders',
+            newValue: JSON.stringify(orders),
+            oldValue: localStorage.getItem('mrsdkOrders'),
+            url: window.location.href,
+            storageArea: localStorage
+        }));
+        
+        console.log('Storage event triggered for order update');
+    } catch (error) {
+        console.error('Error triggering storage event:', error);
+    }
+}    
+    // TRIGGER STORAGE EVENT untuk notify index.html
+    triggerStorageEvent();
+    
+    // Update UI
+    displayOrders();
+    updateStats();
+    closeModal();
+    
+    // Show success message
+    showAlert('Berhasil!', `Status pesanan ${currentOrderId} telah diperbarui ke "${newStatus}"`);
+    
+    // Log update
+    console.log('Order updated successfully:', orders[orderIndex]);
+    
+    // Jika status berubah, update tracking di customer side
+    if (oldStatus !== newStatus) {
+        updateCustomerTracking(currentOrderId);
+    }
+}
+
+        // Update customer tracking (simulated)
+        function updateCustomerTracking(orderId) {
+            console.log(`Tracking updated for order ${orderId}`);
+            
+            // In a real implementation, you would:
+            // 1. Send update to your backend
+            // 2. Backend updates the main index.html page data
+            // 3. Customer sees updated tracking on their order page
+        }
+
+        // Delete order
+        function deleteOrder(orderId) {
+            if (confirm(`Apakah Anda yakin ingin menghapus pesanan ${orderId}?`)) {
+                orders = orders.filter(order => order.id !== orderId);
+                saveOrdersToStorage();
+                displayOrders();
+                updateStats();
+                showAlert('Berhasil', `Pesanan ${orderId} telah dihapus`);
+            }
+        }
+
+        // Show alert message
+        function showAlert(title, text, type = 'success') {
+            const alert = document.getElementById('alertMessage');
+            const icon = alert.querySelector('.alert-icon');
+            
+            // Set icon based on type
+            if (type === 'error') {
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.backgroundColor = '#ff5252';
+            } else if (type === 'warning') {
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                icon.style.backgroundColor = '#ff9800';
+            } else {
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                icon.style.backgroundColor = '#4caf50';
+            }
+            
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertText').textContent = text;
+            
+            alert.style.display = 'flex';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -48,7 +48,7 @@
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .header-container {
@@ -244,12 +244,50 @@
 
         .product-image {
             height: 200px;
-            background-color: var(--lighter-green);
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--lighter-green), var(--light-green));
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .fallback-icon {
+            position: absolute;
+            font-size: 60px;
             color: white;
-            font-size: 80px;
+            opacity: 0.8;
+            z-index: 1;
+            display: none;
+        }
+
+        .size-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .product-info {
@@ -367,7 +405,7 @@
             flex: 1;
         }
 
-        /* Location Search - PERBAIKAN BESAR */
+        /* Location Search */
         .location-search {
             position: relative;
             margin-bottom: 10px;
@@ -384,11 +422,11 @@
             height: 48px;
         }
 
-        /* TOMBOL SEARCH - POSISI YANG FIXED DAN BENAR */
+        /* Search Button */
         .search-btn {
             position: absolute;
             right: 10px;
-            top: 25%;
+            top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
@@ -466,30 +504,34 @@
             font-style: italic;
         }
 
-        /* Perbaiki z-index untuk autocomplete dropdown */
-        .pac-container {
-            z-index: 1050 !important;
-            font-family: 'Quicksand', sans-serif;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            margin-top: 5px;
+        /* Auto Complete Suggestions */
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
             border: 1px solid #ddd;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .pac-item {
+        .autocomplete-suggestion {
             padding: 12px 15px;
-            font-size: 16px;
             cursor: pointer;
             border-bottom: 1px solid #eee;
         }
 
-        .pac-item:hover {
+        .autocomplete-suggestion:hover {
             background-color: #f5f5f5;
         }
 
-        .pac-item-query {
-            font-size: 16px;
-            color: #333;
+        .autocomplete-suggestion:last-child {
+            border-bottom: none;
         }
 
         /* Loading spinner */
@@ -775,6 +817,360 @@
             font-size: 14px;
         }
 
+        /* Tracking Section */
+        section {
+            scroll-margin-top: 100px;
+            padding-top: 30px;
+        }
+
+        #tracking {
+            scroll-margin-top: 120px;
+            padding-top: 40px;
+        }
+
+        /* Tracking Header */
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .live-badge {
+            display: inline-block;
+            background-color: #ff5252;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Tracking Search Card */
+        .track-search-card {
+            background-color: var(--cream);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            background-color: var(--light-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            height: 50px;
+            width: 50px;
+            justify-content: center;
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--primary-green);
+        }
+
+        .refresh-btn.refreshing i {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--light-green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Demo ID Button */
+        .demo-id-btn {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--light-green);
+            border: 1px solid var(--light-green);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .demo-id-btn:hover {
+            background-color: var(--light-green);
+            color: white;
+        }
+
+        /* Loading Card */
+        .loading-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .spinner-large {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--light-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        /* Default Card */
+        .default-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Tracking Status Card */
+        .tracking-status-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Status Highlight */
+        .status-highlight {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--light-green);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--light-green), var(--lighter-green));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Status Steps */
+        .tracking-status {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .tracking-status::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+
+        .status-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .status-step.completed .status-icon {
+            background-color: var(--light-green) !important;
+            animation: statusPulse 2s infinite;
+        }
+
+        .status-step.active .status-icon {
+            background-color: var(--yellow) !important;
+            animation: statusPulse 1.5s infinite;
+            box-shadow: 0 0 0 8px rgba(255, 213, 79, 0.3);
+        }
+
+        @keyframes statusPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(46, 125, 50, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
+        }
+
+        .status-step h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-brown);
+            margin-bottom: 5px;
+        }
+
+        .status-step p {
+            color: var(--brown);
+            font-size: 14px;
+        }
+
+        /* Order Status Badge */
+        .order-status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-diterima {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-disiapkan {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-pengantaran {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-sampai {
+            background-color: #f1f8e9;
+            color: #689f38;
+        }
+
+        /* Driver Info Card */
+        .driver-info-card {
+            background-color: rgba(76, 175, 80, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .driver-avatar-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        /* ETA Card */
+        .eta-card {
+            background: linear-gradient(135deg, var(--light-green), var(--lighter-green));
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Order Details Card */
+        .order-details-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             .hero-content {
@@ -817,7 +1213,6 @@
                 font-size: 18px;
             }
             
-            /* PERBAIKAN UNTUK INPUT DI MOBILE */
             .location-input {
                 font-size: 16px !important;
                 padding: 14px 50px 14px 15px !important;
@@ -832,16 +1227,76 @@
                 font-size: 16px;
             }
             
-            /* Perbaiki tampilan input saat fokus */
             .location-input:focus {
                 border-color: var(--light-green) !important;
                 outline: none;
                 box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
             }
             
-            /* Map container untuk mobile */
             .map-container {
                 height: 250px;
+            }
+            
+            .product-image {
+                height: 180px;
+            }
+            
+            .size-badge {
+                top: 10px;
+                right: 10px;
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            
+            /* Tracking Responsive */
+            .tracking-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .track-search-card {
+                padding: 20px;
+            }
+            
+            .track-search-card > div {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .track-search-card input {
+                padding: 12px 15px;
+            }
+            
+            .tracking-status {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .tracking-status::before {
+                display: none;
+            }
+            
+            .status-step {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                text-align: left;
+            }
+            
+            .status-icon {
+                margin: 0;
+                min-width: 50px;
+                min-height: 50px;
+            }
+            
+            .progress-container {
+                margin: 20px 0;
+            }
+            
+            .tracking-status-card .btn {
+                flex: 100%;
+                margin-bottom: 10px;
             }
         }
 
@@ -876,6 +1331,26 @@
                 padding: 10px;
                 font-size: 13px;
             }
+            
+            .product-image {
+                height: 160px;
+            }
+            
+            .tracking-status-card {
+                padding: 15px;
+            }
+            
+            .status-highlight {
+                padding: 15px;
+            }
+            
+            .driver-info-card {
+                padding: 15px;
+            }
+            
+            #tracking {
+                scroll-margin-top: 85px;
+            }
         }
         
         /* Fix untuk mobile menu */
@@ -898,82 +1373,6 @@
                 display: flex;
             }
         }
-        
-        /* Auto Complete Suggestions */
-        .autocomplete-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .autocomplete-suggestion {
-            padding: 12px 15px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .autocomplete-suggestion:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .autocomplete-suggestion:last-child {
-            border-bottom: none;
-        }
-
-        		/* Styling untuk gambar produk */
-.product-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-}
-
-/* Hapus background color dan styling lama dari .product-image */
-.product-image {
-    height: 200px;
-    /* Hapus background-color: var(--lighter-green); */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Tambahkan ini untuk crop gambar yang overflow */
-    position: relative;
-}
-
-/* Fallback jika gambar gagal load */
-.product-image i {
-    position: absolute;
-    font-size: 60px;
-    color: white;
-    opacity: 0.8;
-    z-index: 1;
-}
-
-/* Overlay untuk efek hover */
-.product-image::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.3) 100%);
-    z-index: 1;
-    transition: opacity 0.3s;
-}
-
-.product-card:hover .product-image::after {
-    opacity: 0.7;
-}
     </style>
 </head>
 <body>
@@ -1044,14 +1443,16 @@
         <div class="container">
             <h2 class="section-title">Menu Andalan Kami</h2>
             <div class="products-grid">
-                <!-- Product 1 -->
+                <!-- Product 1: Kopi Susu Creamy (200ml) -->
                 <div class="product-card">
-						<div class="product-image">
-							<!-- Ganti ikon dengan gambar -->
-							<img src="botol200ml.jpeg" 
-								 alt="Kopi Susu Creamy" 
-								 class="product-img">
-						</div>
+                    <div class="product-image">
+                        <img src="botol200ml.jpeg" 
+                             alt="Kopi Susu Creamy 200ml" 
+                             class="product-img"
+                             loading="lazy"
+                             onerror="handleImageError(this, 'creamy')">
+                        <i class="fas fa-mug-hot fallback-icon"></i>
+                    </div>
                     <div class="product-info">
                         <h3>Kopi Susu Creamy</h3>
                         <p>Perpaduan sempurna kopi robusta dengan susu segar dan gula aren asli.</p>
@@ -1065,15 +1466,16 @@
                     </div>
                 </div>
                 
-                <!-- Product 2 -->
-                
-					<div class="product-card">
-						<div class="product-image">
-							<!-- Ganti ikon dengan gambar -->
-							<img src="cup.jpeg" 
-								 alt="Kopi Susu Gula Aren" 
-								 class="product-img">
-						</div>
+                <!-- Product 2: Kopi Susu Gula Aren (200ml) -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="cup.jpeg" 
+                             alt="Kopi Susu Gula Aren 200ml" 
+                             class="product-img"
+                             loading="lazy"
+                             onerror="handleImageError(this, 'gulaaren')">
+                        <i class="fas fa-mug-hot fallback-icon"></i>
+                    </div>
                     <div class="product-info">
                         <h3>Kopi Susu Gula Aren</h3>
                         <p>Kopi susu dengan gula aren asli yang memberikan rasa karamel alami.</p>
@@ -1087,14 +1489,18 @@
                     </div>
                 </div>
                 
-                <!-- Product 3 -->
-               <div class="product-card">
-						<div class="product-image">
-							<!-- Ganti ikon dengan gambar -->
-							<img src="1liter.jpeg" 
-								 alt="Kopi Susu Creamy 1 Liter" 
-								 class="product-img">
-						</div>
+                <!-- Product 3: Kopi Susu Creamy 1 Liter -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="1liter.jpeg" 
+                             alt="Kopi Susu Creamy 1 Liter" 
+                             class="product-img"
+                             loading="lazy"
+                             onerror="handleImageError(this, 'liter')">
+                        <i class="fas fa-wine-bottle fallback-icon"></i>
+                        <!-- Badge untuk ukuran 1 Liter -->
+                        <span class="size-badge">1 LITER</span>
+                    </div>
                     <div class="product-info">
                         <h3>Kopi Susu Creamy 1 Liter</h3>
                         <p>Kopi susu dengan tambahan rasa hazelnut yang creamy dan harum.</p>
@@ -1108,15 +1514,16 @@
                     </div>
                 </div>
                 
-                <!-- Product 4 -->
-               
-					<div class="product-card">
-						<div class="product-image">
-							<!-- Ganti ikon dengan gambar -->
-							<img src="cup.jpeg" 
-								 alt="Kopi Susu Coconut" 
-								 class="product-img">
-						</div>
+                <!-- Product 4: Kopi Susu Coconut (200ml) -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="botol200ml.jpeg" 
+                             alt="Kopi Susu Coconut 200ml" 
+                             class="product-img"
+                             loading="lazy"
+                             onerror="handleImageError(this, 'coconut')">
+                        <i class="fas fa-coconut fallback-icon"></i>
+                    </div>
                     <div class="product-info">
                         <h3>Kopi Susu Coconut</h3>
                         <p>Kopi susu dengan ekstrak kelapa alami yang memberikan aroma memikat.</p>
@@ -1180,8 +1587,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="manual-address"><i class="fas fa-edit"></i> Ketik Alamat Manual (blok dan nomor rumah)</label>
-                    <textarea id="manual-address" class="form-control" rows="3" placeholder="Contoh: BA 11 no 3"></textarea>
+                    <label for="manual-address"><i class="fas fa-edit"></i> Atau Ketik Alamat Manual (jika peta tidak berfungsi)</label>
+                    <textarea id="manual-address" class="form-control" rows="3" placeholder="Contoh: Jl. Merdeka No. 10, Jakarta Pusat"></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -1235,70 +1642,93 @@
     <!-- Tracking Section -->
     <section class="tracking" id="tracking">
         <div class="container">
-            <h2 class="section-title">Lacak Pesanan Anda</h2>
-            <div class="tracking-container">
-                <h3 style="color: var(--dark-brown); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Status Pengiriman Pesanan #KD12345</h3>
-                
-                <div class="tracking-status">
-                    <!-- Step 1 -->
-                    <div class="status-step completed">
-                        <div class="status-icon">
-                            <i class="fas fa-clipboard-check"></i>
-                        </div>
-                        <h4>Pesanan Diterima</h4>
-                        <p>10:30 WIB</p>
-                    </div>
-                    
-                    <!-- Step 2 -->
-                    <div class="status-step completed">
-                        <div class="status-icon">
-                            <i class="fas fa-coffee"></i>
-                        </div>
-                        <h4>Sedang Disiapkan</h4>
-                        <p>10:45 WIB</p>
-                    </div>
-                    
-                    <!-- Step 3 -->
-                    <div class="status-step active">
-                        <div class="status-icon">
-                            <i class="fas fa-motorcycle"></i>
-                        </div>
-                        <h4>Dalam Pengantaran</h4>
-                        <p>11:15 WIB</p>
-                    </div>
-                    
-                    <!-- Step 4 -->
-                    <div class="status-step">
-                        <div class="status-icon">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <h4>Telah Sampai</h4>
-                        <p>Menunggu</p>
-                    </div>
+            <div class="tracking-header">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    Lacak Pesanan Anda 
+                    <span class="live-badge" id="liveBadge" style="display: none;">
+                        <i class="fas fa-circle" style="font-size: 8px; margin-right: 5px;"></i> LIVE
+                    </span>
+                </h2>
+                <div class="last-update" id="lastUpdateTime" style="color: var(--light-green); font-size: 14px;">
+                    <!-- Last update time will be shown here -->
                 </div>
-                
-                <div class="tracking-map">
-                    <div class="map-overlay">
-                        <i class="fas fa-map-marked-alt" style="font-size: 60px; color: var(--light-green);"></i>
-                        <p style="font-weight: 600; color: var(--dark-brown);">Posisi saat ini: Jl. Merdeka No. 45 (5 menit dari tujuan)</p>
+            </div>
+            
+            <!-- Search Box with better visibility -->
+            <div class="track-search-card">
+                <h3 style="color: var(--dark-brown); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">
+                    <i class="fas fa-search-location"></i> Cari Pesanan Anda
+                </h3>
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <div style="flex: 1; position: relative;">
+                        <input type="text" id="trackOrderId" 
+                               placeholder="Masukkan ID Pesanan Anda (Contoh: KD12345)" 
+                               style="width: 100%; padding: 15px 50px 15px 15px; border-radius: 10px; border: 2px solid var(--light-green); font-size: 16px;">
+                        <i class="fas fa-hashtag" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--light-green);"></i>
                     </div>
-                </div>
-                
-                <div class="driver-info">
-                    <div class="driver-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h4 style="color: var(--dark-brown); margin-bottom: 5px;">Budi Santoso - Driver</h4>
-                        <p style="color: var(--brown);">Mengantar pesanan Anda</p>
-                        <p style="color: var(--brown);"><i class="fas fa-phone-alt"></i> 0812-3456-7890</p>
-                    </div>
-                </div>
-                
-                <div style="text-align: center;">
-                    <button class="btn close-order-btn" id="closeOrderBtn">
-                        <i class="fas fa-check-circle"></i> Tandai Sudah Diterima
+                    <button id="searchTrackBtn" class="btn" style="white-space: nowrap;">
+                        <i class="fas fa-search"></i> Lacak
                     </button>
+                    <button id="refreshTrackBtn" class="refresh-btn" title="Refresh status">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p style="color: var(--brown); font-size: 14px; margin: 0;">
+                        <i class="fas fa-info-circle"></i> ID Pesanan dikirim via WhatsApp setelah order
+                    </p>
+                    <div id="autoRefreshStatus" style="display: flex; align-items: center; gap: 10px;">
+                        <span style="color: var(--light-green); font-size: 12px;">
+                            <i class="fas fa-clock"></i> Auto-refresh setiap 10 detik
+                        </span>
+                        <label class="switch">
+                            <input type="checkbox" id="autoRefreshToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status Loading -->
+            <div id="trackingLoading" class="loading-card" style="display: none;">
+                <div class="loading-content">
+                    <div class="spinner-large"></div>
+                    <p style="color: var(--dark-brown); font-size: 18px; margin-top: 20px;">
+                        Memuat status pesanan...
+                    </p>
+                    <p style="color: var(--brown); font-size: 14px; margin-top: 10px;">
+                        Harap tunggu sebentar
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Status Content -->
+            <div id="trackingContent" style="display: none;">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+            
+            <!-- Default/Error State -->
+            <div id="trackingDefault" class="default-card">
+                <div style="text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-truck" style="font-size: 80px; color: var(--lighter-green); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--dark-brown); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">
+                        Lacak Pengiriman Pesanan
+                    </h3>
+                    <p style="color: var(--brown); max-width: 500px; margin: 0 auto 30px;">
+                        Masukkan ID pesanan Anda untuk melihat status pengiriman terkini.
+                        Anda akan mendapatkan ID pesanan setelah melakukan pemesanan via WhatsApp.
+                    </p>
+                    <div class="demo-orders" style="margin-top: 30px;">
+                        <p style="color: var(--brown); margin-bottom: 10px; font-size: 14px;">
+                            <i class="fas fa-vial"></i> Coba ID demo:
+                        </p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button class="demo-id-btn" onclick="testOrder('KD12345')">KD12345</button>
+                            <button class="demo-id-btn" onclick="testOrder('KD12346')">KD12346</button>
+                            <button class="demo-id-btn" onclick="testOrder('KD12347')">KD12347</button>
+                            <button class="demo-id-btn" onclick="testOrder('KD10001')">KD10001</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1322,7 +1752,7 @@
                 <div class="footer-column">
                     <h3>Kontak Kami</h3>
                     <div class="contact-info">
-                        <p><i class="fas fa-map-marker-alt"></i> Jl. Raya Kopi No. 123, Jakarta</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Citra Indah,Jonggol</p>
                         <p><i class="fas fa-phone"></i> 021-1234-5678</p>
                         <p><i class="fab fa-whatsapp"></i> 0852-9805-5758</p>
                         <p><i class="fas fa-envelope"></i> hello@kopisusumrsdk.com</p>
@@ -1346,7 +1776,9 @@
     </footer>
 
     <script>
-        // Data pesanan
+        // ================================
+        // INITIAL DATA & VARIABLES
+        // ================================
         let orderItems = [];
         let totalPrice = 0;
         let whatsappMessage = "";
@@ -1361,8 +1793,15 @@
         let isMapInitialized = false;
         let placesService;
 
-        // Fix untuk mobile devices
+        // Tracking auto-refresh
+        let autoRefreshInterval;
+
+        // ================================
+        // INITIALIZATION
+        // ================================
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - Initializing...');
+            
             // Mobile menu toggle
             document.getElementById('mobileMenuBtn').addEventListener('click', function() {
                 const navMenu = document.getElementById('navMenu');
@@ -1379,14 +1818,63 @@
             
             // Setup custom autocomplete untuk akurasi yang lebih baik
             setupCustomAutocomplete();
+            
+            // Setup product quantity controls
+            setupProductControls();
+            
+            // Setup order form
+            setupOrderForm();
+            
+            // Setup tracking system
+            initTrackingSystem();
+            
+            // Auto-load last order
+            autoLoadLastOrder();
+            
+            // Setup smooth scrolling
+            setupSmoothScrolling();
         });
 
-        // Setup custom autocomplete untuk pencarian yang lebih akurat
+        // ================================
+        // IMAGE HANDLING FUNCTIONS
+        // ================================
+        function handleImageError(imgElement, productType) {
+            const parent = imgElement.parentElement;
+            const fallbackIcon = parent.querySelector('.fallback-icon');
+            
+            imgElement.style.display = 'none';
+            
+            if (fallbackIcon) {
+                fallbackIcon.style.display = 'flex';
+            }
+            
+            console.warn(`Gambar gagal dimuat: ${imgElement.src}`);
+        }
+
+        // ================================
+        // GOOGLE MAPS FUNCTIONS
+        // ================================
+        function initGoogleMaps() {
+            if (typeof google === 'undefined' || !google.maps) {
+                console.error('Google Maps API not loaded');
+                showAlert('Info', 'Google Maps sedang dimuat...');
+                setTimeout(initGoogleMaps, 2000);
+                return;
+            }
+            
+            try {
+                geocoder = new google.maps.Geocoder();
+                placesService = new google.maps.places.PlacesService(document.createElement('div'));
+                console.log('Google Maps API loaded successfully');
+            } catch (error) {
+                console.error('Error initializing Google Maps:', error);
+            }
+        }
+
         function setupCustomAutocomplete() {
             const locationInput = document.getElementById('location-search');
             const suggestionsContainer = document.getElementById('autocompleteSuggestions');
             
-            // Debounce function untuk menghindari terlalu banyak request
             let debounceTimer;
             locationInput.addEventListener('input', function(e) {
                 clearTimeout(debounceTimer);
@@ -1402,14 +1890,12 @@
                 }, 300);
             });
             
-            // Sembunyikan suggestions saat klik di luar
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.location-search')) {
                     suggestionsContainer.style.display = 'none';
                 }
             });
             
-            // Handle Enter key
             locationInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -1422,10 +1908,8 @@
             });
         }
 
-        // Search places with debounce
         function searchPlacesWithDebounce(searchTerm) {
             if (!window.google || !google.maps || !google.maps.places) {
-                // Fallback jika Google Maps belum siap
                 showSimpleSuggestions(searchTerm);
                 return;
             }
@@ -1443,13 +1927,11 @@
                 if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
                     showSuggestions(results);
                 } else {
-                    // Fallback ke simple suggestions
                     showSimpleSuggestions(searchTerm);
                 }
             });
         }
 
-        // Show suggestions from Google Places
         function showSuggestions(places) {
             const suggestionsContainer = document.getElementById('autocompleteSuggestions');
             suggestionsContainer.innerHTML = '';
@@ -1474,12 +1956,10 @@
             suggestionsContainer.style.display = 'block';
         }
 
-        // Show simple suggestions (fallback)
         function showSimpleSuggestions(searchTerm) {
             const suggestionsContainer = document.getElementById('autocompleteSuggestions');
             suggestionsContainer.innerHTML = '';
             
-            // Saran umum berdasarkan pencarian
             const commonSuggestions = [
                 `${searchTerm}, Jakarta`,
                 `${searchTerm}, Jakarta Selatan`,
@@ -1504,7 +1984,6 @@
             suggestionsContainer.style.display = 'block';
         }
 
-        // Handle place selection
         function selectPlace(place) {
             if (place.geometry) {
                 userLocation = {
@@ -1522,27 +2001,6 @@
             }
         }
 
-        // Initialize Google Maps
-        function initGoogleMaps() {
-            if (typeof google === 'undefined' || !google.maps) {
-                console.error('Google Maps API not loaded');
-                showAlert('Info', 'Google Maps sedang dimuat...');
-                // Coba lagi dalam 2 detik
-                setTimeout(initGoogleMaps, 2000);
-                return;
-            }
-            
-            try {
-                geocoder = new google.maps.Geocoder();
-                placesService = new google.maps.places.PlacesService(document.createElement('div'));
-                
-                console.log('Google Maps API loaded successfully');
-            } catch (error) {
-                console.error('Error initializing Google Maps:', error);
-            }
-        }
-
-        // Fungsi untuk mencari tempat berdasarkan nama - VERSI YANG LEBIH AKURAT
         function searchPlaceByName(placeName) {
             if (!placeName || placeName.trim() === '') return;
             
@@ -1553,14 +2011,13 @@
                 return;
             }
             
-            // Format query untuk hasil yang lebih akurat
             const query = placeName.includes(',') ? placeName : `${placeName}, Indonesia`;
             
             geocoder.geocode({ 
                 address: query,
                 region: 'ID',
                 bounds: new google.maps.LatLngBounds(
-                    new google.maps.LatLng(-6.5, 106.2), // Jakarta area bounds
+                    new google.maps.LatLng(-6.5, 106.2),
                     new google.maps.LatLng(-5.8, 107.0)
                 )
             }, (results, status) => {
@@ -1576,7 +2033,6 @@
                     showMapWithLocation(userLocation);
                     showAlert('Lokasi Ditemukan', 'Alamat telah berhasil ditemukan.');
                 } else {
-                    // Coba tanpa bounds jika gagal
                     geocoder.geocode({ 
                         address: query,
                         region: 'ID'
@@ -1605,7 +2061,6 @@
             const searchText = document.getElementById('location-search').value.trim();
             if (searchText.length > 2) {
                 searchPlaceByName(searchText);
-                // Sembunyikan suggestions
                 document.getElementById('autocompleteSuggestions').style.display = 'none';
             } else {
                 showAlert('Input Kosong', 'Silakan ketik nama tempat atau alamat terlebih dahulu.');
@@ -1663,7 +2118,6 @@
             }
         });
 
-        // Initialize map with location
         function initMapWithLocation(location) {
             try {
                 const mapElement = document.getElementById('address-map');
@@ -1690,7 +2144,6 @@
                     title: 'Lokasi Pengiriman'
                 });
                 
-                // Update address when marker is dragged
                 google.maps.event.addListener(marker, 'dragend', function() {
                     updateAddressFromLocation(marker.getPosition());
                 });
@@ -1701,7 +2154,6 @@
             }
         }
 
-        // Show map with specific location
         function showMapWithLocation(location) {
             if (!isMapInitialized || !map) {
                 initMapWithLocation(location);
@@ -1719,7 +2171,6 @@
                 map.setZoom(16);
             }
             
-            // Force map resize
             setTimeout(() => {
                 if (map) {
                     google.maps.event.trigger(map, 'resize');
@@ -1727,7 +2178,6 @@
             }, 300);
         }
 
-        // Update address from location coordinates
         function updateAddressFromLocation(location) {
             if (!geocoder) {
                 console.error('Geocoder not initialized');
@@ -1743,39 +2193,66 @@
             });
         }
 
-        // Quantity controls
-        document.querySelectorAll('.qty-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-product');
-                const productName = this.getAttribute('data-name');
-                const productPrice = parseInt(this.getAttribute('data-price'));
-                const input = document.getElementById(`qty-${productId}`);
-                const statusElement = document.getElementById(`status-${productId}`);
-                
-                let value = parseInt(input.value) || 0;
-                
-                if (this.classList.contains('plus')) {
-                    value++;
-                } else if (this.classList.contains('minus') && value > 0) {
-                    value--;
-                }
-                
-                input.value = value;
-                
-                if (value > 0) {
-                    statusElement.textContent = `${value} x ditambahkan`;
-                    statusElement.style.color = 'var(--light-green)';
-                } else {
-                    statusElement.textContent = '';
-                }
-                
-                updateOrderItem(productId, productName, productPrice, value);
-                updateOrderSummary();
-                updateReceiptPreview();
+        // ================================
+        // PRODUCT & ORDER FUNCTIONS
+        // ================================
+        function setupProductControls() {
+            document.querySelectorAll('.qty-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product');
+                    const productName = this.getAttribute('data-name');
+                    const productPrice = parseInt(this.getAttribute('data-price'));
+                    const input = document.getElementById(`qty-${productId}`);
+                    const statusElement = document.getElementById(`status-${productId}`);
+                    
+                    let value = parseInt(input.value) || 0;
+                    
+                    if (this.classList.contains('plus')) {
+                        value++;
+                    } else if (this.classList.contains('minus') && value > 0) {
+                        value--;
+                    }
+                    
+                    input.value = value;
+                    
+                    if (value > 0) {
+                        statusElement.textContent = `${value} x ditambahkan`;
+                        statusElement.style.color = 'var(--light-green)';
+                    } else {
+                        statusElement.textContent = '';
+                    }
+                    
+                    updateOrderItem(productId, productName, productPrice, value);
+                    updateOrderSummary();
+                    updateReceiptPreview();
+                });
             });
-        });
 
-        // Update order item function
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const productId = this.id.split('-')[1];
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    const productPrice = parseInt(productCard.querySelector('.price').textContent.replace(/\D/g, ''));
+                    const value = parseInt(this.value) || 0;
+                    const statusElement = document.getElementById(`status-${productId}`);
+                    
+                    if (value < 0) this.value = 0;
+                    
+                    if (value > 0) {
+                        statusElement.textContent = `${value} x ditambahkan`;
+                        statusElement.style.color = 'var(--light-green)';
+                    } else {
+                        statusElement.textContent = '';
+                    }
+                    
+                    updateOrderItem(productId, productName, productPrice, value);
+                    updateOrderSummary();
+                    updateReceiptPreview();
+                });
+            });
+        }
+
         function updateOrderItem(productId, productName, productPrice, quantity) {
             const existingItemIndex = orderItems.findIndex(item => item.id == productId);
             
@@ -1797,7 +2274,6 @@
             }
         }
 
-        // Update order summary
         function updateOrderSummary() {
             const orderItemsElement = document.getElementById('order-items');
             totalPrice = 0;
@@ -1833,7 +2309,6 @@
             document.getElementById('total-price').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
         }
 
-        // Update receipt preview
         function updateReceiptPreview() {
             const receiptItems = document.getElementById('receiptItems');
             const receiptPreview = document.getElementById('receiptPreview');
@@ -1862,8 +2337,14 @@
             }
         }
 
-        // Send to WhatsApp button
-        document.getElementById('sendToWhatsApp').addEventListener('click', function() {
+        // ================================
+        // ORDER FORM FUNCTIONS
+        // ================================
+        function setupOrderForm() {
+            document.getElementById('sendToWhatsApp').addEventListener('click', sendOrderToWhatsApp);
+        }
+
+        function sendOrderToWhatsApp() {
             const customerName = document.getElementById('customer-name').value.trim();
             const customerPhone = document.getElementById('customer-phone').value.trim();
             const customerAddress = document.getElementById('customer-address').value.trim();
@@ -1890,6 +2371,13 @@
             orderNumber = 'ORD-' + Date.now().toString().substr(-6);
             document.getElementById('receiptNumber').textContent = orderNumber;
             
+            let receiptItems = '';
+            orderItems.forEach(item => {
+                receiptItems += `▸ ${item.name}\n`;
+                receiptItems += `  ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}\n`;
+                receiptItems += `  = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n\n`;
+            });
+            
             whatsappMessage = `═══════════════════════════════════\n`;
             whatsappMessage += `         *KOPI SUSU MRS. DK*\n`;
             whatsappMessage += `═══════════════════════════════════\n\n`;
@@ -1898,13 +2386,7 @@
             whatsappMessage += `Tanggal: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}\n\n`;
             whatsappMessage += `═══════════════════════════════════\n`;
             whatsappMessage += `*Detail Pesanan:*\n\n`;
-            
-            orderItems.forEach(item => {
-                whatsappMessage += `▸ ${item.name}\n`;
-                whatsappMessage += `  ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}\n`;
-                whatsappMessage += `  = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n\n`;
-            });
-            
+            whatsappMessage += receiptItems;
             whatsappMessage += `═══════════════════════════════════\n`;
             whatsappMessage += `*Total:* Rp ${totalPrice.toLocaleString('id-ID')}\n\n`;
             whatsappMessage += `═══════════════════════════════════\n`;
@@ -1926,34 +2408,105 @@
             whatsappMessage += `Terima kasih telah memesan di\nKopi Susu Mrs. DK!\n`;
             whatsappMessage += `═══════════════════════════════════`;
             
+            // SAVE ORDER TO ADMIN SYSTEM
+            const orderData = {
+                customerName: customerName,
+                customerPhone: customerPhone,
+                finalAddress: finalAddress,
+                customerNote: customerNote,
+                totalPrice: totalPrice,
+                items: orderItems.map(item => ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price
+                })),
+                whatsappMessage: whatsappMessage,
+                orderNumber: orderNumber,
+                userLocation: userLocation
+            };
+            
+            const adminOrderId = saveOrderToAdminSystem(orderData);
+            
+            // Update receipt with admin order ID
+            whatsappMessage = whatsappMessage.replace(`No. Pesanan: ${orderNumber}`, `No. Pesanan: ${adminOrderId} (${orderNumber})`);
+            
             const encodedMessage = encodeURIComponent(whatsappMessage);
             
-            showAlert('Mengarahkan ke WhatsApp', 'Silakan konfirmasi pengiriman pesan...');
+            showAlert('Mengarahkan ke WhatsApp', `Pesanan ${adminOrderId} telah dicatat! Silakan konfirmasi pengiriman pesan...`);
             
             const whatsappURL = `https://api.whatsapp.com/send?phone=6285298055758&text=${encodedMessage}`;
             
             setTimeout(() => {
                 window.open(whatsappURL, '_blank');
                 
+                // Simpan data pesanan untuk tracking
+                localStorage.setItem('lastOrderId', adminOrderId);
+                
                 setTimeout(() => {
                     resetOrderForm();
                 }, 2000);
             }, 1500);
-        });
-
-        // Show alert
-        function showAlert(title, message) {
-            const alertBox = document.getElementById('whatsappAlert');
-            document.getElementById('alertTitle').textContent = title;
-            document.getElementById('alertMessage').textContent = message;
-            alertBox.style.display = 'block';
-            
-            setTimeout(() => {
-                alertBox.style.display = 'none';
-            }, 3000);
         }
 
-        // Reset order form function
+        function saveOrderToAdminSystem(orderData) {
+            const existingOrders = localStorage.getItem('mrsdkOrders');
+            let orders = existingOrders ? JSON.parse(existingOrders) : [];
+            
+            const orderNumber = orders.length + 1;
+            const orderId = 'KD' + (10000 + orderNumber).toString().substr(1);
+            
+            const now = new Date();
+            const dateString = now.toISOString().split('T')[0];
+            const timeString = now.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            }).replace('.', ':');
+            
+            const adminOrder = {
+                id: orderId,
+                customer: orderData.customerName,
+                customerPhone: orderData.customerPhone,
+                address: orderData.finalAddress,
+                date: dateString,
+                time: timeString,
+                total: orderData.totalPrice,
+                status: 'diterima',
+                items: orderData.items.map(item => ({
+                    name: item.name,
+                    qty: item.quantity,
+                    price: item.price
+                })),
+                driver: {
+                    name: '',
+                    phone: '',
+                    location: '',
+                    eta: ''
+                },
+                tracking: [
+                    {
+                        status: 'diterima',
+                        time: timeString,
+                        date: dateString,
+                        note: 'Pesanan diterima dari WhatsApp'
+                    }
+                ],
+                whatsappMessage: orderData.whatsappMessage,
+                orderNumber: orderData.orderNumber,
+                location: orderData.userLocation,
+                customerNote: orderData.customerNote || ''
+            };
+            
+            orders.unshift(adminOrder);
+            
+            localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+            localStorage.setItem('lastOrderId', orderId);
+            localStorage.setItem(`order_${orderId}`, JSON.stringify(adminOrder));
+            
+            console.log('Order saved to admin system:', adminOrder);
+            return orderId;
+        }
+
         function resetOrderForm() {
             for (let i = 1; i <= 4; i++) {
                 document.getElementById(`qty-${i}`).value = 0;
@@ -1979,69 +2532,677 @@
             showAlert('Pesanan Berhasil Dikirim!', 'Terima kasih telah memesan Kopi Susu Mrs. DK.');
         }
 
-        // Close order button functionality
-        document.getElementById('closeOrderBtn').addEventListener('click', function() {
-            const trackingSteps = document.querySelectorAll('.status-step');
+        // ================================
+        // TRACKING SYSTEM FUNCTIONS
+        // ================================
+        function initTrackingSystem() {
+            console.log('Initializing tracking system...');
             
-            trackingSteps[3].classList.remove('active');
-            trackingSteps[3].classList.add('completed');
+            // Setup event listener
+            setupTrackingListener();
             
-            document.querySelector('.status-step:nth-child(4) p').textContent = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-            
-            this.innerHTML = '<i class="fas fa-check-circle"></i> Pesanan Telah Diterima';
-            this.disabled = true;
-            this.style.backgroundColor = '#888';
-            
-            showAlert('Terima Kasih!', 'Pesanan telah dikonfirmasi diterima.');
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+            // Search button handler
+            const searchBtn = document.getElementById('searchTrackBtn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function() {
+                    const orderId = document.getElementById('trackOrderId').value.trim();
+                    if (!orderId) {
+                        showAlert('Error', 'Masukkan ID Pesanan terlebih dahulu');
+                        return;
+                    }
                     
-                    const navMenu = document.getElementById('navMenu');
-                    if(window.innerWidth <= 768) {
-                        navMenu.classList.remove('active');
+                    loadAndDisplayTracking(orderId);
+                });
+            }
+            
+            // Refresh button handler
+            const refreshBtn = document.getElementById('refreshTrackBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    const btn = this;
+                    const orderId = document.getElementById('trackOrderId').value.trim();
+                    
+                    if (!orderId) {
+                        showAlert('Error', 'Masukkan ID Pesanan terlebih dahulu');
+                        return;
+                    }
+                    
+                    btn.classList.add('refreshing');
+                    
+                    loadAndDisplayTracking(orderId);
+                    
+                    setTimeout(() => {
+                        btn.classList.remove('refreshing');
+                        showAlert('Status Diperbarui', 'Status pesanan telah direfresh');
+                    }, 1000);
+                });
+            }
+            
+            // Auto-refresh toggle
+            const autoRefreshToggle = document.getElementById('autoRefreshToggle');
+            if (autoRefreshToggle) {
+                autoRefreshToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        startAutoRefresh();
+                    } else {
+                        stopAutoRefresh();
+                    }
+                });
+            }
+            
+            // Start auto-refresh
+            startAutoRefresh();
+        }
+
+        function setupTrackingListener() {
+            console.log('Setting up tracking listener...');
+            
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'mrsdkOrders') {
+                    console.log('Orders updated in storage, refreshing tracking...');
+                    refreshTracking();
+                }
+            });
+        }
+
+        function refreshTracking() {
+            const currentOrderId = document.getElementById('trackOrderId').value.trim();
+            if (currentOrderId) {
+                loadAndDisplayTracking(currentOrderId);
+            }
+        }
+
+        function startAutoRefresh() {
+            stopAutoRefresh();
+            
+            autoRefreshInterval = setInterval(() => {
+                const orderId = document.getElementById('trackOrderId').value.trim();
+                if (orderId) {
+                    loadAndDisplayTracking(orderId);
+                }
+            }, 10000);
+            
+            console.log('Auto-refresh started (10 seconds interval)');
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                console.log('Auto-refresh stopped');
+            }
+        }
+
+        function loadAndDisplayTracking(orderId) {
+            console.log('Loading tracking for order:', orderId);
+            
+            document.getElementById('trackingLoading').style.display = 'block';
+            document.getElementById('trackingDefault').style.display = 'none';
+            document.getElementById('trackingContent').style.display = 'none';
+            
+            const savedOrders = localStorage.getItem('mrsdkOrders');
+            if (!savedOrders) {
+                console.log('No orders found in storage');
+                showTrackingError('Tidak ada data pesanan');
+                return;
+            }
+            
+            try {
+                const orders = JSON.parse(savedOrders);
+                console.log('Parsed orders:', orders.length, 'orders');
+                console.log('Available order IDs:', orders.map(o => o.id));
+                
+                const order = orders.find(o => {
+                    const normalizedInput = orderId.toUpperCase().trim();
+                    const normalizedOrderId = o.id ? o.id.toUpperCase().trim() : '';
+                    console.log(`Comparing: "${normalizedInput}" with "${normalizedOrderId}"`);
+                    return normalizedOrderId === normalizedInput;
+                });
+                
+                if (order) {
+                    console.log('Order found:', order);
+                    console.log('Order status:', order.status);
+                    console.log('Order tracking:', order.tracking);
+                    
+                    const fixedOrder = fixOrderDataFormat(order);
+                    updateTrackingDisplay(fixedOrder);
+                } else {
+                    console.log('Order not found. Available orders:', orders);
+                    showTrackingError(`Pesanan "${orderId}" tidak ditemukan`);
+                }
+            } catch (error) {
+                console.error('Error parsing orders:', error);
+                showTrackingError('Error memuat data pesanan');
+            }
+        }
+
+        function fixOrderDataFormat(order) {
+            const fixedOrder = { ...order };
+            
+            if (fixedOrder.status) {
+                const statusMap = {
+                    'diterima': 'diterima',
+                    'disiapkan': 'disiapkan',
+                    'Disiapkan': 'disiapkan',
+                    'pengantaran': 'pengantaran',
+                    'sampai': 'sampai',
+                    'Sampai': 'sampai'
+                };
+                
+                fixedOrder.status = statusMap[fixedOrder.status] || fixedOrder.status.toLowerCase();
+            }
+            
+            if (!fixedOrder.tracking || !Array.isArray(fixedOrder.tracking)) {
+                fixedOrder.tracking = [];
+                
+                if (fixedOrder.status && fixedOrder.date && fixedOrder.time) {
+                    fixedOrder.tracking.push({
+                        status: fixedOrder.status,
+                        time: fixedOrder.time,
+                        date: fixedOrder.date,
+                        note: 'Pesanan dibuat'
+                    });
+                }
+            }
+            
+            if (!fixedOrder.driver || typeof fixedOrder.driver !== 'object') {
+                fixedOrder.driver = {
+                    name: '',
+                    phone: '',
+                    location: '',
+                    eta: ''
+                };
+            }
+            
+            if (!fixedOrder.items || !Array.isArray(fixedOrder.items)) {
+                fixedOrder.items = [];
+            }
+            
+            if (typeof fixedOrder.total === 'string') {
+                fixedOrder.total = parseInt(fixedOrder.total.replace(/[^0-9]/g, ''));
+            }
+            
+            return fixedOrder;
+        }
+
+        function updateTrackingDisplay(order) {
+            console.log('Updating tracking display for order:', order.id);
+            
+            showLiveBadge(true);
+            
+            document.getElementById('trackingLoading').style.display = 'none';
+            document.getElementById('trackingDefault').style.display = 'none';
+            document.getElementById('trackingContent').style.display = 'block';
+            
+            const lastUpdateTime = document.getElementById('lastUpdateTime');
+            if (lastUpdateTime) {
+                lastUpdateTime.innerHTML = `<i class="fas fa-clock"></i> Update: ${new Date().toLocaleTimeString('id-ID')}`;
+            }
+            
+            const statusProgress = {
+                'diterima': 25,
+                'disiapkan': 50,
+                'pengantaran': 75,
+                'sampai': 100
+            };
+            
+            const progressPercent = statusProgress[order.status] || 0;
+            
+            const statusSteps = [
+                { status: 'diterima', icon: 'fa-clipboard-check', label: 'Pesanan Diterima' },
+                { status: 'disiapkan', icon: 'fa-coffee', label: 'Sedang Disiapkan' },
+                { status: 'pengantaran', icon: 'fa-motorcycle', label: 'Dalam Pengantaran' },
+                { status: 'sampai', icon: 'fa-home', label: 'Telah Sampai' }
+            ];
+            
+            let stepsHTML = '';
+            statusSteps.forEach(step => {
+                const stepData = order.tracking ? order.tracking.find(t => t.status === step.status) : null;
+                const isActive = order.status === step.status;
+                const isCompleted = order.tracking ? order.tracking.some(t => t.status === step.status) : false;
+                
+                stepsHTML += `
+                    <div class="status-step ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}" 
+                         style="animation-delay: ${statusSteps.indexOf(step) * 0.1}s">
+                        <div class="status-icon">
+                            <i class="fas ${step.icon}"></i>
+                        </div>
+                        <h4>${step.label}</h4>
+                        <p>${stepData ? `${stepData.time} WIB` : 'Menunggu'}</p>
+                        ${stepData && stepData.note ? 
+                            `<p style="font-size: 12px; color: #666; margin-top: 5px;">${stepData.note}</p>` : ''}
+                    </div>
+                `;
+            });
+            
+            const driverInfoHTML = order.driver?.name ? `
+                <div class="driver-info-card">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="driver-avatar-large">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--dark-brown); margin-bottom: 5px;">
+                                ${order.driver.name} - Driver
+                            </h4>
+                            <p style="color: var(--brown); margin-bottom: 5px;">
+                                <i class="fas fa-phone-alt"></i> ${order.driver.phone || '-'}
+                            </p>
+                            <p style="color: var(--brown);">
+                                <i class="fas fa-map-marker-alt"></i> ${order.driver.location || 'Lokasi tidak tersedia'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ` : `
+                <div class="driver-info-card" style="background-color: rgba(255, 193, 7, 0.05); text-align: center;">
+                    <i class="fas fa-user-clock" style="font-size: 40px; color: #ff9800; margin-bottom: 10px;"></i>
+                    <p style="color: var(--dark-brown);">Driver belum ditugaskan</p>
+                    <p style="color: var(--brown); font-size: 14px;">Driver akan ditugaskan saat pesanan dalam pengantaran</p>
+                </div>
+            `;
+            
+            const etaHTML = order.driver?.eta ? `
+                <div class="eta-card">
+                    <h4 style="margin-bottom: 5px;">
+                        <i class="fas fa-clock"></i> Perkiraan Waktu Tiba
+                    </h4>
+                    <p style="font-size: 18px; font-weight: 600;">${order.driver.eta}</p>
+                </div>
+            ` : '';
+            
+            let itemsHTML = '';
+            if (order.items && order.items.length > 0) {
+                itemsHTML = `
+                    <div class="order-details-card">
+                        <h4 style="color: var(--dark-brown); margin-bottom: 15px;">
+                            <i class="fas fa-shopping-bag"></i> Detail Pesanan
+                        </h4>
+                        ${order.items.map(item => `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #ddd;">
+                                <span>${item.name} (${item.qty}x)</span>
+                                <span style="font-weight: 600;">Rp ${(item.price * item.qty).toLocaleString('id-ID')}</span>
+                            </div>
+                        `).join('')}
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--light-green); font-weight: 600;">
+                            <span>TOTAL</span>
+                            <span>Rp ${order.total.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            const trackingContent = document.getElementById('trackingContent');
+            trackingContent.innerHTML = `
+                <div class="tracking-status-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--dark-brown); margin: 0; font-family: 'Poppins', sans-serif;">
+                            <i class="fas fa-box"></i> Pesanan #${order.id}
+                        </h3>
+                        <span class="order-status-badge ${getStatusClass(order.status)}">
+                            ${getStatusText(order.status)}
+                        </span>
+                    </div>
+                    
+                    <div class="status-highlight">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas ${getStatusIcon(order.status)}" style="font-size: 30px; color: var(--light-green);"></i>
+                            <div>
+                                <h4 style="color: var(--dark-brown); margin: 0 0 5px 0;">
+                                    ${getStatusMessage(order.status)}
+                                </h4>
+                                <p style="color: var(--brown); margin: 0; font-size: 14px;">
+                                    ${getStatusDescription(order.status)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color: var(--dark-brown); font-weight: 600;">Status Pengiriman</span>
+                            <span style="color: var(--light-green); font-weight: 600;">${progressPercent}%</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tracking-status">
+                        ${stepsHTML}
+                    </div>
+                    
+                    ${etaHTML}
+                    ${driverInfoHTML}
+                    ${itemsHTML}
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap;">
+                        <button class="btn" onclick="refreshTracking()" style="flex: 1;">
+                            <i class="fas fa-sync-alt"></i> Refresh Status
+                        </button>
+                        ${order.status === 'sampai' ? `
+                            <button class="btn" style="background-color: #4caf50; color: white; flex: 1;" disabled>
+                                <i class="fas fa-check-circle"></i> Pesanan Telah Diterima
+                            </button>
+                        ` : `
+                            <button class="btn" onclick="confirmOrderReceived('${order.id}')" style="background-color: var(--yellow); color: var(--dark-brown); flex: 1;">
+                                <i class="fas fa-check-circle"></i> Konfirmasi Diterima
+                            </button>
+                        `}
+                        <button class="btn" onclick="shareTracking('${order.id}')" style="background-color: #2196f3; color: white; flex: 1;">
+                            <i class="fas fa-share-alt"></i> Bagikan Status
+                        </button>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ddd;">
+                        <p style="color: #666; font-size: 12px;">
+                            <i class="fas fa-history"></i> Terakhir diperbarui: ${new Date().toLocaleString('id-ID')}
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                scrollToTracking();
+            }, 300);
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'diterima': 'status-diterima',
+                'disiapkan': 'status-disiapkan',
+                'pengantaran': 'status-pengantaran',
+                'sampai': 'status-sampai'
+            };
+            return classes[status] || 'status-diterima';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'diterima': 'Diterima',
+                'disiapkan': 'Disiapkan',
+                'pengantaran': 'Dalam Pengantaran',
+                'sampai': 'Telah Sampai'
+            };
+            return texts[status] || 'Diterima';
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'diterima': 'fa-clipboard-check',
+                'disiapkan': 'fa-coffee',
+                'pengantaran': 'fa-motorcycle',
+                'sampai': 'fa-home'
+            };
+            return icons[status] || 'fa-clipboard-check';
+        }
+
+        function getStatusMessage(status) {
+            const messages = {
+                'diterima': 'Pesanan Anda telah diterima',
+                'disiapkan': 'Pesanan sedang disiapkan',
+                'pengantaran': 'Pesanan dalam pengantaran',
+                'sampai': 'Pesanan telah sampai'
+            };
+            return messages[status] || 'Pesanan diterima';
+        }
+
+        function getStatusDescription(status) {
+            const descriptions = {
+                'diterima': 'Tim kami sedang memproses pesanan Anda',
+                'disiapkan': 'Barista kami sedang membuat kopi spesial untuk Anda',
+                'pengantaran': 'Driver sedang dalam perjalanan ke lokasi Anda',
+                'sampai': 'Pesanan telah sampai di tujuan'
+            };
+            return descriptions[status] || 'Pesanan sedang diproses';
+        }
+
+        function showTrackingError(message) {
+            document.getElementById('trackingLoading').style.display = 'none';
+            document.getElementById('trackingDefault').style.display = 'none';
+            document.getElementById('trackingContent').style.display = 'block';
+            
+            const trackingContent = document.getElementById('trackingContent');
+            trackingContent.innerHTML = `
+                <div class="tracking-status-card" style="text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 60px; color: #ff9800; margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--dark-brown); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">
+                        ${message}
+                    </h3>
+                    <p style="color: var(--brown); margin-bottom: 25px;">
+                        Pastikan ID pesanan yang dimasukkan benar.
+                    </p>
+                    <button class="btn" onclick="showDefaultTracking()" style="margin-right: 10px;">
+                        <i class="fas fa-home"></i> Kembali
+                    </button>
+                    <button class="btn" onclick="testOrder('KD10001')" style="background-color: var(--yellow); color: var(--dark-brown);">
+                        <i class="fas fa-vial"></i> Test KD10001
+                    </button>
+                </div>
+            `;
+        }
+
+        function showDefaultTracking() {
+            document.getElementById('trackingLoading').style.display = 'none';
+            document.getElementById('trackingContent').style.display = 'none';
+            document.getElementById('trackingDefault').style.display = 'block';
+        }
+
+        function showLiveBadge(show) {
+            const liveBadge = document.getElementById('liveBadge');
+            if (liveBadge) {
+                liveBadge.style.display = show ? 'inline-block' : 'none';
+            }
+        }
+
+        // ================================
+        // UTILITY FUNCTIONS
+        // ================================
+        function autoLoadLastOrder() {
+            setTimeout(() => {
+                const lastOrderId = localStorage.getItem('lastOrderId');
+                if (lastOrderId) {
+                    console.log('Auto-loading last order:', lastOrderId);
+                    document.getElementById('trackOrderId').value = lastOrderId;
+                    
+                    loadAndDisplayTracking(lastOrderId);
+                    
+                    setTimeout(() => {
+                        scrollToTracking();
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        function testOrder(orderId) {
+            document.getElementById('trackOrderId').value = orderId;
+            document.getElementById('searchTrackBtn').click();
+        }
+
+        function confirmOrderReceived(orderId) {
+            if (confirm('Apakah pesanan sudah Anda terima?')) {
+                const savedOrders = localStorage.getItem('mrsdkOrders');
+                if (savedOrders) {
+                    const orders = JSON.parse(savedOrders);
+                    const orderIndex = orders.findIndex(o => o.id === orderId);
+                    
+                    if (orderIndex !== -1) {
+                        orders[orderIndex].status = 'sampai';
+                        orders[orderIndex].tracking.push({
+                            status: 'sampai',
+                            time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                            date: new Date().toISOString().split('T')[0],
+                            note: 'Dikonfirmasi diterima oleh customer'
+                        });
+                        
+                        localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+                        
+                        loadAndDisplayTracking(orderId);
+                        
+                        showAlert('Terima Kasih!', 'Pesanan telah dikonfirmasi diterima.');
                     }
                 }
-            });
-        });
+            }
+        }
 
-        // Input quantity change handler (manual input)
-        document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('change', function() {
-                const productId = this.id.split('-')[1];
-                const productCard = this.closest('.product-card');
-                const productName = productCard.querySelector('h3').textContent;
-                const productPrice = parseInt(productCard.querySelector('.price').textContent.replace(/\D/g, ''));
-                const value = parseInt(this.value) || 0;
-                const statusElement = document.getElementById(`status-${productId}`);
-                
-                if (value < 0) this.value = 0;
-                
-                if (value > 0) {
-                    statusElement.textContent = `${value} x ditambahkan`;
-                    statusElement.style.color = 'var(--light-green)';
-                } else {
-                    statusElement.textContent = '';
-                }
-                
-                updateOrderItem(productId, productName, productPrice, value);
-                updateOrderSummary();
-                updateReceiptPreview();
+        function shareTracking(orderId) {
+            const trackingURL = window.location.href.split('#')[0] + '#tracking';
+            const shareText = `Lacak pesanan saya #${orderId} di Kopi Susu Mrs. DK: ${trackingURL}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `Tracking Pesanan #${orderId}`,
+                    text: shareText,
+                    url: trackingURL
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showAlert('Berhasil!', 'Link tracking telah disalin ke clipboard');
+            }
+        }
+
+        function showAlert(title, message, type = 'success') {
+            const alertBox = document.getElementById('whatsappAlert');
+            const icon = alertBox.querySelector('.alert-icon');
+            
+            if (type === 'error') {
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.style.backgroundColor = '#ff5252';
+            } else if (type === 'warning') {
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                icon.style.backgroundColor = '#ff9800';
+            } else {
+                icon.innerHTML = '<i class="fab fa-whatsapp"></i>';
+                icon.style.backgroundColor = '#25D366';
+            }
+            
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+            
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        const navMenu = document.getElementById('navMenu');
+                        if(window.innerWidth <= 768) {
+                            navMenu.classList.remove('active');
+                        }
+                    }
+                });
             });
-        });
+        }
+
+        function scrollToTracking() {
+            const trackingSection = document.getElementById('tracking');
+            if (trackingSection) {
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const targetPosition = trackingSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // ================================
+        // DEBUG FUNCTIONS
+        // ================================
+        function debugOrders() {
+            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+            console.log('=== DEBUG ORDERS ===');
+            console.log('Total orders:', orders.length);
+            
+            orders.forEach((order, index) => {
+                console.log(`\n[${index}] Order ID: ${order.id}`);
+                console.log('Customer:', order.customer);
+                console.log('Status:', order.status);
+                console.log('Status type:', typeof order.status);
+                console.log('Tracking:', order.tracking);
+                console.log('Date:', order.date);
+                console.log('Time:', order.time);
+                console.log('Driver:', order.driver);
+                console.log('Items:', order.items);
+            });
+            
+            return orders;
+        }
+
+        function findOrderKD10001() {
+            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+            const order = orders.find(o => o.id === 'KD10001' || o.id === 'kd10001');
+            
+            console.log('=== FINDING KD10001 ===');
+            if (order) {
+                console.log('Found:', order);
+                console.log('Status:', order.status);
+                console.log('Status after fix:', fixOrderDataFormat(order).status);
+            } else {
+                console.log('Not found');
+                console.log('Available IDs:', orders.map(o => o.id));
+            }
+            
+            return order;
+        }
+
+        // Create test data for KD10001
+        function createTestOrderKD10001() {
+            const testOrder = {
+                id: 'KD10001',
+                customer: 'Raisya',
+                customerPhone: '082189606233',
+                address: 'Jl. Test No. 123',
+                date: '2025-12-14',
+                time: '16:49',
+                total: 70000,
+                status: 'disiapkan',
+                items: [
+                    { name: 'Kopi Susu Creamy', qty: 1, price: 15000 },
+                    { name: 'Kopi Susu Creamy 1 Liter', qty: 1, price: 55000 }
+                ],
+                driver: {
+                    name: 'Budi Santoso',
+                    phone: '081234567890',
+                    location: 'Jl. Merdeka No. 45',
+                    eta: '15 menit dari tujuan'
+                },
+                tracking: [
+                    { status: 'diterima', time: '16:49', date: '2025-12-14', note: 'Pesanan diterima' },
+                    { status: 'disiapkan', time: '16:55', date: '2025-12-14', note: 'Sedang disiapkan' }
+                ]
+            };
+            
+            const existingOrders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+            const filteredOrders = existingOrders.filter(o => o.id !== 'KD10001');
+            filteredOrders.unshift(testOrder);
+            
+            localStorage.setItem('mrsdkOrders', JSON.stringify(filteredOrders));
+            localStorage.setItem('lastOrderId', 'KD10001');
+            
+            console.log('Test order KD10001 created');
+            loadAndDisplayTracking('KD10001');
+        }
     </script>
 </body>
 </html>
