@@ -381,6 +381,24 @@
             font-size: 16px;
         }
 
+        .search-btn {
+            background: none;
+            border: none;
+            color: var(--light-green);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .search-btn:hover {
+            color: var(--primary-green);
+        }
+
         .location-buttons {
             display: flex;
             gap: 10px;
@@ -432,6 +450,47 @@
             margin-top: 5px;
             text-align: center;
             font-style: italic;
+        }
+
+        /* Perbaiki z-index untuk autocomplete dropdown */
+        .pac-container {
+            z-index: 1050 !important;
+            font-family: 'Quicksand', sans-serif;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-top: 5px;
+        }
+
+        .pac-item {
+            padding: 12px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pac-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .pac-item-query {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: var(--light-green);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Order Summary */
@@ -742,6 +801,20 @@
                 padding: 16px 30px;
                 font-size: 18px;
             }
+            
+            /* PERBAIKAN UNTUK INPUT DI MOBILE */
+            .location-input {
+                font-size: 16px !important;
+                padding: 14px 45px 14px 15px !important;
+                height: 50px;
+            }
+            
+            /* Perbaiki tampilan input saat fokus */
+            .location-input:focus {
+                border-color: var(--light-green) !important;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+            }
         }
 
         @media (max-width: 576px) {
@@ -936,7 +1009,10 @@
                 <div class="form-group">
                     <label for="location-search"><i class="fas fa-map-marker-alt"></i> Cari Alamat di Google Maps</label>
                     <div class="location-search">
-                        <input type="text" id="location-search" class="location-input" placeholder="Ketik alamat atau nama jalan...">
+                        <input type="text" id="location-search" class="location-input" placeholder="Contoh: Apartemen Kemang View, Jakarta">
+                        <button type="button" id="manualSearchBtn" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
                         <div class="location-buttons">
                             <button type="button" class="location-btn" id="detectLocation">
                                 <i class="fas fa-location-crosshairs"></i> Deteksi Lokasi Saya
@@ -955,6 +1031,11 @@
                 <div class="form-group">
                     <label for="customer-address"><i class="fas fa-home"></i> Alamat Lengkap (Hasil dari peta)</label>
                     <textarea id="customer-address" class="form-control" rows="3" placeholder="Alamat akan otomatis terisi dari peta..." required readonly></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="manual-address"><i class="fas fa-edit"></i> Atau Ketik Alamat Manual (jika peta tidak berfungsi)</label>
+                    <textarea id="manual-address" class="form-control" rows="3" placeholder="Contoh: Jl. Merdeka No. 10, Jakarta Pusat"></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -1132,6 +1213,15 @@
         let autocomplete;
         let userLocation = { lat: -6.2088, lng: 106.8456 }; // Default: Jakarta
 
+        // Fix untuk mobile devices
+        if ('ontouchstart' in window || navigator.maxTouchPoints) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const locationInput = document.getElementById('location-search');
+                locationInput.removeAttribute('readonly');
+                locationInput.style.cursor = 'text';
+            });
+        }
+
         // Mobile menu toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             const navMenu = document.getElementById('navMenu');
@@ -1147,33 +1237,76 @@
             navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
         });
 
-        // Initialize Google Maps
+        // Initialize Google Maps - VERSI DIPERBAIKI
         function initMap() {
             geocoder = new google.maps.Geocoder();
             
-            // Initialize autocomplete for location search
             const input = document.getElementById('location-search');
-            autocomplete = new google.maps.places.Autocomplete(input, {
-                componentRestrictions: { country: 'id' },
-                fields: ['geometry', 'formatted_address'],
-                types: ['address']
+            
+            // HAPUS attribute readonly untuk mobile
+            input.removeAttribute('readonly');
+            input.style.cursor = 'text';
+            
+            // Event listener untuk mobile
+            input.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.focus();
+                this.select();
             });
             
-            autocomplete.addListener('place_changed', function() {
-                const place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    showAlert('Lokasi Tidak Ditemukan', 'Alamat tidak valid. Silakan cari lagi.');
-                    return;
+            input.addEventListener('focus', function() {
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: this.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
                 }
-                
-                userLocation = {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
-                };
-                
-                updateAddressFromLocation(userLocation);
-                showMapWithLocation(userLocation);
             });
+            
+            // Initialize autocomplete dengan timeout untuk memastikan DOM siap
+            setTimeout(() => {
+                try {
+                    autocomplete = new google.maps.places.Autocomplete(input, {
+                        componentRestrictions: { country: 'id' },
+                        fields: ['name', 'formatted_address', 'geometry'],
+                        types: ['establishment', 'geocode', 'address']
+                    });
+                    
+                    autocomplete.addListener('place_changed', function() {
+                        const place = autocomplete.getPlace();
+                        
+                        if (!place.geometry) {
+                            // Jika tidak ada geometry, cari dengan nama tempat
+                            searchPlaceByName(place.name || input.value);
+                            return;
+                        }
+                        
+                        userLocation = {
+                            lat: place.geometry.location.lat(),
+                            lng: place.geometry.location.lng()
+                        };
+                        
+                        const address = place.formatted_address || place.name;
+                        document.getElementById('customer-address').value = address;
+                        document.getElementById('location-search').value = address;
+                        
+                        showMapWithLocation(userLocation);
+                        showAlert('Lokasi Ditemukan', 'Alamat telah berhasil ditemukan.');
+                        
+                        // Sembunyikan keyboard di mobile
+                        if ('visualViewport' in window) {
+                            setTimeout(() => input.blur(), 500);
+                        }
+                    });
+                    
+                    console.log('Google Places Autocomplete initialized successfully');
+                } catch (error) {
+                    console.error('Error initializing Google Places Autocomplete:', error);
+                    showAlert('Pencarian Alamat', 'Silakan ketik alamat manual atau gunakan tombol deteksi lokasi.');
+                }
+            }, 1000);
             
             // Try to get user's current location
             if (navigator.geolocation) {
@@ -1187,11 +1320,110 @@
                     },
                     (error) => {
                         console.log('Geolocation error:', error);
-                        // Use default location (Jakarta)
                     }
                 );
             }
         }
+
+        // Fungsi untuk mencari tempat berdasarkan nama
+        function searchPlaceByName(placeName) {
+            if (!placeName || placeName.trim() === '') return;
+            
+            showAlert('Mencari...', 'Mencari "' + placeName + '"...');
+            
+            // Coba geocode alamat biasa
+            geocoder.geocode({ address: placeName + ', Indonesia' }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    userLocation = {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+                    };
+                    
+                    document.getElementById('customer-address').value = results[0].formatted_address;
+                    document.getElementById('location-search').value = results[0].formatted_address;
+                    
+                    showMapWithLocation(userLocation);
+                    showAlert('Lokasi Ditemukan', 'Alamat telah berhasil ditemukan.');
+                } else {
+                    // Jika geocode gagal, coba OpenStreetMap
+                    searchWithOpenStreetMap(placeName);
+                }
+            });
+        }
+
+        // Fungsi untuk mencari dengan OpenStreetMap (fallback)
+        function searchWithOpenStreetMap(searchText) {
+            showAlert('Mencari...', 'Mencari lokasi dengan OpenStreetMap...');
+            
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchText + ' Indonesia')}&limit=5`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        userLocation = {
+                            lat: parseFloat(result.lat),
+                            lng: parseFloat(result.lon)
+                        };
+                        
+                        const address = result.display_name;
+                        document.getElementById('customer-address').value = address;
+                        document.getElementById('location-search').value = address;
+                        
+                        showMapWithLocation(userLocation);
+                        showAlert('Lokasi Ditemukan', 'Alamat ditemukan via OpenStreetMap.');
+                    } else {
+                        showAlert('Tidak Ditemukan', 'Lokasi tidak ditemukan. Silakan coba alamat yang lebih spesifik atau gunakan alamat manual.');
+                    }
+                })
+                .catch(error => {
+                    console.error('OpenStreetMap error:', error);
+                    showAlert('Error', 'Tidak dapat mencari lokasi saat ini. Silakan gunakan alamat manual.');
+                });
+        }
+
+        // Event listener untuk tombol pencarian manual
+        document.getElementById('manualSearchBtn').addEventListener('click', function() {
+            const searchText = document.getElementById('location-search').value.trim();
+            if (searchText.length > 2) {
+                showAlert('Mencari Lokasi', 'Mencari "' + searchText + '"...');
+                searchPlaceByName(searchText);
+            } else {
+                showAlert('Input Kosong', 'Silakan ketik nama tempat atau alamat terlebih dahulu.');
+            }
+        });
+
+        // Event listener untuk input manual
+        document.getElementById('location-search').addEventListener('input', function(e) {
+            if (this.value.length > 3 && !autocomplete) {
+                // Jika autocomplete gagal, coba inisialisasi ulang
+                setTimeout(() => {
+                    if (google.maps.places) {
+                        try {
+                            autocomplete = new google.maps.places.Autocomplete(this, {
+                                componentRestrictions: { country: 'id' },
+                                fields: ['name', 'formatted_address', 'geometry'],
+                                types: ['establishment', 'geocode', 'address']
+                            });
+                        } catch (error) {
+                            console.error('Error re-initializing autocomplete:', error);
+                        }
+                    }
+                }, 500);
+            }
+        });
+
+        // Event listener untuk tombol Enter
+        document.getElementById('location-search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const searchText = this.value.trim();
+                if (searchText.length > 2) {
+                    searchPlaceByName(searchText);
+                }
+            }
+        });
 
         // Detect current location button
         document.getElementById('detectLocation').addEventListener('click', function() {
@@ -1277,11 +1509,7 @@
             geocoder.geocode({ location: location }, (results, status) => {
                 if (status === 'OK' && results[0]) {
                     document.getElementById('customer-address').value = results[0].formatted_address;
-                    
-                    // Update search input with address
                     document.getElementById('location-search').value = results[0].formatted_address;
-                    
-                    // Update receipt preview
                     updateReceiptPreview();
                 } else {
                     showAlert('Gagal Mendapatkan Alamat', 'Tidak dapat mendapatkan alamat dari lokasi ini.');
@@ -1325,15 +1553,12 @@
 
         // Update order item function
         function updateOrderItem(productId, productName, productPrice, quantity) {
-            // Cek apakah produk sudah ada di pesanan
             const existingItemIndex = orderItems.findIndex(item => item.id == productId);
             
             if (quantity > 0) {
                 if (existingItemIndex > -1) {
-                    // Update quantity jika sudah ada
                     orderItems[existingItemIndex].quantity = quantity;
                 } else {
-                    // Tambah baru jika belum ada
                     orderItems.push({
                         id: productId,
                         name: productName,
@@ -1342,7 +1567,6 @@
                     });
                 }
             } else {
-                // Hapus jika quantity 0
                 if (existingItemIndex > -1) {
                     orderItems.splice(existingItemIndex, 1);
                 }
@@ -1414,15 +1638,19 @@
             }
         }
 
-        // Send to WhatsApp button - LANGSUNG BUKA WHATSAPP
+        // Send to WhatsApp button
         document.getElementById('sendToWhatsApp').addEventListener('click', function() {
             const customerName = document.getElementById('customer-name').value.trim();
             const customerPhone = document.getElementById('customer-phone').value.trim();
             const customerAddress = document.getElementById('customer-address').value.trim();
+            const manualAddress = document.getElementById('manual-address').value.trim();
             const customerNote = document.getElementById('customer-note').value.trim();
             
+            // Gunakan alamat dari peta atau alamat manual
+            const finalAddress = customerAddress || manualAddress;
+            
             // Validasi input
-            if (!customerName || !customerPhone || !customerAddress) {
+            if (!customerName || !customerPhone || !finalAddress) {
                 showAlert('Data Tidak Lengkap', 'Harap isi nama, WhatsApp, dan alamat lengkap');
                 return;
             }
@@ -1441,7 +1669,7 @@
             orderNumber = 'ORD-' + Date.now().toString().substr(-6);
             document.getElementById('receiptNumber').textContent = orderNumber;
             
-            // Format struk WhatsApp dengan tampilan yang rapi
+            // Format struk WhatsApp
             whatsappMessage = `═══════════════════════════════════\n`;
             whatsappMessage += `         *KOPI SUSU MRS. DK*\n`;
             whatsappMessage += `═══════════════════════════════════\n\n`;
@@ -1463,15 +1691,17 @@
             whatsappMessage += `*Data Pemesan:*\n`;
             whatsappMessage += `Nama: ${customerName}\n`;
             whatsappMessage += `WhatsApp: ${customerPhone}\n`;
-            whatsappMessage += `Alamat: ${customerAddress}\n\n`;
+            whatsappMessage += `Alamat: ${finalAddress}\n\n`;
             
             if (customerNote) {
                 whatsappMessage += `*Catatan:*\n${customerNote}\n\n`;
             }
             
-            whatsappMessage += `═══════════════════════════════════\n`;
-            whatsappMessage += `*Lokasi Pengiriman:*\n`;
-            whatsappMessage += `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}\n\n`;
+            if (customerAddress) {
+                whatsappMessage += `*Lokasi Pengiriman:*\n`;
+                whatsappMessage += `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}\n\n`;
+            }
+            
             whatsappMessage += `═══════════════════════════════════\n`;
             whatsappMessage += `Terima kasih telah memesan di\nKopi Susu Mrs. DK!\n`;
             whatsappMessage += `═══════════════════════════════════`;
@@ -1482,10 +1712,10 @@
             // TAMPILKAN ALERT DULU
             showAlert('Mengarahkan ke WhatsApp', 'Silakan konfirmasi pengiriman pesan...');
             
-            // BUAT URL WHATSAPP UNTUK SEMUA PLATFORM
+            // BUAT URL WHATSAPP
             const whatsappURL = `https://api.whatsapp.com/send?phone=6285298055758&text=${encodedMessage}`;
             
-            // BUKA WHATSAPP DI TAB BARU - INI YANG PASTI BEKERJA
+            // BUKA WHATSAPP DI TAB BARU
             setTimeout(() => {
                 window.open(whatsappURL, '_blank');
                 
@@ -1521,11 +1751,12 @@
             updateOrderSummary();
             updateReceiptPreview();
             
-            // Reset form fields (opsional)
+            // Reset form fields
             document.getElementById('customer-name').value = '';
             document.getElementById('customer-phone').value = '';
             document.getElementById('location-search').value = '';
             document.getElementById('customer-address').value = '';
+            document.getElementById('manual-address').value = '';
             document.getElementById('customer-note').value = '';
             document.getElementById('mapContainer').style.display = 'none';
             
@@ -1607,6 +1838,18 @@
                 updateOrderSummary();
                 updateReceiptPreview();
             });
+        });
+
+        // Tambahkan event listener untuk menutup keyboard
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.pac-container') && !e.target.closest('.location-search')) {
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement.id === 'location-search') {
+                    if (activeElement.value.length === 0) {
+                        activeElement.blur();
+                    }
+                }
+            }
         });
     </script>
 </body>
