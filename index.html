@@ -1171,6 +1171,188 @@
             margin: 20px 0;
         }
 
+        /* ================================
+           iOS WHATSAPP POPUP STYLES
+           ================================ */
+        .ios-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .ios-popup-container {
+            background-color: white;
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .ios-popup-header {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .ios-popup-header i {
+            font-size: 50px;
+            color: white;
+        }
+
+        .ios-popup-title {
+            color: var(--dark-brown);
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .ios-popup-subtitle {
+            color: var(--brown);
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .ios-popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .ios-popup-btn {
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ios-popup-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .ios-popup-btn:active::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(100, 100);
+                opacity: 0;
+            }
+        }
+
+        .ios-popup-btn-primary {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .ios-popup-btn-primary:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .ios-popup-btn-secondary {
+            background-color: var(--light-green);
+            color: white;
+        }
+
+        .ios-popup-btn-secondary:hover {
+            background-color: var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .ios-popup-btn-tertiary {
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+        }
+
+        .ios-popup-btn-tertiary:hover {
+            background-color: #ffca28;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 213, 79, 0.3);
+        }
+
+        .ios-popup-instruction {
+            color: #666;
+            font-size: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            line-height: 1.6;
+        }
+
+        .ios-popup-close {
+            background-color: #f5f5f5;
+            color: #666;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .ios-popup-close:hover {
+            background-color: #e0e0e0;
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             .hero-content {
@@ -1298,6 +1480,36 @@
                 flex: 100%;
                 margin-bottom: 10px;
             }
+            
+            /* iOS WhatsApp Popup Responsive */
+            .ios-popup-container {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+            
+            .ios-popup-header {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 20px;
+            }
+            
+            .ios-popup-header i {
+                font-size: 40px;
+            }
+            
+            .ios-popup-title {
+                font-size: 21px;
+            }
+            
+            .ios-popup-subtitle {
+                font-size: 15px;
+                margin-bottom: 25px;
+            }
+            
+            .ios-popup-btn {
+                padding: 16px;
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1350,6 +1562,37 @@
             
             #tracking {
                 scroll-margin-top: 85px;
+            }
+            
+            /* iPhone khusus styling */
+            @media (max-width: 375px) {
+                .ios-popup-container {
+                    padding: 20px 15px;
+                    border-radius: 15px;
+                }
+                
+                .ios-popup-header {
+                    width: 70px;
+                    height: 70px;
+                }
+                
+                .ios-popup-header i {
+                    font-size: 35px;
+                }
+                
+                .ios-popup-title {
+                    font-size: 19px;
+                }
+                
+                .ios-popup-subtitle {
+                    font-size: 14px;
+                    margin-bottom: 20px;
+                }
+                
+                .ios-popup-btn {
+                    padding: 14px;
+                    font-size: 15px;
+                }
             }
         }
         
@@ -2344,6 +2587,231 @@
             document.getElementById('sendToWhatsApp').addEventListener('click', sendOrderToWhatsApp);
         }
 
+        // Deteksi browser dan device
+        function detectBrowserAndDevice() {
+            const userAgent = navigator.userAgent;
+            
+            return {
+                isIOS: /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream,
+                isAndroid: /Android/.test(userAgent),
+                isOpera: /OPR|Opera/.test(userAgent),
+                isSafari: /Safari/.test(userAgent) && !/Chrome/.test(userAgent),
+                isChrome: /Chrome/.test(userAgent) && !/Edg/.test(userAgent),
+                isFirefox: /Firefox/.test(userAgent),
+                isMobile: /Mobi|Android|iPhone|iPad|iPod|Opera Mini/i.test(userAgent),
+                isDesktop: !/Mobi|Android|iPhone|iPad|iPod|Opera Mini/i.test(userAgent)
+            };
+        }
+
+        // Fungsi universal untuk buka WhatsApp
+        function openWhatsAppUniversal(message, orderId) {
+            const detection = detectBrowserAndDevice();
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = '6285298055758';
+            
+            console.log('Device detection:', detection);
+            
+            // Simpan message untuk fallback
+            localStorage.setItem('whatsappMessage', message);
+            localStorage.setItem('lastOrderId', orderId);
+            
+            // Method URLs
+            const urls = {
+                web: `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`,
+                api: `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`,
+                app: `whatsapp://send?phone=${whatsappNumber}&text=${encodedMessage}`,
+                intent: `intent://send?phone=${whatsappNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end`
+            };
+            
+            // Strategi berdasarkan device
+            if (detection.isIOS || detection.isOpera) {
+                // iOS/Opera - gunakan popup dengan pilihan
+                showIOSWhatsAppInstructions(orderId, urls.web, urls.app, urls.api);
+                showAlert('Pesanan Siap!', `Pesanan ${orderId} telah dicatat. Pilih metode WhatsApp.`);
+            } 
+            else if (detection.isAndroid) {
+                // Android - coba langsung buka app
+                showAlert('Membuka WhatsApp...', `Pesanan ${orderId} sedang dibuka di WhatsApp...`);
+                
+                setTimeout(() => {
+                    // Coba intent dulu
+                    window.location.href = urls.intent;
+                    
+                    // Fallback ke app URL
+                    setTimeout(() => {
+                        if (document.hidden === false) {
+                            window.location.href = urls.app;
+                            
+                            // Fallback ke web
+                            setTimeout(() => {
+                                if (document.hidden === false) {
+                                    window.open(urls.web, '_blank');
+                                }
+                            }, 1000);
+                        }
+                    }, 500);
+                }, 1500);
+            }
+            else {
+                // Desktop - langsung buka WhatsApp Web
+                showAlert('Membuka WhatsApp Web...', `Pesanan ${orderId} sedang dibuka...`);
+                
+                setTimeout(() => {
+                    window.open(urls.web, '_blank');
+                }, 1500);
+            }
+            
+            // Reset form setelah delay
+            setTimeout(() => {
+                resetOrderForm();
+            }, 3000);
+        }
+
+        // Fungsi untuk menampilkan instruksi WhatsApp untuk iOS
+        function showIOSWhatsAppInstructions(orderId, webURL, appURL, iosURL) {
+            // Hapus popup sebelumnya jika ada
+            const existingPopup = document.getElementById('iosWhatsAppPopup');
+            if (existingPopup) {
+                existingPopup.remove();
+            }
+            
+            const popupHTML = `
+                <div id="iosWhatsAppPopup" class="ios-popup-overlay">
+                    <div class="ios-popup-container">
+                        <div class="ios-popup-header">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        
+                        <h3 class="ios-popup-title">Buka WhatsApp</h3>
+                        
+                        <p class="ios-popup-subtitle">
+                            Pesanan <strong style="color: var(--light-green);">#${orderId}</strong> telah siap!<br>
+                            Pilih metode pengiriman di bawah:
+                        </p>
+                        
+                        <div class="ios-popup-buttons">
+                            <button onclick="openWhatsAppIOSMethod('app', '${appURL}')" 
+                                    class="ios-popup-btn ios-popup-btn-primary">
+                                <i class="fab fa-whatsapp"></i> WhatsApp App
+                            </button>
+                            
+                            <button onclick="openWhatsAppIOSMethod('web', '${webURL}')" 
+                                    class="ios-popup-btn ios-popup-btn-secondary">
+                                <i class="fas fa-desktop"></i> WhatsApp Web
+                            </button>
+                            
+                            <button onclick="copyWhatsAppMessage('${orderId}')" 
+                                    class="ios-popup-btn ios-popup-btn-tertiary">
+                                <i class="fas fa-copy"></i> Salin Pesan
+                            </button>
+                        </div>
+                        
+                        <div class="ios-popup-instruction">
+                            <p style="margin-bottom: 10px;">
+                                <i class="fas fa-lightbulb"></i> Tips:
+                            </p>
+                            <p style="font-size: 11px;">
+                                1. <strong>WhatsApp App</strong>: Langsung buka aplikasi WhatsApp<br>
+                                2. <strong>WhatsApp Web</strong>: Buka di browser<br>
+                                3. <strong>Salin Pesan</strong>: Paste manual di WhatsApp
+                            </p>
+                        </div>
+                        
+                        <button onclick="closeIOSPopup()" class="ios-popup-close">
+                            <i class="fas fa-times"></i> Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', popupHTML);
+            
+            // Auto-close setelah 30 detik
+            setTimeout(() => {
+                closeIOSPopup();
+            }, 30000);
+        }
+
+        // Fungsi untuk membuka WhatsApp di iOS
+        function openWhatsAppIOSMethod(method, url) {
+            console.log(`Opening WhatsApp via ${method}: ${url}`);
+            
+            if (method === 'app') {
+                // Coba buka WhatsApp app
+                window.location.href = url;
+                
+                // Fallback ke WhatsApp Web jika gagal
+                setTimeout(() => {
+                    if (document.hidden || document.webkitHidden) {
+                        // App berhasil dibuka
+                        console.log('WhatsApp app opened successfully');
+                    } else {
+                        // App gagal, buka WhatsApp Web
+                        console.log('WhatsApp app failed, opening WhatsApp Web');
+                        window.open(url.replace('whatsapp://', 'https://web.whatsapp.com/'), '_blank');
+                    }
+                }, 1000);
+            } else if (method === 'web') {
+                // Buka WhatsApp Web
+                window.open(url, '_blank');
+            }
+            
+            // Tutup popup
+            closeIOSPopup();
+            
+            // Reset form setelah beberapa detik
+            setTimeout(() => {
+                resetOrderForm();
+            }, 2000);
+        }
+
+        // Fungsi untuk copy pesan ke clipboard
+        function copyWhatsAppMessage(orderId) {
+            const message = localStorage.getItem('whatsappMessage');
+            
+            // Buat textarea untuk copy
+            const textarea = document.createElement('textarea');
+            textarea.value = message;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // Untuk mobile
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showAlert('Berhasil!', `Pesan pesanan #${orderId} telah disalin ke clipboard.`, 'success');
+                    
+                    // Beri instruksi untuk paste di WhatsApp
+                    setTimeout(() => {
+                        alert(`Langkah selanjutnya:\n1. Buka WhatsApp\n2. Cari kontak: 0852-9805-5758\n3. Paste pesan yang sudah disalin\n4. Kirim pesanan Anda!`);
+                    }, 500);
+                } else {
+                    throw new Error('Copy failed');
+                }
+            } catch (err) {
+                console.error('Copy failed:', err);
+                showAlert('Gagal', 'Gagal menyalin pesan. Silakan screenshot halaman ini.', 'error');
+            }
+            
+            document.body.removeChild(textarea);
+            closeIOSPopup();
+            
+            // Reset form
+            setTimeout(() => {
+                resetOrderForm();
+            }, 2000);
+        }
+
+        // Fungsi untuk menutup popup iOS
+        function closeIOSPopup() {
+            const popup = document.getElementById('iosWhatsAppPopup');
+            if (popup) {
+                popup.remove();
+            }
+        }
+
         function sendOrderToWhatsApp() {
             const customerName = document.getElementById('customer-name').value.trim();
             const customerPhone = document.getElementById('customer-phone').value.trim();
@@ -2353,6 +2821,7 @@
             
             const finalAddress = customerAddress || manualAddress;
             
+            // Validasi
             if (!customerName || !customerPhone || !finalAddress) {
                 showAlert('Data Tidak Lengkap', 'Harap isi nama, WhatsApp, dan alamat lengkap');
                 return;
@@ -2371,6 +2840,7 @@
             orderNumber = 'ORD-' + Date.now().toString().substr(-6);
             document.getElementById('receiptNumber').textContent = orderNumber;
             
+            // Generate message
             let receiptItems = '';
             orderItems.forEach(item => {
                 receiptItems += `▸ ${item.name}\n`;
@@ -2408,7 +2878,7 @@
             whatsappMessage += `Terima kasih telah memesan di\nKopi Susu Mrs. DK!\n`;
             whatsappMessage += `═══════════════════════════════════`;
             
-            // SAVE ORDER TO ADMIN SYSTEM
+            // Save to admin system
             const orderData = {
                 customerName: customerName,
                 customerPhone: customerPhone,
@@ -2427,25 +2897,11 @@
             
             const adminOrderId = saveOrderToAdminSystem(orderData);
             
-            // Update receipt with admin order ID
+            // Update message with admin order ID
             whatsappMessage = whatsappMessage.replace(`No. Pesanan: ${orderNumber}`, `No. Pesanan: ${adminOrderId} (${orderNumber})`);
             
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-            
-            showAlert('Mengarahkan ke WhatsApp', `Pesanan ${adminOrderId} telah dicatat! Silakan konfirmasi pengiriman pesan...`);
-            
-            const whatsappURL = `https://api.whatsapp.com/send?phone=6285298055758&text=${encodedMessage}`;
-            
-            setTimeout(() => {
-                window.open(whatsappURL, '_blank');
-                
-                // Simpan data pesanan untuk tracking
-                localStorage.setItem('lastOrderId', adminOrderId);
-                
-                setTimeout(() => {
-                    resetOrderForm();
-                }, 2000);
-            }, 1500);
+            // Gunakan fungsi universal untuk semua device
+            openWhatsAppUniversal(whatsappMessage, adminOrderId);
         }
 
         function saveOrderToAdminSystem(orderData) {
