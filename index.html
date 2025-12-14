@@ -6,6 +6,8 @@
     <title>Kopi Susu Mrs. DK - Segarnya Nikmat Tiada Tara</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Load Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap&language=id&region=ID" async defer></script>
     <style>
         * {
             margin: 0;
@@ -193,16 +195,6 @@
             color: white;
         }
 
-        .btn-order {
-            background-color: var(--lighter-green);
-            color: white;
-            width: 100%;
-        }
-
-        .btn-order:hover {
-            background-color: var(--light-green);
-        }
-
         /* Products Section */
         .section-title {
             text-align: center;
@@ -286,37 +278,49 @@
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
             margin-bottom: 15px;
         }
 
         .qty-btn {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background-color: var(--light-green);
             color: white;
             border: none;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
 
         .qty-btn:hover {
             background-color: var(--primary-green);
+            transform: scale(1.1);
         }
 
         .quantity-input {
-            width: 50px;
+            width: 60px;
             text-align: center;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: 700;
+            border: 2px solid var(--light-green);
+            border-radius: 10px;
+            padding: 8px;
+            background-color: white;
+            color: var(--dark-brown);
+        }
+
+        .quantity-status {
+            font-size: 14px;
+            color: var(--light-green);
             font-weight: 600;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            padding: 5px;
+            text-align: center;
+            margin-top: 5px;
+            height: 20px;
         }
 
         /* Customer Form */
@@ -363,6 +367,73 @@
             flex: 1;
         }
 
+        /* Location Search */
+        .location-search {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .location-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .location-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .location-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--light-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .location-btn:hover {
+            background-color: var(--primary-green);
+        }
+
+        .location-btn i {
+            font-size: 16px;
+        }
+
+        /* Map Container */
+        .map-container {
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 15px;
+            border: 3px solid var(--light-green);
+            display: none;
+        }
+
+        #address-map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-instruction {
+            font-size: 14px;
+            color: var(--brown);
+            margin-top: 5px;
+            text-align: center;
+            font-style: italic;
+        }
+
         /* Order Summary */
         .order-summary {
             background-color: var(--cream);
@@ -382,204 +453,184 @@
 
         .order-items {
             margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .order-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
-            padding-bottom: 10px;
+            padding: 10px;
             border-bottom: 1px dashed #ddd;
+            background-color: rgba(76, 175, 80, 0.05);
+            border-radius: 8px;
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            color: var(--dark-brown);
+            margin-bottom: 3px;
+        }
+
+        .order-item-qty {
+            font-size: 14px;
+            color: var(--brown);
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: var(--light-green);
+            font-size: 18px;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .empty-order {
+            text-align: center;
+            padding: 30px;
+            color: var(--brown);
+        }
+
+        .empty-order i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #ddd;
         }
 
         .order-total {
             display: flex;
             justify-content: space-between;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--light-green);
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px solid var(--lighter-green);
+            border-top: 3px solid var(--lighter-green);
         }
 
-        /* Modal */
-        .modal {
-            display: none;
+        /* Alert Box */
+        .alert-box {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
+            top: 100px;
             right: 20px;
-            font-size: 24px;
-            color: var(--dark-brown);
-            cursor: pointer;
-            background: none;
-            border: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
         }
 
-        .modal-title {
-            color: var(--dark-brown);
-            margin-bottom: 20px;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
-        /* Tracking Section */
-        .tracking {
-            padding: 60px 0;
-            margin-bottom: 40px;
-        }
-
-        .tracking-container {
-            background-color: var(--cream);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow);
-        }
-
-        .tracking-status {
+        .alert-content {
             display: flex;
-            justify-content: space-between;
-            margin: 40px 0;
-            position: relative;
+            align-items: center;
+            gap: 15px;
         }
 
-        .tracking-status::before {
-            content: '';
-            position: absolute;
-            top: 25px;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background-color: #ddd;
-            z-index: 1;
-        }
-
-        .status-step {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            flex: 1;
-        }
-
-        .status-icon {
-            width: 55px;
-            height: 55px;
+        .alert-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background-color: #ddd;
+            background-color: #25D366;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 22px;
-            color: #777;
+            font-size: 20px;
+        }
+
+        /* WhatsApp Button Container */
+        .whatsapp-btn-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .whatsapp-btn-large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 18px 40px;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
             transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 500px;
         }
 
-        .status-step.active .status-icon {
-            background-color: var(--lighter-green);
-            color: white;
-            transform: scale(1.1);
+        .whatsapp-btn-large:hover {
+            background-color: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
-        .status-step.completed .status-icon {
-            background-color: var(--light-green);
-            color: white;
+        .whatsapp-btn-large i {
+            font-size: 24px;
         }
 
-        .status-step h4 {
-            font-family: 'Poppins', sans-serif;
+        /* Receipt Preview */
+        .receipt-preview {
+            background-color: white;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            display: none;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 10px;
+        }
+
+        .receipt-header h4 {
+            font-size: 18px;
             margin-bottom: 5px;
             color: var(--dark-brown);
         }
 
-        .status-step p {
-            font-size: 14px;
-            color: var(--brown);
-        }
-
-        .tracking-map {
-            height: 300px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
-            margin: 30px 0;
+        .receipt-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--brown);
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
 
-        .map-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom right, rgba(76, 175, 80, 0.2), rgba(46, 125, 50, 0.3));
+        .receipt-total {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .driver-info {
-            background-color: white;
-            padding: 20px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: var(--shadow);
-            margin-top: 20px;
-        }
-
-        .driver-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--light-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-        }
-
-        .close-order-btn {
-            background-color: var(--primary-green);
-            color: white;
-            margin-top: 20px;
-        }
-
-        .close-order-btn:hover {
-            background-color: var(--dark-brown);
+            justify-content: space-between;
+            font-weight: bold;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px dashed #333;
         }
 
         /* Footer */
@@ -657,15 +708,6 @@
                 text-align: center;
             }
             
-            .tracking-status {
-                flex-wrap: wrap;
-                gap: 30px;
-            }
-            
-            .status-step {
-                flex: 0 0 calc(50% - 30px);
-            }
-            
             .form-row {
                 flex-direction: column;
                 gap: 0;
@@ -685,17 +727,20 @@
                 font-size: 32px;
             }
             
-            .tracking-container {
-                padding: 25px;
+            .alert-box {
+                top: 80px;
+                left: 20px;
+                right: 20px;
+                max-width: none;
             }
             
-            .status-step {
-                flex: 0 0 100%;
-                margin-bottom: 30px;
+            .location-buttons {
+                flex-direction: column;
             }
             
-            .status-step:last-child {
-                margin-bottom: 0;
+            .whatsapp-btn-large {
+                padding: 16px 30px;
+                font-size: 18px;
             }
         }
 
@@ -717,13 +762,31 @@
                 grid-template-columns: 1fr;
             }
             
-            .modal-content {
-                padding: 20px;
+            .quantity-input {
+                width: 50px;
+                font-size: 18px;
+            }
+            
+            .map-container {
+                height: 250px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- WhatsApp Alert -->
+    <div class="alert-box" id="whatsappAlert">
+        <div class="alert-content">
+            <div class="alert-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <div>
+                <strong id="alertTitle">Mengarahkan ke WhatsApp...</strong>
+                <p id="alertMessage">Silakan konfirmasi pengiriman pesan</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container header-container">
@@ -788,13 +851,11 @@
                         <p>Perpaduan sempurna kopi robusta dengan susu segar dan gula aren asli.</p>
                         <div class="price">Rp 15.000</div>
                         <div class="quantity-controls">
-                            <button class="qty-btn minus" data-product="1">-</button>
-                            <input type="number" class="quantity-input" id="qty-1" value="0" min="0" readonly>
-                            <button class="qty-btn plus" data-product="1">+</button>
+                            <button class="qty-btn minus" data-product="1" data-name="Kopi Susu Creamy" data-price="15000">-</button>
+                            <input type="number" class="quantity-input" id="qty-1" value="0" min="0">
+                            <button class="qty-btn plus" data-product="1" data-name="Kopi Susu Creamy" data-price="15000">+</button>
                         </div>
-                        <button class="btn btn-order add-to-order" data-product="1" data-name="Kopi Susu Creamy" data-price="15000">
-                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
-                        </button>
+                        <div class="quantity-status" id="status-1"></div>
                     </div>
                 </div>
                 
@@ -808,13 +869,11 @@
                         <p>Kopi susu dengan gula aren asli yang memberikan rasa karamel alami.</p>
                         <div class="price">Rp 15.000</div>
                         <div class="quantity-controls">
-                            <button class="qty-btn minus" data-product="2">-</button>
-                            <input type="number" class="quantity-input" id="qty-2" value="0" min="0" readonly>
-                            <button class="qty-btn plus" data-product="2">+</button>
+                            <button class="qty-btn minus" data-product="2" data-name="Kopi Susu Gula Aren" data-price="15000">-</button>
+                            <input type="number" class="quantity-input" id="qty-2" value="0" min="0">
+                            <button class="qty-btn plus" data-product="2" data-name="Kopi Susu Gula Aren" data-price="15000">+</button>
                         </div>
-                        <button class="btn btn-order add-to-order" data-product="2" data-name="Kopi Susu Gula Aren" data-price="15000">
-                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
-                        </button>
+                        <div class="quantity-status" id="status-2"></div>
                     </div>
                 </div>
                 
@@ -828,13 +887,11 @@
                         <p>Kopi susu dengan tambahan rasa hazelnut yang creamy dan harum.</p>
                         <div class="price">Rp 55.000</div>
                         <div class="quantity-controls">
-                            <button class="qty-btn minus" data-product="3">-</button>
-                            <input type="number" class="quantity-input" id="qty-3" value="0" min="0" readonly>
-                            <button class="qty-btn plus" data-product="3">+</button>
+                            <button class="qty-btn minus" data-product="3" data-name="Kopi Susu Creamy 1 Litee" data-price="55000">-</button>
+                            <input type="number" class="quantity-input" id="qty-3" value="0" min="0">
+                            <button class="qty-btn plus" data-product="3" data-name="Kopi Susu Creamy 1 Litee" data-price="55000">+</button>
                         </div>
-                        <button class="btn btn-order add-to-order" data-product="3" data-name="Kopi Susu Creamy 1 Litee" data-price="55000">
-                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
-                        </button>
+                        <div class="quantity-status" id="status-3"></div>
                     </div>
                 </div>
                 
@@ -848,13 +905,11 @@
                         <p>Kopi susu dengan ekstrak kelapa alami yang memberikan aroma memikat.</p>
                         <div class="price">Rp 15.000</div>
                         <div class="quantity-controls">
-                            <button class="qty-btn minus" data-product="4">-</button>
-                            <input type="number" class="quantity-input" id="qty-4" value="0" min="0" readonly>
-                            <button class="qty-btn plus" data-product="4">+</button>
+                            <button class="qty-btn minus" data-product="4" data-name="Kopi Susu Coconut" data-price="15000">-</button>
+                            <input type="number" class="quantity-input" id="qty-4" value="0" min="0">
+                            <button class="qty-btn plus" data-product="4" data-name="Kopi Susu Coconut" data-price="15000">+</button>
                         </div>
-                        <button class="btn btn-order add-to-order" data-product="4" data-name="Kopi Susu Coconut" data-price="15000">
-                            <i class="fas fa-plus-circle"></i> Tambah ke Pesanan
-                        </button>
+                        <div class="quantity-status" id="status-4"></div>
                     </div>
                 </div>
             </div>
@@ -879,29 +934,73 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="customer-address"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
-                    <textarea id="customer-address" class="form-control" rows="4" placeholder="Masukkan alamat lengkap untuk pengiriman" required></textarea>
+                    <label for="location-search"><i class="fas fa-map-marker-alt"></i> Cari Alamat di Google Maps</label>
+                    <div class="location-search">
+                        <input type="text" id="location-search" class="location-input" placeholder="Ketik alamat atau nama jalan...">
+                        <div class="location-buttons">
+                            <button type="button" class="location-btn" id="detectLocation">
+                                <i class="fas fa-location-crosshairs"></i> Deteksi Lokasi Saya
+                            </button>
+                            <button type="button" class="location-btn" id="showMap">
+                                <i class="fas fa-map"></i> Tampilkan Peta
+                            </button>
+                        </div>
+                    </div>
+                    <div class="map-container" id="mapContainer">
+                        <div id="address-map"></div>
+                        <p class="map-instruction">Geser pin merah untuk menentukan lokasi yang tepat</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-address"><i class="fas fa-home"></i> Alamat Lengkap (Hasil dari peta)</label>
+                    <textarea id="customer-address" class="form-control" rows="3" placeholder="Alamat akan otomatis terisi dari peta..." required readonly></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="customer-note"><i class="fas fa-sticky-note"></i> Catatan Pesanan (Opsional)</label>
-                    <textarea id="customer-note" class="form-control" rows="3" placeholder="Contoh: Kurangi gula, tambah es, dll."></textarea>
+                    <textarea id="customer-note" class="form-control" rows="2" placeholder="Contoh: Kurangi gula, tambah es, dll."></textarea>
+                </div>
+                
+                <!-- Receipt Preview -->
+                <div class="receipt-preview" id="receiptPreview">
+                    <div class="receipt-header">
+                        <h4>KOPI SUSU MRS. DK</h4>
+                        <p>Struk Pesanan #<span id="receiptNumber">000001</span></p>
+                    </div>
+                    <div id="receiptItems">
+                        <!-- Items will be generated here -->
+                    </div>
+                    <div class="receipt-total">
+                        <span>TOTAL</span>
+                        <span id="receiptTotal">Rp 0</span>
+                    </div>
                 </div>
             </div>
             
             <div class="order-summary">
                 <h3><i class="fas fa-receipt"></i> Ringkasan Pesanan</h3>
                 <div class="order-items" id="order-items">
-                    <p style="text-align: center; color: var(--brown);">Belum ada pesanan</p>
+                    <div class="empty-order">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Belum ada pesanan</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Gunakan tombol + dan - pada produk untuk menambahkan pesanan</p>
+                    </div>
                 </div>
                 <div class="order-total">
                     <span>Total Pembayaran:</span>
                     <span id="total-price">Rp 0</span>
                 </div>
                 
-                <button class="btn btn-whatsapp" id="confirm-order" style="margin-top: 30px; width: 100%;">
-                    <i class="fab fa-whatsapp"></i> Konfirmasi & Kirim Pesanan via WhatsApp
-                </button>
+                <!-- WhatsApp Button - Langsung arahkan tanpa modal -->
+                <div class="whatsapp-btn-container">
+                    <button class="whatsapp-btn-large" id="sendToWhatsApp">
+                        <i class="fab fa-whatsapp"></i> Kirim Struk via WhatsApp
+                    </button>
+                    <p style="color: var(--brown); margin-top: 10px; font-size: 14px;">
+                        Klik tombol di atas untuk langsung mengirim struk ke WhatsApp kami
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -978,28 +1077,6 @@
         </div>
     </section>
 
-    <!-- Order Success Modal -->
-    <div class="modal" id="orderSuccessModal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">&times;</button>
-            <h2 class="modal-title">Pesanan Berhasil!</h2>
-            <div style="text-align: center; margin-bottom: 30px;">
-                <i class="fas fa-check-circle" style="font-size: 80px; color: var(--light-green); margin-bottom: 20px;"></i>
-                <p style="color: var(--brown); font-size: 18px; margin-bottom: 20px;">Pesanan Anda telah berhasil dikirim ke WhatsApp kami. Tim kami akan segera memproses pesanan Anda.</p>
-                <div style="background-color: #f5f5f5; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                    <p style="font-weight: 600; color: var(--dark-brown);">No. Pesanan: <span id="modalOrderNumber">#ORD-001</span></p>
-                    <p style="color: var(--brown);">Total: <span id="modalOrderTotal">Rp 0</span></p>
-                </div>
-            </div>
-            <button class="btn btn-whatsapp" id="whatsappButton" style="width: 100%;">
-                <i class="fab fa-whatsapp"></i> Buka WhatsApp
-            </button>
-            <button class="btn" id="closeModal" style="width: 100%; margin-top: 15px;">
-                <i class="fas fa-times"></i> Tutup
-            </button>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
@@ -1042,17 +1119,18 @@
     </footer>
 
     <script>
-        // Data produk
-        const products = {
-            1: { name: "Kopi Susu Creamy", price: 15000, qty: 0 },
-            2: { name: "Kopi Susu Gula Aren", price: 15000, qty: 0 },
-            3: { name: "Kopi Susu Creamy 1 Litee", price: 55000, qty: 0 },
-            4: { name: "Kopi Susu Coconut", price: 15000, qty: 0 }
-        };
-
         // Data pesanan
         let orderItems = [];
         let totalPrice = 0;
+        let whatsappMessage = "";
+        let orderNumber = "";
+        
+        // Google Maps variables
+        let map;
+        let marker;
+        let geocoder;
+        let autocomplete;
+        let userLocation = { lat: -6.2088, lng: 106.8456 }; // Default: Jakarta
 
         // Mobile menu toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
@@ -1069,12 +1147,158 @@
             navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
         });
 
-        // Quantity controls
+        // Initialize Google Maps
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+            
+            // Initialize autocomplete for location search
+            const input = document.getElementById('location-search');
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                componentRestrictions: { country: 'id' },
+                fields: ['geometry', 'formatted_address'],
+                types: ['address']
+            });
+            
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    showAlert('Lokasi Tidak Ditemukan', 'Alamat tidak valid. Silakan cari lagi.');
+                    return;
+                }
+                
+                userLocation = {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng()
+                };
+                
+                updateAddressFromLocation(userLocation);
+                showMapWithLocation(userLocation);
+            });
+            
+            // Try to get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        updateAddressFromLocation(userLocation);
+                    },
+                    (error) => {
+                        console.log('Geolocation error:', error);
+                        // Use default location (Jakarta)
+                    }
+                );
+            }
+        }
+
+        // Detect current location button
+        document.getElementById('detectLocation').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                showAlert('Mendeteksi Lokasi', 'Mengambil lokasi Anda...');
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        updateAddressFromLocation(userLocation);
+                        showMapWithLocation(userLocation);
+                        showAlert('Lokasi Ditemukan', 'Lokasi Anda telah berhasil dideteksi.');
+                    },
+                    (error) => {
+                        showAlert('Gagal Mendeteksi', 'Tidak dapat mengambil lokasi. Silakan cari alamat manual.');
+                    },
+                    { timeout: 10000 }
+                );
+            } else {
+                showAlert('Browser Tidak Mendukung', 'Browser Anda tidak mendukung deteksi lokasi.');
+            }
+        });
+
+        // Show map button
+        document.getElementById('showMap').addEventListener('click', function() {
+            const mapContainer = document.getElementById('mapContainer');
+            if (mapContainer.style.display === 'block') {
+                mapContainer.style.display = 'none';
+            } else {
+                mapContainer.style.display = 'block';
+                if (!map) {
+                    initMapWithLocation(userLocation);
+                }
+                showMapWithLocation(userLocation);
+            }
+        });
+
+        // Initialize map with location
+        function initMapWithLocation(location) {
+            map = new google.maps.Map(document.getElementById('address-map'), {
+                center: location,
+                zoom: 16,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true,
+                zoomControl: true
+            });
+            
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: location
+            });
+            
+            // Update address when marker is dragged
+            google.maps.event.addListener(marker, 'dragend', function() {
+                updateAddressFromLocation(marker.getPosition());
+            });
+            
+            // Update address when map is clicked
+            google.maps.event.addListener(map, 'click', function(event) {
+                marker.setPosition(event.latLng);
+                updateAddressFromLocation(event.latLng);
+            });
+        }
+
+        // Show map with specific location
+        function showMapWithLocation(location) {
+            if (!map) {
+                initMapWithLocation(location);
+            } else {
+                map.setCenter(location);
+                marker.setPosition(location);
+            }
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+
+        // Update address from location coordinates
+        function updateAddressFromLocation(location) {
+            geocoder.geocode({ location: location }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    document.getElementById('customer-address').value = results[0].formatted_address;
+                    
+                    // Update search input with address
+                    document.getElementById('location-search').value = results[0].formatted_address;
+                    
+                    // Update receipt preview
+                    updateReceiptPreview();
+                } else {
+                    showAlert('Gagal Mendapatkan Alamat', 'Tidak dapat mendapatkan alamat dari lokasi ini.');
+                }
+            });
+        }
+
+        // Quantity controls - OTOMATIS TAMBAH PESANAN SAAT +/- DITEKAN
         document.querySelectorAll('.qty-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.getAttribute('data-product');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseInt(this.getAttribute('data-price'));
                 const input = document.getElementById(`qty-${productId}`);
-                let value = parseInt(input.value);
+                const statusElement = document.getElementById(`status-${productId}`);
+                
+                let value = parseInt(input.value) || 0;
                 
                 if (this.classList.contains('plus')) {
                     value++;
@@ -1083,51 +1307,47 @@
                 }
                 
                 input.value = value;
-                products[productId].qty = value;
                 
-                // Update add to order button
-                const addButton = document.querySelector(`.add-to-order[data-product="${productId}"]`);
+                // Update status text
                 if (value > 0) {
-                    addButton.innerHTML = `<i class="fas fa-check-circle"></i> Ditambahkan (${value})`;
-                    addButton.style.backgroundColor = 'var(--light-green)';
+                    statusElement.textContent = `${value} x ditambahkan`;
+                    statusElement.style.color = 'var(--light-green)';
                 } else {
-                    addButton.innerHTML = `<i class="fas fa-plus-circle"></i> Tambah ke Pesanan`;
-                    addButton.style.backgroundColor = 'var(--lighter-green)';
+                    statusElement.textContent = '';
                 }
+                
+                // Update order items langsung
+                updateOrderItem(productId, productName, productPrice, value);
+                updateOrderSummary();
+                updateReceiptPreview();
             });
         });
 
-        // Add to order functionality
-        document.querySelectorAll('.add-to-order').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-product');
-                const productName = this.getAttribute('data-name');
-                const productPrice = parseInt(this.getAttribute('data-price'));
-                const quantity = products[productId].qty;
-                
-                if (quantity > 0) {
-                    // Cek apakah produk sudah ada di pesanan
-                    const existingItemIndex = orderItems.findIndex(item => item.id == productId);
-                    
-                    if (existingItemIndex > -1) {
-                        if (quantity > 0) {
-                            orderItems[existingItemIndex].quantity = quantity;
-                        } else {
-                            orderItems.splice(existingItemIndex, 1);
-                        }
-                    } else {
-                        orderItems.push({
-                            id: productId,
-                            name: productName,
-                            price: productPrice,
-                            quantity: quantity
-                        });
-                    }
-                    
-                    updateOrderSummary();
+        // Update order item function
+        function updateOrderItem(productId, productName, productPrice, quantity) {
+            // Cek apakah produk sudah ada di pesanan
+            const existingItemIndex = orderItems.findIndex(item => item.id == productId);
+            
+            if (quantity > 0) {
+                if (existingItemIndex > -1) {
+                    // Update quantity jika sudah ada
+                    orderItems[existingItemIndex].quantity = quantity;
+                } else {
+                    // Tambah baru jika belum ada
+                    orderItems.push({
+                        id: productId,
+                        name: productName,
+                        price: productPrice,
+                        quantity: quantity
+                    });
                 }
-            });
-        });
+            } else {
+                // Hapus jika quantity 0
+                if (existingItemIndex > -1) {
+                    orderItems.splice(existingItemIndex, 1);
+                }
+            }
+        }
 
         // Update order summary
         function updateOrderSummary() {
@@ -1135,7 +1355,13 @@
             totalPrice = 0;
             
             if (orderItems.length === 0) {
-                orderItemsElement.innerHTML = '<p style="text-align: center; color: var(--brown);">Belum ada pesanan</p>';
+                orderItemsElement.innerHTML = `
+                    <div class="empty-order">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Belum ada pesanan</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Gunakan tombol + dan - pada produk untuk menambahkan pesanan</p>
+                    </div>
+                `;
             } else {
                 let itemsHTML = '';
                 orderItems.forEach(item => {
@@ -1144,11 +1370,11 @@
                     
                     itemsHTML += `
                         <div class="order-item">
-                            <div>
-                                <strong>${item.name}</strong><br>
-                                <small>${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}</small>
+                            <div class="order-item-info">
+                                <div class="order-item-name">${item.name}</div>
+                                <div class="order-item-qty">${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}</div>
                             </div>
-                            <div>Rp ${itemTotal.toLocaleString('id-ID')}</div>
+                            <div class="order-item-price">Rp ${itemTotal.toLocaleString('id-ID')}</div>
                         </div>
                     `;
                 });
@@ -1159,8 +1385,37 @@
             document.getElementById('total-price').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
         }
 
-        // Confirm order functionality
-        document.getElementById('confirm-order').addEventListener('click', function() {
+        // Update receipt preview
+        function updateReceiptPreview() {
+            const receiptItems = document.getElementById('receiptItems');
+            const receiptPreview = document.getElementById('receiptPreview');
+            
+            if (orderItems.length > 0) {
+                let itemsHTML = '';
+                let subtotal = 0;
+                
+                orderItems.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    
+                    itemsHTML += `
+                        <div class="receipt-item">
+                            <span>${item.name} (${item.quantity}x)</span>
+                            <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+                        </div>
+                    `;
+                });
+                
+                receiptItems.innerHTML = itemsHTML;
+                document.getElementById('receiptTotal').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+                receiptPreview.style.display = 'block';
+            } else {
+                receiptPreview.style.display = 'none';
+            }
+        }
+
+        // Send to WhatsApp button - LANGSUNG BUKA WHATSAPP
+        document.getElementById('sendToWhatsApp').addEventListener('click', function() {
             const customerName = document.getElementById('customer-name').value.trim();
             const customerPhone = document.getElementById('customer-phone').value.trim();
             const customerAddress = document.getElementById('customer-address').value.trim();
@@ -1168,75 +1423,121 @@
             
             // Validasi input
             if (!customerName || !customerPhone || !customerAddress) {
-                alert('Harap isi semua data yang diperlukan (Nama, WhatsApp, dan Alamat)');
+                showAlert('Data Tidak Lengkap', 'Harap isi nama, WhatsApp, dan alamat lengkap');
                 return;
             }
             
             if (orderItems.length === 0) {
-                alert('Harap tambahkan minimal satu produk ke pesanan');
+                showAlert('Pesanan Kosong', 'Harap tambahkan minimal satu produk ke pesanan');
                 return;
             }
             
             if (!customerPhone.match(/^[0-9]{10,13}$/)) {
-                alert('Nomor WhatsApp tidak valid. Harap masukkan 10-13 digit angka');
+                showAlert('Nomor WhatsApp Tidak Valid', 'Harap masukkan 10-13 digit angka');
                 return;
             }
             
             // Generate order number
-            const orderNumber = 'ORD-' + Date.now().toString().substr(-6);
+            orderNumber = 'ORD-' + Date.now().toString().substr(-6);
+            document.getElementById('receiptNumber').textContent = orderNumber;
             
-            // Format pesan untuk WhatsApp
-            let whatsappMessage = `Halo Kopi Susu Mrs. DK, saya ingin memesan:\n\n`;
+            // Format struk WhatsApp dengan tampilan yang rapi
+            whatsappMessage = `═══════════════════════════════════\n`;
+            whatsappMessage += `         *KOPI SUSU MRS. DK*\n`;
+            whatsappMessage += `═══════════════════════════════════\n\n`;
+            whatsappMessage += `           *STRUK PESANAN*\n`;
+            whatsappMessage += `No. Pesanan: ${orderNumber}\n`;
+            whatsappMessage += `Tanggal: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}\n\n`;
+            whatsappMessage += `═══════════════════════════════════\n`;
+            whatsappMessage += `*Detail Pesanan:*\n\n`;
             
             orderItems.forEach(item => {
-                whatsappMessage += `- ${item.name}: ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')} = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
+                whatsappMessage += `▸ ${item.name}\n`;
+                whatsappMessage += `  ${item.quantity} x Rp ${item.price.toLocaleString('id-ID')}\n`;
+                whatsappMessage += `  = Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n\n`;
             });
             
-            whatsappMessage += `\n*Total: Rp ${totalPrice.toLocaleString('id-ID')}*\n\n`;
-            whatsappMessage += `Data Pemesan:\n`;
+            whatsappMessage += `═══════════════════════════════════\n`;
+            whatsappMessage += `*Total:* Rp ${totalPrice.toLocaleString('id-ID')}\n\n`;
+            whatsappMessage += `═══════════════════════════════════\n`;
+            whatsappMessage += `*Data Pemesan:*\n`;
             whatsappMessage += `Nama: ${customerName}\n`;
             whatsappMessage += `WhatsApp: ${customerPhone}\n`;
-            whatsappMessage += `Alamat: ${customerAddress}\n`;
+            whatsappMessage += `Alamat: ${customerAddress}\n\n`;
             
             if (customerNote) {
-                whatsappMessage += `Catatan: ${customerNote}\n`;
+                whatsappMessage += `*Catatan:*\n${customerNote}\n\n`;
             }
             
-            whatsappMessage += `\nNo. Pesanan: ${orderNumber}`;
+            whatsappMessage += `═══════════════════════════════════\n`;
+            whatsappMessage += `*Lokasi Pengiriman:*\n`;
+            whatsappMessage += `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}\n\n`;
+            whatsappMessage += `═══════════════════════════════════\n`;
+            whatsappMessage += `Terima kasih telah memesan di\nKopi Susu Mrs. DK!\n`;
+            whatsappMessage += `═══════════════════════════════════`;
             
-            // Encode message for WhatsApp URL
+            // Encode message untuk URL WhatsApp
             const encodedMessage = encodeURIComponent(whatsappMessage);
-            const whatsappURL = `https://wa.me/6285298055758?text=${encodedMessage}`;
             
-            // Simpan data untuk modal
-            document.getElementById('modalOrderNumber').textContent = orderNumber;
-            document.getElementById('modalOrderTotal').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            // TAMPILKAN ALERT DULU
+            showAlert('Mengarahkan ke WhatsApp', 'Silakan konfirmasi pengiriman pesan...');
             
-            // Update WhatsApp button
-            const whatsappButton = document.getElementById('whatsappButton');
-            whatsappButton.href = whatsappURL;
-            whatsappButton.target = '_blank';
+            // BUAT URL WHATSAPP UNTUK SEMUA PLATFORM
+            const whatsappURL = `https://api.whatsapp.com/send?phone=6285298055758&text=${encodedMessage}`;
             
-            // Show success modal
-            document.getElementById('orderSuccessModal').style.display = 'flex';
+            // BUKA WHATSAPP DI TAB BARU - INI YANG PASTI BEKERJA
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+                
+                // Reset form setelah 2 detik
+                setTimeout(() => {
+                    resetOrderForm();
+                }, 2000);
+            }, 1500);
         });
 
-        // Modal functionality
-        document.getElementById('modalClose').addEventListener('click', function() {
-            document.getElementById('orderSuccessModal').style.display = 'none';
-        });
+        // Show alert
+        function showAlert(title, message) {
+            const alertBox = document.getElementById('whatsappAlert');
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
 
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('orderSuccessModal').style.display = 'none';
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('orderSuccessModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+        // Reset order form function
+        function resetOrderForm() {
+            // Reset semua input quantity
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`qty-${i}`).value = 0;
+                document.getElementById(`status-${i}`).textContent = '';
             }
-        });
+            
+            // Reset order items
+            orderItems = [];
+            updateOrderSummary();
+            updateReceiptPreview();
+            
+            // Reset form fields (opsional)
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            document.getElementById('location-search').value = '';
+            document.getElementById('customer-address').value = '';
+            document.getElementById('customer-note').value = '';
+            document.getElementById('mapContainer').style.display = 'none';
+            
+            // Reset map to default location
+            userLocation = { lat: -6.2088, lng: 106.8456 };
+            
+            // Scroll ke atas form
+            document.getElementById('order-form').scrollIntoView({ behavior: 'smooth' });
+            
+            // Tampilkan alert konfirmasi
+            showAlert('Pesanan Berhasil Dikirim!', 'Terima kasih telah memesan Kopi Susu Mrs. DK.');
+        }
 
         // Close order button functionality
         document.getElementById('closeOrderBtn').addEventListener('click', function() {
@@ -1255,7 +1556,7 @@
             this.style.backgroundColor = '#888';
             
             // Show alert
-            alert('Terima kasih! Pesanan telah dikonfirmasi sebagai diterima. Selamat menikmati Kopi Susu Mrs. DK!');
+            showAlert('Terima Kasih!', 'Pesanan telah dikonfirmasi diterima.');
         });
 
         // Smooth scrolling for anchor links
@@ -1282,32 +1583,31 @@
             });
         });
 
-        // Simulate order tracking updates
-        function simulateTrackingUpdate() {
-            const trackingSteps = document.querySelectorAll('.status-step');
-            const statusIcons = document.querySelectorAll('.status-icon i');
-            
-            // Update delivery position message
-            const positions = [
-                "Sedang menuju ke lokasi Anda",
-                "Posisi saat ini: Jl. Sudirman No. 12 (10 menit dari tujuan)",
-                "Posisi saat ini: Jl. Merdeka No. 45 (5 menit dari tujuan)",
-                "Hampir sampai di lokasi Anda"
-            ];
-            
-            const randomPosition = positions[Math.floor(Math.random() * positions.length)];
-            document.querySelector('.map-overlay p').textContent = randomPosition;
-            
-            // Animate the driver icon
-            const driverIcon = document.querySelector('.driver-avatar i');
-            driverIcon.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                driverIcon.style.transform = 'scale(1)';
-            }, 300);
-        }
-        
-        // Run tracking simulation every 10 seconds
-        setInterval(simulateTrackingUpdate, 10000);
+        // Input quantity change handler (manual input)
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const productId = this.id.split('-')[1];
+                const productCard = this.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = parseInt(productCard.querySelector('.price').textContent.replace(/\D/g, ''));
+                const value = parseInt(this.value) || 0;
+                const statusElement = document.getElementById(`status-${productId}`);
+                
+                if (value < 0) this.value = 0;
+                
+                if (value > 0) {
+                    statusElement.textContent = `${value} x ditambahkan`;
+                    statusElement.style.color = 'var(--light-green)';
+                } else {
+                    statusElement.textContent = '';
+                }
+                
+                // Update order items
+                updateOrderItem(productId, productName, productPrice, value);
+                updateOrderSummary();
+                updateReceiptPreview();
+            });
+        });
     </script>
 </body>
 </html>
