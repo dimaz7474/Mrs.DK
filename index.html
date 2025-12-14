@@ -1,18 +1,866 @@
-     function bayarQRIS() {
-         // Integrasi dengan Midtrans API
-         fetch('/api/pembayaran/qris', {
-             method: 'POST',
-             body: JSON.stringify({ amount: 25000, item: 'Kopi Susu' })
-         })
-         .then(response => response.json())
-         .then(data => {
-             // Tampilkan QR code
-             document.getElementById('qris-qr').src = data.qr_url;
-         });
-     }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi Susu Mrs. DK - Segarnya Nikmat Tiada Tara</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-     function bayarTransfer() {
-         // Redirect ke halaman transfer bank
-         window.location.href = '/transfer-bank';
-     }
-     
+        :root {
+            --primary-green: #1a5d1a;
+            --light-green: #2e7d32;
+            --lighter-green: #4caf50;
+            --cream: #f9f3e9;
+            --brown: #5d4037;
+            --dark-brown: #3e2723;
+            --yellow: #ffd54f;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--primary-green);
+            background-image: linear-gradient(to bottom right, var(--primary-green), var(--light-green));
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(26, 93, 26, 0.95);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            background-color: var(--yellow);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--dark-brown);
+        }
+
+        .logo-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            color: var(--cream);
+            font-size: 14px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 17px;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        nav a:hover {
+            color: var(--yellow);
+            border-bottom: 2px solid var(--yellow);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            background-color: rgba(249, 243, 233, 0.1);
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+            color: white;
+        }
+
+        .hero-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .coffee-image {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 8px solid var(--cream);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--yellow);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .products {
+            padding: 60px 0;
+            background-color: rgba(249, 243, 233, 0.05);
+            border-radius: 30px;
+            margin-bottom: 40px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background-color: var(--cream);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            height: 200px;
+            background-color: var(--lighter-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 80px;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .product-info p {
+            color: var(--brown);
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light-green);
+            margin-bottom: 15px;
+        }
+
+        .order-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Tracking Section */
+        .tracking {
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .tracking-container {
+            background-color: var(--cream);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .tracking-status {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .tracking-status::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+
+        .status-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .status-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 22px;
+            color: #777;
+            transition: all 0.3s;
+        }
+
+        .status-step.active .status-icon {
+            background-color: var(--lighter-green);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .status-step.completed .status-icon {
+            background-color: var(--light-green);
+            color: white;
+        }
+
+        .status-step h4 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 5px;
+            color: var(--dark-brown);
+        }
+
+        .status-step p {
+            font-size: 14px;
+            color: var(--brown);
+        }
+
+        .tracking-map {
+            height: 300px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brown);
+            font-size: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, rgba(76, 175, 80, 0.2), rgba(46, 125, 50, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .driver-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .driver-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .close-order-btn {
+            background-color: var(--primary-green);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .close-order-btn:hover {
+            background-color: var(--dark-brown);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-brown);
+            color: var(--cream);
+            padding: 50px 0 20px;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-column h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--yellow);
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--yellow);
+            color: var(--dark-brown);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tracking-status {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+            
+            .status-step {
+                flex: 0 0 calc(50% - 30px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-text h2 {
+                font-size: 32px;
+            }
+            
+            .tracking-container {
+                padding: 25px;
+            }
+            
+            .status-step {
+                flex: 0 0 100%;
+                margin-bottom: 30px;
+            }
+            
+            .status-step:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .hero {
+                padding: 50px 0;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-coffee"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Kopi Susu Mrs. DK</h1>
+                    <p>Segarnya Nikmat Tiada Tara</p>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#products">Produk</a></li>
+                    <li><a href="#tracking">Tracking Pesanan</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Kopi Susu Autentik dengan Cita Rasa Khas Mrs. DK</h2>
+                    <p>Rasakan kenikmatan kopi susu premium dengan racikan spesial dari Mrs. DK. Dibuat dengan biji kopi pilihan dan susu segar berkualitas tinggi untuk pengalaman minum kopi yang tak terlupakan.</p>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Mrs.%20DK,%20saya%20ingin%20memesan%20kopi%20susu" target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <div class="coffee-image">
+                        <i class="fas fa-coffee" style="font-size: 300px; color: var(--cream);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Menu Andalan Kami</h2>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kopi Susu Classic</h3>
+                        <p>Perpaduan sempurna kopi robusta dengan susu segar dan gula aren asli.</p>
+                        <div class="price">Rp 18.000</div>
+                        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Classic" target="_blank" class="btn btn-whatsapp order-btn">
+                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kopi Susu Gula Aren</h3>
+                        <p>Kopi susu dengan gula aren asli yang memberikan rasa karamel alami.</p>
+                        <div class="price">Rp 20.000</div>
+                        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Gula%20Aren" target="_blank" class="btn btn-whatsapp order-btn">
+                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kopi Susu Hazelnut</h3>
+                        <p>Kopi susu dengan tambahan rasa hazelnut yang creamy dan harum.</p>
+                        <div class="price">Rp 22.000</div>
+                        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Hazelnut" target="_blank" class="btn btn-whatsapp order-btn">
+                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kopi Susu Vanilla</h3>
+                        <p>Kopi susu dengan ekstrak vanilla alami yang memberikan aroma memikat.</p>
+                        <div class="price">Rp 21.000</div>
+                        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Kopi%20Susu%20Vanilla" target="_blank" class="btn btn-whatsapp order-btn">
+                            <i class="fab fa-whatsapp"></i> Pesan Sekarang
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracking Section -->
+    <section class="tracking" id="tracking">
+        <div class="container">
+            <h2 class="section-title">Lacak Pesanan Anda</h2>
+            <div class="tracking-container">
+                <h3 style="color: var(--dark-brown); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Status Pengiriman Pesanan #KD12345</h3>
+                
+                <div class="tracking-status">
+                    <!-- Step 1 -->
+                    <div class="status-step completed">
+                        <div class="status-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h4>Pesanan Diterima</h4>
+                        <p>10:30 WIB</p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="status-step completed">
+                        <div class="status-icon">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <h4>Sedang Disiapkan</h4>
+                        <p>10:45 WIB</p>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="status-step active">
+                        <div class="status-icon">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <h4>Dalam Pengantaran</h4>
+                        <p>11:15 WIB</p>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="status-step">
+                        <div class="status-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h4>Telah Sampai</h4>
+                        <p>Menunggu</p>
+                    </div>
+                </div>
+                
+                <div class="tracking-map">
+                    <div class="map-overlay">
+                        <i class="fas fa-map-marked-alt" style="font-size: 60px; color: var(--light-green);"></i>
+                        <p style="font-weight: 600; color: var(--dark-brown);">Posisi saat ini: Jl. Merdeka No. 45 (5 menit dari tujuan)</p>
+                    </div>
+                </div>
+                
+                <div class="driver-info">
+                    <div class="driver-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--dark-brown); margin-bottom: 5px;">Budi Santoso - Driver</h4>
+                        <p style="color: var(--brown);">Mengantar pesanan Anda</p>
+                        <p style="color: var(--brown);"><i class="fas fa-phone-alt"></i> 0812-3456-7890</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="btn close-order-btn" id="closeOrderBtn">
+                        <i class="fas fa-check-circle"></i> Tandai Sudah Diterima
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kopi Susu Mrs. DK</h3>
+                    <p>Menghadirkan kenikmatan kopi susu dengan cita rasa autentik sejak 2015. Setiap cangkir dibuat dengan penuh cinta dan bahan-bahan terbaik.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="https://wa.me/6281234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kontak Kami</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Jl. Raya Kopi No. 123, Jakarta</p>
+                        <p><i class="fas fa-phone"></i> 021-1234-5678</p>
+                        <p><i class="fab fa-whatsapp"></i> 0812-3456-7890</p>
+                        <p><i class="fas fa-envelope"></i> hello@kopisusumrsdk.com</p>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Jam Operasional</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-clock"></i> Senin - Jumat: 07:00 - 21:00</p>
+                        <p><i class="fas fa-clock"></i> Sabtu - Minggu: 08:00 - 22:00</p>
+                        <p><i class="fas fa-shipping-fast"></i> Pengiriman: Setiap hari 08:00 - 20:00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Kopi Susu Mrs. DK. Semua hak dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+            navMenu.style.flexDirection = 'column';
+            navMenu.style.position = 'absolute';
+            navMenu.style.top = '100%';
+            navMenu.style.left = '0';
+            navMenu.style.right = '0';
+            navMenu.style.backgroundColor = 'var(--primary-green)';
+            navMenu.style.padding = '20px';
+            navMenu.style.gap = '20px';
+            navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
+        });
+        
+        // Close order button functionality
+        document.getElementById('closeOrderBtn').addEventListener('click', function() {
+            const trackingSteps = document.querySelectorAll('.status-step');
+            
+            // Mark the last step as completed
+            trackingSteps[3].classList.remove('active');
+            trackingSteps[3].classList.add('completed');
+            
+            // Update the text
+            document.querySelector('.status-step:nth-child(4) p').textContent = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+            
+            // Disable the button and show confirmation
+            this.innerHTML = '<i class="fas fa-check-circle"></i> Pesanan Telah Diterima';
+            this.disabled = true;
+            this.style.backgroundColor = '#888';
+            
+            // Show alert
+            alert('Terima kasih! Pesanan telah dikonfirmasi sebagai diterima. Selamat menikmati Kopi Susu Mrs. DK!');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const navMenu = document.getElementById('navMenu');
+                    if(window.innerWidth <= 768 && navMenu.style.display === 'flex') {
+                        navMenu.style.display = 'none';
+                    }
+                }
+            });
+        });
+        
+        // Simulate order tracking updates
+        function simulateTrackingUpdate() {
+            const trackingSteps = document.querySelectorAll('.status-step');
+            const statusIcons = document.querySelectorAll('.status-icon i');
+            
+            // Update delivery position message
+            const positions = [
+                "Sedang menuju ke lokasi Anda",
+                "Posisi saat ini: Jl. Sudirman No. 12 (10 menit dari tujuan)",
+                "Posisi saat ini: Jl. Merdeka No. 45 (5 menit dari tujuan)",
+                "Hampir sampai di lokasi Anda"
+            ];
+            
+            const randomPosition = positions[Math.floor(Math.random() * positions.length)];
+            document.querySelector('.map-overlay p').textContent = randomPosition;
+            
+            // Animate the driver icon
+            const driverIcon = document.querySelector('.driver-avatar i');
+            driverIcon.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                driverIcon.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Run tracking simulation every 10 seconds
+        setInterval(simulateTrackingUpdate, 10000);
+    </script>
+</body>
+</html>
