@@ -5,179 +5,409 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Kopi Susu Mrs. DK</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         :root {
-            --primary-green: #1a5d1a;
-            --light-green: #2e7d32;
-            --lighter-green: #4caf50;
-            --cream: #f9f3e9;
-            --brown: #5d4037;
-            --dark-brown: #3e2723;
-            --yellow: #ffd54f;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --red: #f44336;
-            --green: #4caf50;
+            --primary: #1a5d1a;
+            --secondary: #2e7d32;
+            --accent: #ffd54f;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --dark: #333;
+            --light: #f5f5f5;
         }
-
+        
         body {
-            font-family: 'Quicksand', sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
             color: #333;
-            background-color: #f5f5f5;
             min-height: 100vh;
         }
-
+        
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
-
-        /* Header */
-        header {
-            background-color: var(--primary-green);
-            padding: 20px 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
-        .logo-icon {
-            background-color: var(--yellow);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            color: var(--dark-brown);
-        }
-
-        .logo-text h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
             color: white;
-            font-weight: 700;
         }
-
-        .logo-text p {
-            color: var(--cream);
+        
+        .stat-content {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .stat-label {
             font-size: 14px;
+            color: #666;
+            margin-top: 5px;
         }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
+        
+        .main-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
-
-        /* Card Styles */
-        .card {
-            background-color: white;
+        
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-header {
+        
+        .section-title {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid var(--cream);
+            border-bottom: 2px solid #f0f0f0;
         }
-
-        .card-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 20px;
-            color: var(--dark-brown);
+        
+        .section-title h2 {
+            color: var(--primary);
+            font-size: 22px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
-        /* Status Toko */
-        .store-status-container {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #f0f0f0;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .filter-btn.active {
+            background: var(--secondary);
             color: white;
         }
-
-        .status-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
+        
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
-        .status-open {
-            background-color: var(--green);
+        
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .order-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .order-item {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .order-item:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.1);
+        }
+        
+        .order-item.active {
+            border-color: var(--secondary);
+            background: #f0f7f0;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .order-id {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-diterima { background: #e3f2fd; color: #1976d2; }
+        .status-disiapkan { background: #fff3e0; color: #f57c00; }
+        .status-pengantaran { background: #e8f5e9; color: #388e3c; }
+        .status-sampai { background: #f1f8e9; color: #689f38; }
+        
+        .order-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn-primary {
+            background: var(--secondary);
             color: white;
         }
-
-        .status-closed {
-            background-color: var(--red);
+        
+        .action-btn-warning {
+            background: var(--warning);
             color: white;
         }
-
-        .status-toggle {
+        
+        .action-btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .action-btn-info {
+            background: var(--info);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Driver Management Styles */
+        .driver-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .driver-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-top: 20px;
+            transition: all 0.3s;
         }
-
-        .status-label {
-            font-size: 18px;
-            font-weight: 600;
+        
+        .driver-card.active {
+            border-color: var(--secondary);
+            background: #f0f7f0;
         }
-
-        /* Toggle Switch */
-        .status-switch {
+        
+        .driver-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .driver-info {
+            flex: 1;
+        }
+        
+        .driver-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .driver-status {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-online { background: #4CAF50; }
+        .status-offline { background: #9e9e9e; }
+        .status-busy { background: #ff9800; }
+        
+        .driver-orders {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .driver-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Store Control Styles */
+        .store-control {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 70px;
+            width: 60px;
             height: 34px;
+            margin: 0 20px;
         }
-
-        .status-switch input {
+        
+        .toggle-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
-        .status-slider {
+        
+        .toggle-slider {
             position: absolute;
             cursor: pointer;
             top: 0;
@@ -188,8 +418,8 @@
             transition: .4s;
             border-radius: 34px;
         }
-
-        .status-slider:before {
+        
+        .toggle-slider:before {
             position: absolute;
             content: "";
             height: 26px;
@@ -200,151 +430,15 @@
             transition: .4s;
             border-radius: 50%;
         }
-
-        input:checked + .status-slider {
-            background-color: var(--light-green);
+        
+        input:checked + .toggle-slider {
+            background-color: var(--secondary);
         }
-
-        input:checked + .status-slider:before {
-            transform: translateX(36px);
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
-
-        .status-message {
-            margin-top: 15px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* Orders Table */
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .orders-table th {
-            background-color: var(--cream);
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--dark-brown);
-            border-bottom: 2px solid var(--lighter-green);
-        }
-
-        .orders-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .orders-table tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        .order-status {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-pending {
-            background-color: #fff3e0;
-            color: #f57c00;
-        }
-
-        .status-processing {
-            background-color: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .status-delivered {
-            background-color: #e8f5e9;
-            color: #388e3c;
-        }
-
-        .status-cancelled {
-            background-color: #ffebee;
-            color: #d32f2f;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-action {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-edit {
-            background-color: var(--yellow);
-            color: var(--dark-brown);
-        }
-
-        .btn-delete {
-            background-color: var(--red);
-            color: white;
-        }
-
-        .btn-view {
-            background-color: var(--light-green);
-            color: white;
-        }
-
-        .btn-action:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        /* Statistics Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--lighter-green), var(--light-green));
-            color: white;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--brown);
-            font-size: 14px;
-            margin-top: 40px;
-            border-top: 1px solid #eee;
-        }
-
-        /* Modal */
+        
         .modal {
             display: none;
             position: fixed;
@@ -352,743 +446,1848 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-
+        
         .modal-content {
-            background-color: white;
-            padding: 30px;
+            background: white;
             border-radius: 15px;
+            padding: 30px;
             max-width: 500px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
         }
-
+        
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
-
+        
         .modal-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            color: var(--dark-brown);
+            color: var(--primary);
+            font-size: 20px;
         }
-
+        
         .close-modal {
             background: none;
             border: none;
             font-size: 24px;
+            color: #666;
             cursor: pointer;
-            color: var(--brown);
         }
-
-        /* Form Styles */
+        
         .form-group {
             margin-bottom: 20px;
         }
-
-        .form-group label {
+        
+        .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark-brown);
+            font-weight: 500;
+            color: #333;
         }
-
+        
         .form-control {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Quicksand', sans-serif;
-            transition: border-color 0.3s;
+            border-radius: 8px;
+            font-size: 14px;
         }
-
+        
         .form-control:focus {
             outline: none;
-            border-color: var(--light-green);
+            border-color: var(--secondary);
         }
-
-        .btn-save {
-            background-color: var(--light-green);
-            color: white;
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
             border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        /* Live Tracking Styles */
+        .live-tracking {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .tracking-map {
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 3px solid var(--secondary);
+        }
+        
+        #trackingMap {
             width: 100%;
+            height: 100%;
         }
-
-        .btn-save:hover {
-            background-color: var(--primary-green);
+        
+        .tracking-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
         }
-
-        /* Responsive */
+        
+        .info-item {
+            text-align: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .info-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
         @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 15px;
             }
             
-            .orders-table {
-                display: block;
-                overflow-x: auto;
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
             }
             
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .order-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tracking-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
         }
-
+        
         @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr;
             }
             
-            .modal-content {
-                padding: 20px;
-                margin: 10px;
+            .order-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>Admin Panel</h1>
-                    <p>Kopi Susu Mrs. DK</p>
-                </div>
-            </div>
-            <div style="color: white; font-size: 14px;">
-                <i class="fas fa-clock"></i> Last updated: <span id="lastUpdateTime">-</span>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-tachometer-alt"></i>
+                Admin Panel - Kopi Susu Mrs. DK
+            </h1>
+            <p>Kelola pesanan, driver, dan pengaturan toko</p>
         </div>
-    </header>
-
-    <main class="container">
-        <!-- Dashboard Stats -->
+        
+        <!-- Statistics Overview -->
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fas fa-shopping-cart" style="font-size: 30px;"></i>
-                <div class="stat-number" id="totalOrders">0</div>
-                <div class="stat-label">Total Pesanan</div>
+                <div class="stat-icon" style="background: var(--info);">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalOrders">0</div>
+                    <div class="stat-label">Total Pesanan</div>
+                </div>
             </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #2196F3, #1976D2);">
-                <i class="fas fa-clock" style="font-size: 30px;"></i>
-                <div class="stat-number" id="pendingOrders">0</div>
-                <div class="stat-label">Pesanan Baru</div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--warning);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="pendingOrders">0</div>
+                    <div class="stat-label">Pesanan Diproses</div>
+                </div>
             </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #FF9800, #F57C00);">
-                <i class="fas fa-motorcycle" style="font-size: 30px;"></i>
-                <div class="stat-number" id="processingOrders">0</div>
-                <div class="stat-label">Dalam Pengiriman</div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--secondary);">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="activeDeliveries">0</div>
+                    <div class="stat-label">Pengiriman Aktif</div>
+                </div>
             </div>
-            <div class="stat-card" style="background: linear-gradient(135deg, #4CAF50, #388E3C);">
-                <i class="fas fa-check-circle" style="font-size: 30px;"></i>
-                <div class="stat-number" id="completedOrders">0</div>
-                <div class="stat-label">Selesai</div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="problemOrders">0</div>
+                    <div class="stat-label">Pesanan Bermasalah</div>
+                </div>
             </div>
         </div>
-
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
-            <!-- Status Toko -->
-            <div class="card store-status-container">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-store"></i> Status Toko</h2>
-                    <span class="status-badge" id="currentStatusBadge">BUKA</span>
-                </div>
-                <div class="status-toggle">
-                    <span class="status-label" id="statusLabel">Toko Sedang BUKA</span>
-                    <label class="status-switch">
-                        <input type="checkbox" id="storeStatusToggle" checked>
-                        <span class="status-slider"></span>
-                    </label>
-                </div>
-                <p class="status-message" id="statusMessage">
-                    Pelanggan dapat melakukan pemesanan via WhatsApp
-                </p>
-                <div style="margin-top: 20px;">
-                    <p><i class="fas fa-info-circle"></i> Status akan tersimpan di semua perangkat</p>
-                    <p style="font-size: 12px; margin-top: 10px;">
-                        <i class="fas fa-sync-alt"></i> Update terakhir: <span id="statusUpdateTime">-</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Pengaturan Pesanan -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-cogs"></i> Pengaturan</h2>
-                </div>
-                <div class="form-group">
-                    <label for="autoRefresh"><i class="fas fa-sync-alt"></i> Auto-Refresh Data</label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <label class="switch">
-                            <input type="checkbox" id="autoRefreshToggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <span>Refresh otomatis setiap 30 detik</span>
-                    </div>
-                </div>
-                <div class="form-group" style="margin-top: 20px;">
-                    <button onclick="clearAllOrders()" class="btn-action btn-delete" style="width: 100%; padding: 12px;">
-                        <i class="fas fa-trash-alt"></i> Hapus Semua Pesanan
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Orders Section -->
+            <div class="section">
+                <div class="section-title">
+                    <h2><i class="fas fa-clipboard-list"></i> Daftar Pesanan</h2>
+                    <button class="action-btn action-btn-primary" onclick="refreshOrders()">
+                        <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
+                
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchOrders" placeholder="Cari ID atau nama pelanggan...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button class="filter-btn active" onclick="filterOrders('all')">Semua</button>
+                    <button class="filter-btn" onclick="filterOrders('diterima')">Diterima</button>
+                    <button class="filter-btn" onclick="filterOrders('disiapkan')">Disiapkan</button>
+                    <button class="filter-btn" onclick="filterOrders('pengantaran')">Pengantaran</button>
+                    <button class="filter-btn" onclick="filterOrders('sampai')">Sampai</button>
+                </div>
+                
+                <div class="order-list" id="ordersList">
+                    <!-- Orders will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>Belum ada pesanan</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Pesanan akan muncul di sini</p>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Daftar Pesanan -->
-        <div class="card" style="margin-top: 30px;">
-            <div class="card-header">
-                <h2 class="card-title"><i class="fas fa-list"></i> Daftar Pesanan Terbaru</h2>
-                <button onclick="refreshOrders()" class="btn-action btn-view">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            <div class="orders-container">
-                <table class="orders-table">
-                    <thead>
-                        <tr>
-                            <th>ID Pesanan</th>
-                            <th>Nama Customer</th>
-                            <th>Tanggal</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTableBody">
-                        <!-- Orders will be loaded here -->
-                    </tbody>
-                </table>
-                <div id="emptyOrdersMessage" style="text-align: center; padding: 40px; display: none;">
-                    <i class="fas fa-shopping-cart" style="font-size: 60px; color: #ddd; margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--brown); margin-bottom: 10px;">Belum Ada Pesanan</h3>
-                    <p>Belum ada pesanan yang diterima.</p>
+            
+            <!-- Driver & Live Tracking Section -->
+            <div class="section">
+                <div class="section-title">
+                    <h2><i class="fas fa-user-friends"></i> Driver Management</h2>
+                    <button class="action-btn action-btn-primary" onclick="showAddDriverModal()">
+                        <i class="fas fa-plus"></i> Tambah Driver
+                    </button>
+                </div>
+                
+                <div class="driver-list" id="driversList">
+                    <!-- Drivers will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p>Belum ada driver</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Tambahkan driver untuk mengelola pengiriman</p>
+                    </div>
+                </div>
+                
+                <!-- Live Tracking for Selected Order -->
+                <div class="live-tracking" id="liveTrackingSection" style="display: none;">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">
+                        <i class="fas fa-map-marked-alt"></i> Live Tracking Pesanan
+                        <span id="trackingOrderId"></span>
+                    </h3>
+                    
+                    <div class="tracking-map">
+                        <div id="trackingMap"></div>
+                    </div>
+                    
+                    <div class="tracking-info">
+                        <div class="info-item">
+                            <div class="info-value" id="trackingDriver">-</div>
+                            <div class="info-label">Driver</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value" id="trackingDistance">- km</div>
+                            <div class="info-label">Jarak</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value" id="trackingETA">- menit</div>
+                            <div class="info-label">Estimasi Waktu</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-actions" style="margin-top: 15px;">
+                        <button class="action-btn action-btn-primary" onclick="updateDriverLocationManual()">
+                            <i class="fas fa-map-pin"></i> Update Lokasi Driver
+                        </button>
+                        <button class="action-btn action-btn-warning" onclick="assignNewDriver()">
+                            <i class="fas fa-user-edit"></i> Ganti Driver
+                        </button>
+                        <button class="action-btn action-btn-danger" onclick="cancelDelivery()">
+                            <i class="fas fa-times-circle"></i> Batalkan Pengiriman
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Pesan Pemberitahuan -->
-        <div class="card" style="margin-top: 30px;">
-            <div class="card-header">
-                <h2 class="card-title"><i class="fas fa-bullhorn"></i> Pesan Tutup Toko</h2>
+        
+        <!-- Store Control Section -->
+        <div class="store-control">
+            <h3 style="color: var(--primary); margin-bottom: 20px;">
+                <i class="fas fa-store"></i> Kontrol Toko
+            </h3>
+            
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <span style="font-weight: 500; margin-right: 15px;">Toko Tutup</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="storeStatusToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span style="font-weight: 500; margin-left: 15px;">Toko Buka</span>
             </div>
-            <div class="form-group">
-                <label for="closedMessage"><i class="fas fa-edit"></i> Pesan yang ditampilkan saat toko tutup:</label>
-                <textarea id="closedMessage" class="form-control" rows="4" placeholder="Contoh: Maaf, toko sedang tutup. Kami buka kembali besok jam 08:00.">
-Maaf, toko sedang tutup sementara. Silakan pesan pada jam operasional kami.
-                </textarea>
+            
+            <div class="form-group" style="max-width: 500px; margin: 0 auto;">
+                <label for="storeMessage" class="form-label">Pesan Tutup Toko (jika tutup)</label>
+                <textarea id="storeMessage" class="form-control" rows="3" placeholder="Contoh: Maaf, toko sedang tutup sementara. Silakan pesan pada jam operasional kami."></textarea>
             </div>
-            <div class="form-group">
-                <button onclick="saveClosedMessage()" class="btn-save">
-                    <i class="fas fa-save"></i> Simpan Pesan
-                </button>
-            </div>
+            
+            <button class="btn btn-primary" onclick="updateStoreStatus()" style="margin-top: 20px;">
+                <i class="fas fa-save"></i> Simpan Pengaturan
+            </button>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <div class="footer container">
-        <p>&copy; 2025 Kopi Susu Mrs. DK - Admin Panel</p>
-        <p style="font-size: 12px; margin-top: 5px;">Versi 2.0 | Terakhir diupdate: <span id="footerUpdateTime">-</span></p>
     </div>
-
-    <!-- Modal Detail Pesanan -->
-    <div class="modal" id="orderDetailModal">
+    
+    <!-- Add Driver Modal -->
+    <div class="modal" id="addDriverModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Detail Pesanan</h3>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <h3 class="modal-title"><i class="fas fa-user-plus"></i> Tambah Driver Baru</h3>
+                <button class="close-modal" onclick="closeModal('addDriverModal')">&times;</button>
             </div>
-            <div id="orderDetailContent">
-                <!-- Order details will be loaded here -->
+            
+            <div class="form-group">
+                <label for="driverNameInput" class="form-label">Nama Driver</label>
+                <input type="text" id="driverNameInput" class="form-control" placeholder="Masukkan nama driver">
+            </div>
+            
+            <div class="form-group">
+                <label for="driverPhoneInput" class="form-label">Nomor Telepon</label>
+                <input type="tel" id="driverPhoneInput" class="form-control" placeholder="081234567890">
+            </div>
+            
+            <div class="form-group">
+                <label for="driverVehicleInput" class="form-label">Kendaraan</label>
+                <input type="text" id="driverVehicleInput" class="form-control" placeholder="Contoh: Motor Honda Beat">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('addDriverModal')">Batal</button>
+                <button class="btn btn-primary" onclick="addNewDriver()">Simpan Driver</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Assign Driver Modal -->
+    <div class="modal" id="assignDriverModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-user-check"></i> Tugaskan Driver</h3>
+                <button class="close-modal" onclick="closeModal('assignDriverModal')">&times;</button>
+            </div>
+            
+            <p style="margin-bottom: 20px;">Pilih driver untuk pesanan: <strong id="assignOrderId"></strong></p>
+            
+            <div class="driver-list" id="availableDrivers">
+                <!-- Available drivers will be listed here -->
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('assignDriverModal')">Batal</button>
+                <button class="btn btn-primary" onclick="confirmAssignDriver()">Tugaskan Driver</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Update Location Modal -->
+    <div class="modal" id="updateLocationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-map-pin"></i> Update Lokasi Driver Manual</h3>
+                <button class="close-modal" onclick="closeModal('updateLocationModal')">&times;</button>
+            </div>
+            
+            <p style="margin-bottom: 20px;">Update lokasi driver untuk pesanan: <strong id="updateLocationOrderId"></strong></p>
+            
+            <div class="form-group">
+                <label for="locationLat" class="form-label">Latitude</label>
+                <input type="text" id="locationLat" class="form-control" placeholder="-6.2088">
+            </div>
+            
+            <div class="form-group">
+                <label for="locationLng" class="form-label">Longitude</label>
+                <input type="text" id="locationLng" class="form-control" placeholder="106.8456">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="action-btn action-btn-info" onclick="useCurrentLocation()">
+                    <i class="fas fa-location-crosshairs"></i> Gunakan Lokasi Saya
+                </button>
+                <button class="action-btn action-btn-info" onclick="useStoreLocation()">
+                    <i class="fas fa-store"></i> Lokasi Toko
+                </button>
+                <button class="action-btn action-btn-info" onclick="useCustomerLocation()">
+                    <i class="fas fa-home"></i> Lokasi Customer
+                </button>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('updateLocationModal')">Batal</button>
+                <button class="btn btn-primary" onclick="confirmUpdateLocation()">Update Lokasi</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ================================
-        // INITIALIZATION
-        // ================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Admin Panel Loaded');
-            
-            // Load initial data
-            loadStoreStatus();
-            loadOrders();
-            loadClosedMessage();
-            updateStats();
-            
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Start auto-refresh if enabled
-            startAutoRefresh();
-            
-            // Update time
-            updateTime();
-            setInterval(updateTime, 60000); // Update every minute
+    // ================================
+    // ADMIN PANEL VARIABLES
+    // ================================
+    let selectedOrder = null;
+    let selectedDriver = null;
+    let trackingOrder = null;
+    let trackingMap = null;
+    let driverMarker = null;
+    let customerMarker = null;
+    let trackingInterval = null;
+    let currentFilter = 'all';
+    
+    // ================================
+    // INITIALIZATION
+    // ================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Admin Panel Initializing...');
+        
+        // Load initial data
+        loadStatistics();
+        loadOrders();
+        loadDrivers();
+        
+        // Setup event listeners
+        document.getElementById('searchOrders').addEventListener('input', function() {
+            searchOrders(this.value);
         });
-
-        // ================================
-        // STORE STATUS MANAGEMENT
-        // ================================
-        function loadStoreStatus() {
-            const status = localStorage.getItem('storeStatus') || 'open';
-            const toggle = document.getElementById('storeStatusToggle');
-            const badge = document.getElementById('currentStatusBadge');
-            const label = document.getElementById('statusLabel');
-            const message = document.getElementById('statusMessage');
-            const updateTime = document.getElementById('statusUpdateTime');
-            
-            if (status === 'open') {
-                toggle.checked = true;
-                badge.textContent = 'BUKA';
-                badge.className = 'status-badge status-open';
-                label.textContent = 'Toko Sedang BUKA';
-                label.style.color = 'white';
-                message.textContent = 'Pelanggan dapat melakukan pemesanan via WhatsApp';
-                message.innerHTML += '<br><i class="fas fa-check-circle"></i> Status: Aktif';
-            } else {
-                toggle.checked = false;
-                badge.textContent = 'TUTUP';
-                badge.className = 'status-badge status-closed';
-                label.textContent = 'Toko Sedang TUTUP';
-                label.style.color = 'white';
-                message.textContent = 'Pelanggan TIDAK dapat melakukan pemesanan';
-                message.innerHTML += '<br><i class="fas fa-times-circle"></i> Status: Non-aktif';
+        
+        // Setup store status toggle
+        setupStoreToggle();
+        
+        // Load current store status
+        loadStoreStatus();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            loadStatistics();
+            loadOrders();
+            loadDrivers();
+            if (trackingOrder) {
+                updateTrackingDisplay(trackingOrder);
             }
-            
-            // Load last update time
-            const lastUpdate = localStorage.getItem('statusLastUpdate');
-            if (lastUpdate) {
-                updateTime.textContent = new Date(lastUpdate).toLocaleString('id-ID');
+        }, 30000);
+        
+        // Setup Google Maps for tracking
+        setTimeout(() => {
+            if (typeof google !== 'undefined') {
+                initTrackingMap();
             }
+        }, 1000);
+    });
+    
+    // ================================
+    // STATISTICS FUNCTIONS
+    // ================================
+    function loadStatistics() {
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        
+        // Calculate statistics
+        const totalOrders = orders.length;
+        const pendingOrders = orders.filter(o => o.status === 'diterima' || o.status === 'disiapkan').length;
+        const activeDeliveries = orders.filter(o => o.status === 'pengantaran').length;
+        const problemOrders = orders.filter(o => {
+            // Orders older than 2 hours and not delivered
+            if (o.status === 'sampai') return false;
+            const orderDate = new Date(`${o.date}T${o.time}`);
+            const hoursDiff = (new Date() - orderDate) / (1000 * 60 * 60);
+            return hoursDiff > 2;
+        }).length;
+        
+        // Update UI
+        document.getElementById('totalOrders').textContent = totalOrders;
+        document.getElementById('pendingOrders').textContent = pendingOrders;
+        document.getElementById('activeDeliveries').textContent = activeDeliveries;
+        document.getElementById('problemOrders').textContent = problemOrders;
+    }
+    
+    // ================================
+    // ORDER MANAGEMENT FUNCTIONS
+    // ================================
+    function loadOrders() {
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const ordersList = document.getElementById('ordersList');
+        
+        if (orders.length === 0) {
+            ordersList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <p>Belum ada pesanan</p>
+                    <p style="font-size: 14px; margin-top: 10px;">Pesanan akan muncul di sini</p>
+                </div>
+            `;
+            return;
         }
-
-        function saveStoreStatus(isOpen) {
-            const status = isOpen ? 'open' : 'closed';
-            const now = new Date();
-            
-            localStorage.setItem('storeStatus', status);
-            localStorage.setItem('statusLastUpdate', now.toISOString());
-            
-            // Update UI
-            loadStoreStatus();
-            
-            // Show confirmation
-            showNotification(
-                isOpen ? 'Toko dibuka' : 'Toko ditutup',
-                isOpen ? 
-                    'Toko sekarang BUKA untuk pemesanan' : 
-                    'Toko sekarang TUTUP. Pelanggan tidak dapat pesan.',
-                isOpen ? 'success' : 'warning'
-            );
-            
-            // Trigger storage event for other tabs/pages
-            localStorage.setItem('storeStatusChanged', Date.now().toString());
-        }
-
-        function setupEventListeners() {
-            // Store status toggle
-            document.getElementById('storeStatusToggle').addEventListener('change', function() {
-                saveStoreStatus(this.checked);
-            });
-            
-            // Auto-refresh toggle
-            document.getElementById('autoRefreshToggle').addEventListener('change', function() {
-                if (this.checked) {
-                    startAutoRefresh();
-                } else {
-                    stopAutoRefresh();
-                }
-            });
-            
-            // Listen for storage changes from other tabs
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'storeStatus') {
-                    loadStoreStatus();
-                    showNotification('Status toko diupdate', 'Status toko telah diubah dari tab lain', 'info');
-                }
-            });
-        }
-
-        // ================================
-        // ORDERS MANAGEMENT
-        // ================================
-        function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
-            const tableBody = document.getElementById('ordersTableBody');
-            const emptyMessage = document.getElementById('emptyOrdersMessage');
-            
-            if (orders.length === 0) {
-                tableBody.innerHTML = '';
-                emptyMessage.style.display = 'block';
+        
+        // Sort orders by date/time (newest first)
+        const sortedOrders = [...orders].sort((a, b) => {
+            const dateA = new Date(`${a.date}T${a.time}`);
+            const dateB = new Date(`${b.date}T${b.time}`);
+            return dateB - dateA;
+        });
+        
+        let ordersHTML = '';
+        
+        sortedOrders.forEach(order => {
+            if (currentFilter !== 'all' && order.status !== currentFilter) {
                 return;
             }
             
-            emptyMessage.style.display = 'none';
+            const customerName = order.customer || 'Pelanggan';
+            const address = order.address || 'Alamat tidak tersedia';
+            const itemsCount = order.items ? order.items.reduce((sum, item) => sum + (item.qty || 0), 0) : 0;
+            const totalPrice = order.total ? 'Rp ' + order.total.toLocaleString('id-ID') : 'Rp 0';
+            const driverName = order.driver?.name || 'Belum ada driver';
+            const isSelected = selectedOrder?.id === order.id;
             
-            // Sort by date (newest first)
-            orders.sort((a, b) => {
-                const dateA = new Date(a.date + ' ' + a.time);
-                const dateB = new Date(b.date + ' ' + b.time);
-                return dateB - dateA;
-            });
+            ordersHTML += `
+                <div class="order-item ${isSelected ? 'active' : ''}" data-order-id="${order.id}" onclick="selectOrder('${order.id}')">
+                    <div class="order-header">
+                        <div class="order-id">${order.id}</div>
+                        <div class="order-status status-${order.status}">${getStatusText(order.status)}</div>
+                    </div>
+                    
+                    <div class="order-details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Pelanggan</span>
+                            <span class="detail-value">${customerName}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Telepon</span>
+                            <span class="detail-value">${order.customerPhone || '-'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Item</span>
+                            <span class="detail-value">${itemsCount} item</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Harga</span>
+                            <span class="detail-value">${totalPrice}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Driver</span>
+                            <span class="detail-value">${driverName}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Waktu Order</span>
+                            <span class="detail-value">${order.time || '-'} • ${order.date || '-'}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                        <i class="fas fa-map-marker-alt"></i> ${address.substring(0, 60)}${address.length > 60 ? '...' : ''}
+                    </div>
+                    
+                    <div class="order-actions">
+                        ${order.status === 'diterima' ? `
+                            <button class="action-btn action-btn-primary" onclick="updateOrderStatus('${order.id}', 'disiapkan', event)">
+                                <i class="fas fa-coffee"></i> Mulai Siapkan
+                            </button>
+                        ` : ''}
+                        
+                        ${order.status === 'disiapkan' ? `
+                            <button class="action-btn action-btn-primary" onclick="updateOrderStatus('${order.id}', 'pengantaran', event)">
+                                <i class="fas fa-motorcycle"></i> Mulai Antar
+                            </button>
+                        ` : ''}
+                        
+                        ${order.status === 'pengantaran' ? `
+                            <button class="action-btn action-btn-success" onclick="updateOrderStatus('${order.id}', 'sampai', event)">
+                                <i class="fas fa-check-circle"></i> Tandai Sampai
+                            </button>
+                        ` : ''}
+                        
+                        ${order.status !== 'sampai' ? `
+                            <button class="action-btn action-btn-warning" onclick="assignDriverToOrder('${order.id}', event)">
+                                <i class="fas fa-user-plus"></i> Tugaskan Driver
+                            </button>
+                        ` : ''}
+                        
+                        <button class="action-btn action-btn-info" onclick="viewOrderDetails('${order.id}', event)">
+                            <i class="fas fa-eye"></i> Detail
+                        </button>
+                        
+                        <button class="action-btn action-btn-danger" onclick="deleteOrder('${order.id}', event)">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        ordersList.innerHTML = ordersHTML || `
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <p>Tidak ada pesanan dengan filter ini</p>
+            </div>
+        `;
+    }
+    
+    function filterOrders(status) {
+        currentFilter = status;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        loadOrders();
+    }
+    
+    function searchOrders(query) {
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const searchTerm = query.toLowerCase().trim();
+        
+        if (!searchTerm) {
+            loadOrders();
+            return;
+        }
+        
+        const filteredOrders = orders.filter(order => {
+            return (
+                order.id.toLowerCase().includes(searchTerm) ||
+                order.customer?.toLowerCase().includes(searchTerm) ||
+                order.customerPhone?.includes(searchTerm) ||
+                order.address?.toLowerCase().includes(searchTerm)
+            );
+        });
+        
+        const ordersList = document.getElementById('ordersList');
+        
+        if (filteredOrders.length === 0) {
+            ordersList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <p>Tidak ditemukan pesanan dengan kata kunci "${query}"</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let ordersHTML = '';
+        
+        filteredOrders.forEach(order => {
+            const customerName = order.customer || 'Pelanggan';
+            const address = order.address || 'Alamat tidak tersedia';
+            const itemsCount = order.items ? order.items.reduce((sum, item) => sum + (item.qty || 0), 0) : 0;
+            const totalPrice = order.total ? 'Rp ' + order.total.toLocaleString('id-ID') : 'Rp 0';
+            const driverName = order.driver?.name || 'Belum ada driver';
             
-            let tableHTML = '';
+            ordersHTML += `
+                <div class="order-item" data-order-id="${order.id}" onclick="selectOrder('${order.id}')">
+                    <div class="order-header">
+                        <div class="order-id">${order.id}</div>
+                        <div class="order-status status-${order.status}">${getStatusText(order.status)}</div>
+                    </div>
+                    
+                    <div class="order-details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Pelanggan</span>
+                            <span class="detail-value">${customerName}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Telepon</span>
+                            <span class="detail-value">${order.customerPhone || '-'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Item</span>
+                            <span class="detail-value">${itemsCount} item</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Harga</span>
+                            <span class="detail-value">${totalPrice}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                        <i class="fas fa-map-marker-alt"></i> ${address.substring(0, 60)}${address.length > 60 ? '...' : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        ordersList.innerHTML = ordersHTML;
+    }
+    
+    function selectOrder(orderId) {
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        selectedOrder = orders.find(o => o.id === orderId);
+        
+        // Update UI
+        document.querySelectorAll('.order-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+        
+        // If order is in delivery, show tracking
+        if (selectedOrder.status === 'pengantaran') {
+            trackingOrder = selectedOrder;
+            showLiveTracking(selectedOrder);
+        } else {
+            hideLiveTracking();
+        }
+    }
+    
+    function updateOrderStatus(orderId, newStatus, event) {
+        if (event) event.stopPropagation();
+        
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const orderIndex = orders.findIndex(o => o.id === orderId);
+        
+        if (orderIndex === -1) return;
+        
+        const oldStatus = orders[orderIndex].status;
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const date = new Date().toISOString().split('T')[0];
+        
+        // Update status
+        orders[orderIndex].status = newStatus;
+        
+        // Add tracking entry
+        orders[orderIndex].tracking.push({
+            status: newStatus,
+            time: time,
+            date: date,
+            note: getStatusNote(newStatus, oldStatus)
+        });
+        
+        // Jika memulai pengantaran dan belum ada driver, assign default driver
+        if (newStatus === 'pengantaran') {
+            if (!orders[orderIndex].driver || !orders[orderIndex].driver.name) {
+                orders[orderIndex].driver = {
+                    name: 'Driver Kopi Susu Mrs. DK',
+                    phone: '081234567890',
+                    location: 'Dalam perjalanan',
+                    eta: '15 menit',
+                    realtimeLocation: {
+                        lat: -6.4553553, // Mulai dari toko
+                        lng: 107.0379105,
+                        lastUpdate: new Date().toISOString()
+                    },
+                    route: [
+                        { lat: -6.4553553, lng: 107.0379105, timestamp: new Date().toISOString() }
+                    ]
+                };
+            }
             
-            orders.slice(0, 10).forEach(order => { // Show only latest 10 orders
-                const statusClass = getStatusClass(order.status);
-                const statusText = getStatusText(order.status);
-                
-                tableHTML += `
+            // Pastikan lokasi customer tersimpan
+            if (!orders[orderIndex].location) {
+                // Jika tidak ada lokasi, coba ambil dari address atau set default
+                orders[orderIndex].location = {
+                    lat: -6.2088, // Default Jakarta
+                    lng: 106.8456
+                };
+            }
+        }
+        
+        // Save changes
+        localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+        
+        // Refresh UI
+        loadStatistics();
+        loadOrders();
+        
+        // Show success message
+        showAlert('Berhasil!', `Status pesanan ${orderId} diubah menjadi ${getStatusText(newStatus)}`);
+        
+        // Jika order sekarang dalam pengantaran, update live tracking
+        if (newStatus === 'pengantaran') {
+            selectedOrder = orders[orderIndex];
+            trackingOrder = selectedOrder;
+            
+            // Trigger refresh di halaman customer
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'mrsdkOrders',
+                newValue: JSON.stringify(orders)
+            }));
+            
+            showLiveTracking(selectedOrder);
+        }
+    }
+    
+    function getStatusNote(newStatus, oldStatus) {
+        const notes = {
+            'diterima': 'Pesanan diterima dari customer',
+            'disiapkan': 'Pesanan sedang disiapkan',
+            'pengantaran': 'Pesanan dalam pengantaran',
+            'sampai': 'Pesanan telah sampai di lokasi customer'
+        };
+        return notes[newStatus] || `Status diubah dari ${oldStatus} ke ${newStatus}`;
+    }
+    
+    function getStatusText(status) {
+        const texts = {
+            'diterima': 'Diterima',
+            'disiapkan': 'Disiapkan',
+            'pengantaran': 'Dalam Pengantaran',
+            'sampai': 'Telah Sampai'
+        };
+        return texts[status] || status;
+    }
+    
+    function assignDriverToOrder(orderId, event) {
+        if (event) event.stopPropagation();
+        
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const order = orders.find(o => o.id === orderId);
+        
+        if (!order) return;
+        
+        selectedOrder = order;
+        document.getElementById('assignOrderId').textContent = orderId;
+        
+        // Load available drivers
+        loadAvailableDrivers();
+        
+        // Show modal
+        showModal('assignDriverModal');
+    }
+    
+    function deleteOrder(orderId, event) {
+        if (event) event.stopPropagation();
+        
+        if (!confirm(`Apakah Anda yakin ingin menghapus pesanan ${orderId}?`)) {
+            return;
+        }
+        
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const filteredOrders = orders.filter(o => o.id !== orderId);
+        
+        localStorage.setItem('mrsdkOrders', JSON.stringify(filteredOrders));
+        
+        // Refresh UI
+        loadStatistics();
+        loadOrders();
+        
+        // Clear selection if deleted order was selected
+        if (selectedOrder && selectedOrder.id === orderId) {
+            selectedOrder = null;
+            hideLiveTracking();
+        }
+        
+        showAlert('Berhasil!', `Pesanan ${orderId} telah dihapus`);
+    }
+    
+    function viewOrderDetails(orderId, event) {
+        if (event) event.stopPropagation();
+        
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const order = orders.find(o => o.id === orderId);
+        
+        if (!order) return;
+        
+        // Build details HTML
+        let itemsHTML = '';
+        if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+                itemsHTML += `
                     <tr>
-                        <td><strong>${order.id}</strong></td>
-                        <td>
-                            <div>${order.customer}</div>
-                            <small style="color: #666;">${order.customerPhone}</small>
-                        </td>
-                        <td>${order.date}<br><small>${order.time}</small></td>
-                        <td>Rp ${parseInt(order.total).toLocaleString('id-ID')}</td>
-                        <td>
-                            <span class="order-status ${statusClass}">${statusText}</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button onclick="viewOrderDetail('${order.id}')" class="btn-action btn-view">
-                                    <i class="fas fa-eye"></i> Lihat
-                                </button>
-                                <button onclick="deleteOrder('${order.id}')" class="btn-action btn-delete">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        </td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>Rp ${item.price.toLocaleString('id-ID')}</td>
+                        <td>Rp ${(item.price * item.qty).toLocaleString('id-ID')}</td>
                     </tr>
                 `;
             });
-            
-            tableBody.innerHTML = tableHTML;
-            updateStats();
         }
-
-        function updateStats() {
-            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
-            
-            document.getElementById('totalOrders').textContent = orders.length;
-            document.getElementById('pendingOrders').textContent = orders.filter(o => o.status === 'diterima').length;
-            document.getElementById('processingOrders').textContent = orders.filter(o => o.status === 'pengantaran').length;
-            document.getElementById('completedOrders').textContent = orders.filter(o => o.status === 'sampai').length;
-        }
-
-        function getStatusClass(status) {
-            const classes = {
-                'diterima': 'status-pending',
-                'disiapkan': 'status-processing',
-                'pengantaran': 'status-processing',
-                'sampai': 'status-delivered'
-            };
-            return classes[status] || 'status-pending';
-        }
-
-        function getStatusText(status) {
-            const texts = {
-                'diterima': 'Baru',
-                'disiapkan': 'Disiapkan',
-                'pengantaran': 'Kirim',
-                'sampai': 'Selesai'
-            };
-            return texts[status] || 'Baru';
-        }
-
-        function refreshOrders() {
-            loadOrders();
-            showNotification('Data diperbarui', 'Daftar pesanan telah direfresh', 'success');
-        }
-
-        function deleteOrder(orderId) {
-            if (confirm(`Apakah Anda yakin ingin menghapus pesanan ${orderId}?`)) {
-                const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
-                const filteredOrders = orders.filter(order => order.id !== orderId);
-                
-                localStorage.setItem('mrsdkOrders', JSON.stringify(filteredOrders));
-                loadOrders();
-                
-                showNotification('Pesanan dihapus', `Pesanan ${orderId} telah dihapus`, 'success');
-            }
-        }
-
-        function clearAllOrders() {
-            if (confirm('Apakah Anda yakin ingin menghapus SEMUA pesanan? Tindakan ini tidak dapat dibatalkan!')) {
-                localStorage.removeItem('mrsdkOrders');
-                localStorage.removeItem('lastOrderId');
-                loadOrders();
-                
-                showNotification('Semua pesanan dihapus', 'Semua data pesanan telah dihapus', 'warning');
-            }
-        }
-
-        function viewOrderDetail(orderId) {
-            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
-            const order = orders.find(o => o.id === orderId);
-            
-            if (!order) {
-                showNotification('Pesanan tidak ditemukan', `Pesanan ${orderId} tidak ditemukan`, 'error');
-                return;
-            }
-            
-            let itemsHTML = '';
-            if (order.items && order.items.length > 0) {
-                itemsHTML = order.items.map(item => `
-                    <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>${item.qty} x Rp ${parseInt(item.price).toLocaleString('id-ID')}</small>
+        
+        let trackingHTML = '';
+        if (order.tracking && order.tracking.length > 0) {
+            order.tracking.forEach(track => {
+                trackingHTML += `
+                    <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-${getTrackingIcon(track.status)}"></i>
                         </div>
                         <div>
-                            <strong>Rp ${(item.qty * item.price).toLocaleString('id-ID')}</strong>
+                            <div style="font-weight: 500; color: #333;">${getStatusText(track.status)}</div>
+                            <div style="font-size: 12px; color: #666;">${track.time} • ${track.date}</div>
+                            ${track.note ? `<div style="font-size: 12px; color: #666; margin-top: 5px;">${track.note}</div>` : ''}
                         </div>
                     </div>
-                `).join('');
-            }
-            
-            let trackingHTML = '';
-            if (order.tracking && order.tracking.length > 0) {
-                trackingHTML = order.tracking.map(track => `
-                    <div style="padding: 8px 0; border-bottom: 1px dashed #eee;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <strong>${getStatusText(track.status)}</strong>
-                            <small>${track.time}</small>
-                        </div>
-                        <small style="color: #666;">${track.note || ''}</small>
-                    </div>
-                `).join('');
-            }
-            
-            document.getElementById('orderDetailContent').innerHTML = `
-                <div style="margin-bottom: 20px;">
-                    <h4 style="color: var(--light-green); margin-bottom: 10px;">
-                        <i class="fas fa-receipt"></i> ${order.id}
-                    </h4>
-                    <p><strong>Nama:</strong> ${order.customer}</p>
-                    <p><strong>WhatsApp:</strong> ${order.customerPhone}</p>
-                    <p><strong>Alamat:</strong> ${order.address}</p>
-                    <p><strong>Tanggal:</strong> ${order.date} ${order.time}</p>
-                    ${order.customerNote ? `<p><strong>Catatan:</strong> ${order.customerNote}</p>` : ''}
-                </div>
-                
-                <div style="margin: 20px 0;">
-                    <h4 style="color: var(--dark-brown); margin-bottom: 10px;">
-                        <i class="fas fa-shopping-bag"></i> Items
-                    </h4>
-                    ${itemsHTML || '<p>Tidak ada items</p>'}
-                    <div style="display: flex; justify-content: space-between; padding: 15px 10px; font-weight: bold; border-top: 2px solid var(--light-green);">
-                        <span>TOTAL</span>
-                        <span>Rp ${parseInt(order.total).toLocaleString('id-ID')}</span>
-                    </div>
-                </div>
-                
-                <div style="margin: 20px 0;">
-                    <h4 style="color: var(--dark-brown); margin-bottom: 10px;">
-                        <i class="fas fa-truck"></i> Status Pengiriman
-                    </h4>
-                    <span class="order-status ${getStatusClass(order.status)}">
-                        ${getStatusText(order.status)}
-                    </span>
-                    
-                    ${trackingHTML ? `
-                        <div style="margin-top: 15px;">
-                            <h5>Riwayat:</h5>
-                            ${trackingHTML}
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <div style="margin-top: 30px; display: flex; gap: 10px;">
-                    <button onclick="updateOrderStatus('${order.id}', 'disiapkan')" 
-                            style="flex: 1; padding: 10px; background-color: var(--yellow); color: var(--dark-brown); border: none; border-radius: 8px; cursor: pointer;">
-                        <i class="fas fa-coffee"></i> Disiapkan
-                    </button>
-                    <button onclick="updateOrderStatus('${order.id}', 'pengantaran')" 
-                            style="flex: 1; padding: 10px; background-color: #2196F3; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                        <i class="fas fa-truck"></i> Kirim
-                    </button>
-                    <button onclick="updateOrderStatus('${order.id}', 'sampai')" 
-                            style="flex: 1; padding: 10px; background-color: var(--green); color: white; border: none; border-radius: 8px; cursor: pointer;">
-                        <i class="fas fa-check"></i> Selesai
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('orderDetailModal').style.display = 'flex';
-        }
-
-        function updateOrderStatus(orderId, newStatus) {
-            const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
-            const orderIndex = orders.findIndex(o => o.id === orderId);
-            
-            if (orderIndex !== -1) {
-                const now = new Date();
-                orders[orderIndex].status = newStatus;
-                
-                // Add tracking entry
-                if (!orders[orderIndex].tracking) {
-                    orders[orderIndex].tracking = [];
-                }
-                
-                orders[orderIndex].tracking.push({
-                    status: newStatus,
-                    time: now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
-                    date: now.toISOString().split('T')[0],
-                    note: 'Status diupdate oleh admin'
-                });
-                
-                localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
-                
-                // Update UI
-                viewOrderDetail(orderId);
-                loadOrders();
-                
-                showNotification('Status diupdate', `Status pesanan ${orderId} berhasil diupdate`, 'success');
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('orderDetailModal').style.display = 'none';
-        }
-
-        // ================================
-        // CLOSED MESSAGE MANAGEMENT
-        // ================================
-        function loadClosedMessage() {
-            const message = localStorage.getItem('storeClosedMessage') || 
-                'Maaf, toko sedang tutup sementara. Silakan pesan pada jam operasional kami.';
-            document.getElementById('closedMessage').value = message;
-        }
-
-        function saveClosedMessage() {
-            const message = document.getElementById('closedMessage').value.trim();
-            localStorage.setItem('storeClosedMessage', message);
-            
-            showNotification('Pesan disimpan', 'Pesan tutup toko telah disimpan', 'success');
-        }
-
-        // ================================
-        // UTILITY FUNCTIONS
-        // ================================
-        let autoRefreshInterval;
-        
-        function startAutoRefresh() {
-            stopAutoRefresh();
-            autoRefreshInterval = setInterval(() => {
-                loadOrders();
-                updateStats();
-                console.log('Auto-refresh data');
-            }, 30000); // 30 seconds
-        }
-        
-        function stopAutoRefresh() {
-            if (autoRefreshInterval) {
-                clearInterval(autoRefreshInterval);
-                autoRefreshInterval = null;
-            }
-        }
-        
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleString('id-ID');
-            
-            document.getElementById('lastUpdateTime').textContent = timeString;
-            document.getElementById('footerUpdateTime').textContent = now.toLocaleDateString('id-ID');
-        }
-        
-        function showNotification(title, message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF9800' : '#2196F3'};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                z-index: 9999;
-                max-width: 350px;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}" 
-                       style="font-size: 20px;"></i>
-                    <div>
-                        <strong>${title}</strong>
-                        <p style="margin: 5px 0 0 0; font-size: 14px;">${message}</p>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-            
-            // Add CSS for animations
-            if (!document.getElementById('notificationStyles')) {
-                const style = document.createElement('style');
-                style.id = 'notificationStyles';
-                style.textContent = `
-                    @keyframes slideIn {
-                        from {
-                            transform: translateX(100%);
-                            opacity: 0;
-                        }
-                        to {
-                            transform: translateX(0);
-                            opacity: 1;
-                        }
-                    }
-                    @keyframes slideOut {
-                        from {
-                            transform: translateX(0);
-                            opacity: 1;
-                        }
-                        to {
-                            transform: translateX(100%);
-                            opacity: 0;
-                        }
-                    }
                 `;
-                document.head.appendChild(style);
-            }
+            });
         }
-    </script>
+        
+        const detailsHTML = `
+            <div style="max-height: 70vh; overflow-y: auto; padding-right: 10px;">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">Detail Pesanan ${orderId}</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h4 style="color: #666; margin-bottom: 10px;">Info Pelanggan</h4>
+                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                            <p><strong>Nama:</strong> ${order.customer || '-'}</p>
+                            <p><strong>Telepon:</strong> ${order.customerPhone || '-'}</p>
+                            <p><strong>Alamat:</strong> ${order.address || '-'}</p>
+                            ${order.location ? `<p><strong>Koordinat:</strong> ${order.location.lat.toFixed(6)}, ${order.location.lng.toFixed(6)}</p>` : ''}
+                            ${order.customerNote ? `<p><strong>Catatan:</strong> ${order.customerNote}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #666; margin-bottom: 10px;">Info Pengiriman</h4>
+                        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                            <p><strong>Driver:</strong> ${order.driver?.name || '-'}</p>
+                            <p><strong>Telepon Driver:</strong> ${order.driver?.phone || '-'}</p>
+                            <p><strong>Status:</strong> <span class="status-${order.status}">${getStatusText(order.status)}</span></p>
+                            <p><strong>Total:</strong> Rp ${order.total ? order.total.toLocaleString('id-ID') : '0'}</p>
+                            <p><strong>Waktu Order:</strong> ${order.time || '-'} • ${order.date || '-'}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 style="color: #666; margin-bottom: 10px;">Daftar Item</h4>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background: #f0f0f0;">
+                            <th style="padding: 10px; text-align: left;">Nama Item</th>
+                            <th style="padding: 10px; text-align: center;">Qty</th>
+                            <th style="padding: 10px; text-align: right;">Harga</th>
+                            <th style="padding: 10px; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHTML || '<tr><td colspan="4" style="padding: 20px; text-align: center; color: #666;">Tidak ada item</td></tr>'}
+                    </tbody>
+                    <tfoot>
+                        <tr style="border-top: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 10px; text-align: right; font-weight: bold;">TOTAL</td>
+                            <td style="padding: 10px; text-align: right; font-weight: bold;">Rp ${order.total ? order.total.toLocaleString('id-ID') : '0'}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <h4 style="color: #666; margin-bottom: 10px;">Riwayat Tracking</h4>
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    ${trackingHTML || '<p style="color: #666; text-align: center;">Tidak ada riwayat tracking</p>'}
+                </div>
+            </div>
+        `;
+        
+        // Create modal for details
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-eye"></i> Detail Pesanan</h3>
+                    <button class="close-modal" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                </div>
+                ${detailsHTML}
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Tutup</button>
+                    <button class="btn btn-primary" onclick="printOrder('${orderId}')">
+                        <i class="fas fa-print"></i> Cetak Struk
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
+    
+    function getTrackingIcon(status) {
+        const icons = {
+            'diterima': 'clipboard-check',
+            'disiapkan': 'coffee',
+            'pengantaran': 'motorcycle',
+            'sampai': 'home'
+        };
+        return icons[status] || 'clock';
+    }
+    
+    function printOrder(orderId) {
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const order = orders.find(o => o.id === orderId);
+        
+        if (!order) return;
+        
+        // Create print content
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Struk Pesanan ${orderId}</title>
+                <style>
+                    body { font-family: 'Courier New', monospace; padding: 20px; max-width: 400px; margin: 0 auto; }
+                    .header { text-align: center; margin-bottom: 20px; }
+                    .divider { border-top: 2px dashed #000; margin: 20px 0; }
+                    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+                    th, td { padding: 8px 5px; text-align: left; }
+                    .total { font-weight: bold; font-size: 18px; }
+                    .footer { text-align: center; margin-top: 30px; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h2>KOPI SUSU MRS. DK</h2>
+                    <p>Citra Indah, Jonggol</p>
+                    <p>0852-9805-5758</p>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <p><strong>ID Pesanan:</strong> ${orderId}</p>
+                <p><strong>Tanggal:</strong> ${order.date} ${order.time}</p>
+                <p><strong>Customer:</strong> ${order.customer}</p>
+                <p><strong>Telepon:</strong> ${order.customerPhone}</p>
+                
+                <div class="divider"></div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Harga</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${order.items.map(item => `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.qty}</td>
+                                <td>${item.price.toLocaleString('id-ID')}</td>
+                                <td>${(item.price * item.qty).toLocaleString('id-ID')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <div class="divider"></div>
+                
+                <div style="text-align: right;">
+                    <p class="total">TOTAL: Rp ${order.total.toLocaleString('id-ID')}</p>
+                </div>
+                
+                <div class="footer">
+                    <p>Terima kasih telah berbelanja di</p>
+                    <p><strong>Kopi Susu Mrs. DK</strong></p>
+                    <p>Segarnya Nikmat Tiada Tara</p>
+                </div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+    
+    function refreshOrders() {
+        loadOrders();
+        showAlert('Diperbarui', 'Daftar pesanan telah direfresh');
+    }
+    
+    // ================================
+    // DRIVER MANAGEMENT FUNCTIONS
+    // ================================
+    function loadDrivers() {
+        // In a real system, this would come from a database
+        // For demo, we'll create some sample drivers
+        const sampleDrivers = [
+            {
+                id: 'DRV001',
+                name: 'Budi Santoso',
+                phone: '081234567890',
+                vehicle: 'Motor Honda Beat',
+                status: 'online',
+                activeOrders: 2,
+                lastActive: '5 menit lalu'
+            },
+            {
+                id: 'DRV002',
+                name: 'Sari Dewi',
+                phone: '081987654321',
+                vehicle: 'Motor Yamaha NMAX',
+                status: 'busy',
+                activeOrders: 1,
+                lastActive: '2 menit lalu'
+            },
+            {
+                id: 'DRV003',
+                name: 'Ahmad Rizki',
+                phone: '082112345678',
+                vehicle: 'Motor Suzuki GSX',
+                status: 'offline',
+                activeOrders: 0,
+                lastActive: '1 jam lalu'
+            }
+        ];
+        
+        const driversList = document.getElementById('driversList');
+        
+        if (sampleDrivers.length === 0) {
+            driversList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <p>Belum ada driver</p>
+                    <p style="font-size: 14px; margin-top: 10px;">Tambahkan driver untuk mengelola pengiriman</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let driversHTML = '';
+        
+        sampleDrivers.forEach(driver => {
+            driversHTML += `
+                <div class="driver-card" data-driver-id="${driver.id}">
+                    <div class="driver-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-name">${driver.name}</div>
+                        <div class="driver-status">
+                            <div class="status-dot status-${driver.status}"></div>
+                            <span>${driver.status === 'online' ? 'Online' : driver.status === 'busy' ? 'Sibuk' : 'Offline'}</span>
+                            <span style="margin-left: 10px;">${driver.phone}</span>
+                        </div>
+                        <div class="driver-orders">
+                            <i class="fas fa-shipping-fast"></i> ${driver.activeOrders} pesanan aktif • ${driver.vehicle}
+                        </div>
+                    </div>
+                    <div class="driver-actions">
+                        <button class="action-btn action-btn-info" onclick="editDriver('${driver.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn action-btn-danger" onclick="removeDriver('${driver.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        driversList.innerHTML = driversHTML;
+    }
+    
+    function loadAvailableDrivers() {
+        // For demo, use the same sample drivers
+        const sampleDrivers = [
+            { id: 'DRV001', name: 'Budi Santoso', status: 'online', activeOrders: 2 },
+            { id: 'DRV002', name: 'Sari Dewi', status: 'busy', activeOrders: 1 },
+            { id: 'DRV003', name: 'Ahmad Rizki', status: 'offline', activeOrders: 0 }
+        ];
+        
+        const availableDrivers = document.getElementById('availableDrivers');
+        let driversHTML = '';
+        
+        sampleDrivers.forEach(driver => {
+            driversHTML += `
+                <div class="driver-card" data-driver-id="${driver.id}" onclick="selectDriver('${driver.id}')" style="cursor: pointer;">
+                    <div class="driver-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-name">${driver.name}</div>
+                        <div class="driver-status">
+                            <div class="status-dot status-${driver.status}"></div>
+                            <span>${driver.status === 'online' ? 'Online' : driver.status === 'busy' ? 'Sibuk' : 'Offline'}</span>
+                        </div>
+                        <div class="driver-orders">
+                            ${driver.activeOrders} pesanan aktif
+                        </div>
+                    </div>
+                    <div style="color: var(--secondary);">
+                        <i class="fas fa-check-circle" id="selectedDriverIcon-${driver.id}" style="display: none;"></i>
+                    </div>
+                </div>
+            `;
+        });
+        
+        availableDrivers.innerHTML = driversHTML;
+        selectedDriver = null;
+    }
+    
+    function selectDriver(driverId) {
+        selectedDriver = driverId;
+        
+        // Update UI
+        document.querySelectorAll('.driver-card').forEach(card => {
+            const icon = card.querySelector('i.fa-check-circle');
+            if (icon) icon.style.display = 'none';
+            card.style.borderColor = '#f0f0f0';
+            card.style.background = 'white';
+        });
+        
+        const selectedCard = document.querySelector(`[data-driver-id="${driverId}"]`);
+        if (selectedCard) {
+            const icon = selectedCard.querySelector('i.fa-check-circle');
+            if (icon) icon.style.display = 'block';
+            selectedCard.style.borderColor = 'var(--secondary)';
+            selectedCard.style.background = '#f0f7f0';
+        }
+    }
+    
+    function confirmAssignDriver() {
+        if (!selectedOrder || !selectedDriver) {
+            showAlert('Error', 'Pilih driver terlebih dahulu');
+            return;
+        }
+        
+        // Get driver info
+        const sampleDrivers = [
+            { id: 'DRV001', name: 'Budi Santoso', phone: '081234567890' },
+            { id: 'DRV002', name: 'Sari Dewi', phone: '081987654321' },
+            { id: 'DRV003', name: 'Ahmad Rizki', phone: '082112345678' }
+        ];
+        
+        const driver = sampleDrivers.find(d => d.id === selectedDriver);
+        
+        if (!driver) {
+            showAlert('Error', 'Driver tidak ditemukan');
+            return;
+        }
+        
+        // Update order with driver info
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const orderIndex = orders.findIndex(o => o.id === selectedOrder.id);
+        
+        if (orderIndex === -1) {
+            showAlert('Error', 'Pesanan tidak ditemukan');
+            return;
+        }
+        
+        orders[orderIndex].driver = {
+            name: driver.name,
+            phone: driver.phone,
+            location: 'Driver ditugaskan',
+            eta: 'Estimasi waktu akan muncul',
+            realtimeLocation: {
+                lat: -6.4553553,
+                lng: 107.0379105,
+                lastUpdate: new Date().toISOString()
+            },
+            route: [
+                { lat: -6.4553553, lng: 107.0379105, timestamp: new Date().toISOString() }
+            ]
+        };
+        
+        localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+        
+        // Close modal and refresh
+        closeModal('assignDriverModal');
+        loadOrders();
+        
+        showAlert('Berhasil!', `Driver ${driver.name} ditugaskan ke pesanan ${selectedOrder.id}`);
+    }
+    
+    function showAddDriverModal() {
+        // Clear form
+        document.getElementById('driverNameInput').value = '';
+        document.getElementById('driverPhoneInput').value = '';
+        document.getElementById('driverVehicleInput').value = '';
+        
+        showModal('addDriverModal');
+    }
+    
+    function addNewDriver() {
+        const name = document.getElementById('driverNameInput').value.trim();
+        const phone = document.getElementById('driverPhoneInput').value.trim();
+        const vehicle = document.getElementById('driverVehicleInput').value.trim();
+        
+        if (!name || !phone || !vehicle) {
+            showAlert('Error', 'Harap isi semua field');
+            return;
+        }
+        
+        // In a real system, this would save to a database
+        // For demo, we'll just show a success message
+        
+        closeModal('addDriverModal');
+        
+        // Refresh drivers list
+        setTimeout(() => {
+            loadDrivers();
+            showAlert('Berhasil!', `Driver ${name} telah ditambahkan`);
+        }, 500);
+    }
+    
+    function editDriver(driverId) {
+        // In a real system, this would load driver data
+        showAlert('Info', 'Fitur edit driver akan datang di versi selanjutnya');
+    }
+    
+    function removeDriver(driverId) {
+        if (!confirm('Apakah Anda yakin ingin menghapus driver ini?')) {
+            return;
+        }
+        
+        // In a real system, this would remove from database
+        // For demo, we'll just show a message
+        
+        showAlert('Berhasil!', 'Driver telah dihapus');
+        
+        // Refresh drivers list
+        setTimeout(loadDrivers, 500);
+    }
+    
+    // ================================
+    // LIVE TRACKING FUNCTIONS
+    // ================================
+    function initTrackingMap() {
+        try {
+            // Default center to Jakarta
+            const defaultCenter = { lat: -6.2088, lng: 106.8456 };
+            
+            trackingMap = new google.maps.Map(document.getElementById('trackingMap'), {
+                center: defaultCenter,
+                zoom: 12,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true,
+                zoomControl: true,
+                gestureHandling: 'greedy',
+                styles: [
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
+            });
+            
+            console.log('Tracking map initialized');
+        } catch (error) {
+            console.error('Error initializing tracking map:', error);
+        }
+    }
+    
+    function showLiveTracking(order) {
+        document.getElementById('liveTrackingSection').style.display = 'block';
+        document.getElementById('trackingOrderId').textContent = order.id;
+        
+        // Update tracking info
+        updateTrackingDisplay(order);
+        
+        // Start auto-refresh for tracking
+        if (trackingInterval) {
+            clearInterval(trackingInterval);
+        }
+        
+        trackingInterval = setInterval(() => {
+            if (trackingOrder) {
+                updateTrackingDisplay(trackingOrder);
+            }
+        }, 5000);
+    }
+    
+    function hideLiveTracking() {
+        document.getElementById('liveTrackingSection').style.display = 'none';
+        
+        if (trackingInterval) {
+            clearInterval(trackingInterval);
+            trackingInterval = null;
+        }
+        
+        // Clear markers
+        if (driverMarker) {
+            driverMarker.setMap(null);
+            driverMarker = null;
+        }
+        
+        if (customerMarker) {
+            customerMarker.setMap(null);
+            customerMarker = null;
+        }
+    }
+    
+    function updateTrackingDisplay(order) {
+        if (!order || !order.driver) return;
+        
+        // Update driver info
+        document.getElementById('trackingDriver').textContent = order.driver.name || '-';
+        
+        // Calculate distance and ETA
+        let distance = '-';
+        let eta = '-';
+        
+        if (order.driver.realtimeLocation && order.location) {
+            const dist = calculateDistance(
+                { lat: order.driver.realtimeLocation.lat, lng: order.driver.realtimeLocation.lng },
+                { lat: order.location.lat, lng: order.location.lng }
+            );
+            distance = `${dist.toFixed(1)} km`;
+            eta = `${calculateETA(dist)} menit`;
+        }
+        
+        document.getElementById('trackingDistance').textContent = distance;
+        document.getElementById('trackingETA').textContent = eta;
+        
+        // Update map if available
+        if (trackingMap && order.driver.realtimeLocation && order.location) {
+            updateTrackingMap(order);
+        }
+    }
+    
+    function updateTrackingMap(order) {
+        const driverLocation = {
+            lat: order.driver.realtimeLocation.lat,
+            lng: order.driver.realtimeLocation.lng
+        };
+        
+        const customerLocation = {
+            lat: order.location.lat,
+            lng: order.location.lng
+        };
+        
+        // Update or create driver marker
+        if (!driverMarker) {
+            driverMarker = new google.maps.Marker({
+                position: driverLocation,
+                map: trackingMap,
+                icon: {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 7,
+                    fillColor: "#ff5252",
+                    fillOpacity: 1,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2,
+                    rotation: getBearing(driverLocation, customerLocation)
+                },
+                title: 'Posisi Driver'
+            });
+        } else {
+            driverMarker.setPosition(driverLocation);
+            driverMarker.setIcon({
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 7,
+                fillColor: "#ff5252",
+                fillOpacity: 1,
+                strokeColor: "#ffffff",
+                strokeWeight: 2,
+                rotation: getBearing(driverLocation, customerLocation)
+            });
+        }
+        
+        // Update or create customer marker
+        if (!customerMarker) {
+            customerMarker = new google.maps.Marker({
+                position: customerLocation,
+                map: trackingMap,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 8,
+                    fillColor: "#2196f3",
+                    fillOpacity: 1,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2
+                },
+                title: 'Lokasi Customer'
+            });
+        } else {
+            customerMarker.setPosition(customerLocation);
+        }
+        
+        // Center map to show both markers
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend(driverLocation);
+        bounds.extend(customerLocation);
+        trackingMap.fitBounds(bounds);
+        
+        // Add route line if there's route history
+        if (order.driver.route && order.driver.route.length > 1) {
+            const routePath = order.driver.route.map(point => 
+                new google.maps.LatLng(point.lat, point.lng)
+            );
+            
+            // Remove existing route line
+            if (window.trackingRouteLine) {
+                window.trackingRouteLine.setMap(null);
+            }
+            
+            // Create new route line
+            window.trackingRouteLine = new google.maps.Polyline({
+                path: routePath,
+                geodesic: true,
+                strokeColor: "#4CAF50",
+                strokeOpacity: 0.7,
+                strokeWeight: 4,
+                icons: [{
+                    icon: {
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                        scale: 3,
+                        strokeColor: "#4CAF50",
+                        fillColor: "#4CAF50"
+                    },
+                    offset: '100%',
+                    repeat: '100px'
+                }]
+            });
+            
+            window.trackingRouteLine.setMap(trackingMap);
+        }
+    }
+    
+    function updateDriverLocationManual() {
+        if (!trackingOrder) {
+            showAlert('Error', 'Pilih pesanan dalam pengantaran terlebih dahulu');
+            return;
+        }
+        
+        document.getElementById('updateLocationOrderId').textContent = trackingOrder.id;
+        showModal('updateLocationModal');
+    }
+    
+    function useCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    document.getElementById('locationLat').value = position.coords.latitude;
+                    document.getElementById('locationLng').value = position.coords.longitude;
+                    showAlert('Berhasil', 'Lokasi Anda telah diambil');
+                },
+                (error) => {
+                    showAlert('Error', 'Gagal mengambil lokasi Anda');
+                }
+            );
+        } else {
+            showAlert('Error', 'Browser tidak mendukung geolocation');
+        }
+    }
+    
+    function useStoreLocation() {
+        document.getElementById('locationLat').value = -6.4553553;
+        document.getElementById('locationLng').value = 107.0379105;
+    }
+    
+    function useCustomerLocation() {
+        if (trackingOrder && trackingOrder.location) {
+            document.getElementById('locationLat').value = trackingOrder.location.lat;
+            document.getElementById('locationLng').value = trackingOrder.location.lng;
+        } else {
+            showAlert('Error', 'Lokasi customer tidak tersedia');
+        }
+    }
+    
+    function confirmUpdateLocation() {
+        const lat = parseFloat(document.getElementById('locationLat').value);
+        const lng = parseFloat(document.getElementById('locationLng').value);
+        
+        if (isNaN(lat) || isNaN(lng)) {
+            showAlert('Error', 'Koordinat tidak valid');
+            return;
+        }
+        
+        // Update driver location in system
+        const orders = JSON.parse(localStorage.getItem('mrsdkOrders') || '[]');
+        const orderIndex = orders.findIndex(o => o.id === trackingOrder.id);
+        
+        if (orderIndex === -1) {
+            showAlert('Error', 'Pesanan tidak ditemukan');
+            return;
+        }
+        
+        orders[orderIndex].driver.realtimeLocation = {
+            lat: lat,
+            lng: lng,
+            lastUpdate: new Date().toISOString()
+        };
+        
+        // Add to route
+        if (!orders[orderIndex].driver.route) {
+            orders[orderIndex].driver.route = [];
+        }
+        
+        orders[orderIndex].driver.route.push({
+            lat: lat,
+            lng: lng,
+            timestamp: new Date().toISOString()
+        });
+        
+        localStorage.setItem('mrsdkOrders', JSON.stringify(orders));
+        
+        // Close modal and refresh
+        closeModal('updateLocationModal');
+        updateTrackingDisplay(orders[orderIndex]);
+        
+        showAlert('Berhasil!', 'Lokasi driver telah diperbarui');
+    }
+    
+    function assignNewDriver() {
+        if (!trackingOrder) {
+            showAlert('Error', 'Pilih pesanan terlebih dahulu');
+            return;
+        }
+        
+        assignDriverToOrder(trackingOrder.id);
+    }
+    
+    function cancelDelivery() {
+        if (!trackingOrder) {
+            showAlert('Error', 'Pilih pesanan terlebih dahulu');
+            return;
+        }
+        
+        if (!confirm('Batalkan pengiriman pesanan ini?')) {
+            return;
+        }
+        
+        updateOrderStatus(trackingOrder.id, 'disiapkan');
+        hideLiveTracking();
+    }
+    
+    // ================================
+    // STORE CONTROL FUNCTIONS (AUTO-SAVE)
+    // ================================
+    function setupStoreToggle() {
+        const toggle = document.getElementById('storeStatusToggle');
+        const messageBox = document.getElementById('storeMessage');
+        
+        // Auto-save when toggle is changed
+        toggle.addEventListener('change', function() {
+            const isOpen = this.checked;
+            saveStoreStatus(isOpen, messageBox.value.trim());
+            updateStoreStatusUI(isOpen);
+        });
+        
+        // Auto-save when message is changed (debounced)
+        let messageTimeout;
+        messageBox.addEventListener('input', function() {
+            clearTimeout(messageTimeout);
+            messageTimeout = setTimeout(() => {
+                const isOpen = document.getElementById('storeStatusToggle').checked;
+                saveStoreStatus(isOpen, this.value.trim());
+            }, 1000);
+        });
+    }
+    
+    function loadStoreStatus() {
+        const status = localStorage.getItem('storeStatus') || 'open';
+        const message = localStorage.getItem('storeClosedMessage') || '';
+        
+        document.getElementById('storeStatusToggle').checked = status === 'open';
+        document.getElementById('storeMessage').value = message;
+        
+        updateStoreStatusUI(status === 'open');
+    }
+    
+    function saveStoreStatus(isOpen, message) {
+        localStorage.setItem('storeStatus', isOpen ? 'open' : 'closed');
+        localStorage.setItem('storeClosedMessage', message);
+        localStorage.setItem('storeStatusChanged', Date.now().toString());
+        
+        showAlert('Berhasil!', `Status toko telah diubah menjadi ${isOpen ? 'BUKA' : 'TUTUP'}`);
+    }
+    
+    function updateStoreStatusUI(isOpen) {
+        const toggle = document.getElementById('storeStatusToggle');
+        const messageBox = document.getElementById('storeMessage');
+        
+        if (isOpen) {
+            toggle.parentElement.querySelector('span:first-child').style.color = '#666';
+            toggle.parentElement.querySelector('span:last-child').style.color = 'var(--primary)';
+            messageBox.disabled = true;
+            messageBox.style.opacity = '0.6';
+        } else {
+            toggle.parentElement.querySelector('span:first-child').style.color = 'var(--primary)';
+            toggle.parentElement.querySelector('span:last-child').style.color = '#666';
+            messageBox.disabled = false;
+            messageBox.style.opacity = '1';
+        }
+    }
+    
+    // ================================
+    // HELPER FUNCTIONS
+    // ================================
+    function calculateDistance(point1, point2) {
+        const R = 6371;
+        const dLat = toRad(point2.lat - point1.lat);
+        const dLon = toRad(point2.lng - point1.lng);
+        const lat1 = toRad(point1.lat);
+        const lat2 = toRad(point2.lat);
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        return R * c;
+    }
+    
+    function toRad(degrees) {
+        return degrees * Math.PI / 180;
+    }
+    
+    function calculateETA(distanceKm) {
+        const averageSpeed = 30;
+        const timeHours = distanceKm / averageSpeed;
+        const timeMinutes = Math.ceil(timeHours * 60);
+        return Math.max(5, Math.min(timeMinutes, 120));
+    }
+    
+    function getBearing(start, end) {
+        const startLat = toRad(start.lat);
+        const startLng = toRad(start.lng);
+        const endLat = toRad(end.lat);
+        const endLng = toRad(end.lng);
+        const dLng = endLng - startLng;
+        const y = Math.sin(dLng) * Math.cos(endLat);
+        const x = Math.cos(startLat) * Math.sin(endLat) -
+                  Math.sin(startLat) * Math.cos(endLat) * Math.cos(dLng);
+        let bearing = Math.atan2(y, x);
+        bearing = bearing * 180 / Math.PI;
+        bearing = (bearing + 360) % 360;
+        return bearing;
+    }
+    
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+    
+    function showAlert(title, message) {
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        alertDiv.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 40px; height: 40px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-check-circle" style="color: white; font-size: 20px;"></i>
+                </div>
+                <div>
+                    <strong style="color: #333;">${title}</strong>
+                    <p style="margin: 5px 0 0 0; color: #666;">${message}</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(alertDiv);
+        
+        // Add CSS for animation
+        if (!document.querySelector('#alertStyles')) {
+            const style = document.createElement('style');
+            style.id = 'alertStyles';
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Remove alert after 3 seconds
+        setTimeout(() => {
+            alertDiv.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 300);
+        }, 3000);
+    }
+</script>
+    
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfkHXB364WW7owocF6X9crbdneVhgPW-8&callback=initTrackingMap" async defer></script>
 </body>
 </html>
